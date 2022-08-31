@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Catalyst",
+  "description": "Chrome Extension in React",
+  "version": "1.0.0",
+  "icons":{
+    "16": "tempLogo.png",
+    "48": "tempLogo.png",
+    "128": "tempLogo.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "React Extension1",
+    "default_icon": "tempLogo.png"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"]
+    }
+  ]
+}
