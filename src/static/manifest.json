@@ -14,9 +14,13 @@
     "default_icon": "tempLogo.png"
   },
   "options_page": "options.html",
+  "chrome_url_overrides" : {
+    "newtab": "newtab.html"
+  },
   "background": {
     "service_worker": "background.js"
   },
+  "permissions":["storage", "contextMenus", "search", "tabs"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

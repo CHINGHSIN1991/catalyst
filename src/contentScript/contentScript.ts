@@ -1,2 +1,2 @@
 console.log("contentScript running!");
-console.log(123);
+console.log(window.location.href);
