@@ -2,6 +2,7 @@ const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
   entry: {
@@ -32,6 +33,9 @@ module.exports = {
         },
       ],
     }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
     ...getHtmlPlugins(['popup', 'options', 'newtab']),
   ],
   resolve: {
@@ -52,9 +56,18 @@ function getHtmlPlugins(chunks) {
   return chunks.map(
     (chunk) =>
       new HtmlPlugin({
-        title: 'React Extension',
+        title: 'Catalyst',
         filename: `${chunk}.html`,
         chunks: [chunk],
       })
   )
 }
+
+// new webpack.DefinePlugin({
+//   PRODUCTION: JSON.stringify(true),
+//   VERSION: JSON.stringify('5fa3b9'),
+//   BROWSER_SUPPORTS_HTML5: true,
+//   TWO: '1+1',
+//   'typeof window': JSON.stringify('object'),
+//   'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+// });

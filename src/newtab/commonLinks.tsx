@@ -60,7 +60,7 @@ export const CommonLinkPanel: React.FC<{}> = () => {
   }
 
   function addCommonLink() {
-    let tempLinks = commonLinks;
+    let tempLinks = commonLinks || [];
     const linkUrl = new URL(tempCommonLink.commonLinkUrl);
     const id = Date.now();
     const name = tempCommonLink.commonLinkName;
@@ -109,7 +109,6 @@ export const CommonLinkPanel: React.FC<{}> = () => {
   function delCommonLink(id: number) {
     let tempLinks = commonLinks.filter((link) => link.id !== id)
     chrome.storage.sync.set({ commonLinks: tempLinks }, function () {
-      console.log(tempLinks);
       setCommonLinks([...tempLinks]);
     });
   }
@@ -123,7 +122,6 @@ export const CommonLinkPanel: React.FC<{}> = () => {
 
   useEffect(() => {
     chrome.storage.sync.get(['commonLinks'], function (result) {
-      console.log(result.commonLinks);
       setCommonLinks(result.commonLinks);
     });
   }, [])
@@ -132,7 +130,7 @@ export const CommonLinkPanel: React.FC<{}> = () => {
     <OrgFunctionPanel>
       <input type="text" onChange={handleSearchQuery} /><button onClick={search}>Search</button>
       <CommonLinksList>
-        {commonLinks.map((commonLink) => {
+        {commonLinks && commonLinks.map((commonLink) => {
           return <CommonLink key={commonLink.id}>
             <button onClick={() => { openTab(commonLink) }}>edit</button>
             <button onClick={() => { delCommonLink(commonLink.id) }}>x</button>
@@ -150,7 +148,7 @@ export const CommonLinkPanel: React.FC<{}> = () => {
         <div>
           <label htmlFor="">LinkTitle<input name="name" value={editLink.name} onChange={handleEditLink} type="text" /></label>
           <label htmlFor="">LinkUrl<input name="url" value={editLink.url} onChange={handleEditLink} type="text" /></label>
-          <button onClick={changeCommonLink}>Conform</button>
+          <button onClick={changeCommonLink}>Confirm</button>
           <button onClick={() => { setIsEditOn(false) }}>Cancel</button>
         </div>}
     </OrgFunctionPanel>

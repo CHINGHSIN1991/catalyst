@@ -4,14 +4,14 @@
   "description": "Chrome Extension in React",
   "version": "1.0.0",
   "icons":{
-    "16": "tempLogo.png",
-    "48": "tempLogo.png",
-    "128": "tempLogo.png"
+    "16": "CatalystLogo_128.png",
+    "48": "CatalystLogo_128.png",
+    "128": "CatalystLogo_128.png"
   },
   "action": {
     "default_popup": "popup.html",
     "default_title": "React Extension1",
-    "default_icon": "tempLogo.png"
+    "default_icon": "CatalystLogo_128.png"
   },
   "options_page": "options.html",
   "chrome_url_overrides" : {
@@ -20,7 +20,13 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions":["storage", "contextMenus", "search", "tabs"],
+  "oauth2": {
+    "client_id": "42137827685-khoc4mfrhmaj59t3up0jcea6stm4cfgd.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar"
+    ]
+  },
+  "permissions":["storage", "alarms", "notifications", "identity", "identity.email", "contextMenus", "search", "tabs"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

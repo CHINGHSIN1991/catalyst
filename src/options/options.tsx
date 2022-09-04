@@ -19,7 +19,7 @@ const App: React.FC<{}> = () => {
     <Wrapper>
       <ResetStyle />
       <GlobalStyle />
-      <Img src={"tempLogo.png"}></Img>
+      <Img src={"CatalystLogo_128.png"}></Img>
     </Wrapper>
   )
 }

@@ -4,9 +4,12 @@ import styled from "styled-components";
 import { ResetStyle, GlobalStyle } from "../static/globalStyle"
 import { useState, useEffect, useReducer } from "react";
 
-import { PanelBasicSetting } from './styleSetting';
 import { CommonLinkPanel } from './commonLinks';
 import { InspirationNotePanel } from './inspirationNotes';
+import { TimePanel } from './timePanel';
+import { ToDoListPanel } from './toDoList';
+import { PersonalServicePanel } from './personalService';
+import { CalendarPanel } from './calendarPanel';
 
 
 const Wrapper = styled.div`
@@ -33,8 +36,7 @@ const FocusPanel = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-`
-const PersonalServicePanel = styled(PanelBasicSetting)`
+  justify-content: center;
 `
 
 const App: React.FC<{}> = () => {
@@ -47,11 +49,12 @@ const App: React.FC<{}> = () => {
         <InspirationNotePanel></InspirationNotePanel>
       </MenuContainer>
       <FocusPanel>
+        <TimePanel></TimePanel>
       </FocusPanel>
       <MenuContainer>
-        <PersonalServicePanel>
-          Have a nice day!
-        </PersonalServicePanel>
+        <PersonalServicePanel></PersonalServicePanel>
+        <CalendarPanel></CalendarPanel>
+        <ToDoListPanel></ToDoListPanel>
       </MenuContainer>
     </Wrapper>
   )

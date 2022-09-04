@@ -1,22 +1,61 @@
-const clock = {
-  time: '',
-  date: ''
-}
+import React from 'react';
+import styled from "styled-components";
+import { useState, useEffect, useRef } from "react";
+
+const Wrapper = styled.div`
+  /* border: solid 1px; */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const DateBlock = styled.div`
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
+  /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
+`
+
+const TimeBlock = styled.div`
+  font-size: 7rem;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
+  /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
+`
 
 
-var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-var timerID = setInterval(updateTime, 1000);
-updateTime();
-function updateTime() {
-  var cd = new Date();
-  clock.time = zeroPadding(cd.getHours(), 2) + ':' + zeroPadding(cd.getMinutes(), 2) + ':' + zeroPadding(cd.getSeconds(), 2);
-  clock.date = zeroPadding(cd.getFullYear(), 4) + '-' + zeroPadding(cd.getMonth() + 1, 2) + '-' + zeroPadding(cd.getDate(), 2) + ' ' + week[cd.getDay()];
-};
+export const TimePanel: React.FC<{}> = () => {
+  const week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  const timerID: React.MutableRefObject<any> = useRef();
+  const [currentClock, setCurrentClock] = useState({
+    time: "",
+    date: "",
+  })
 
-function zeroPadding(num, digit) {
-  var zero = '';
-  for (var i = 0; i < digit; i++) {
-    zero += '0';
+
+  function updateTime() {
+    const cd = new Date();
+    const tempClock = { ...currentClock }
+    tempClock.time = `${JSON.stringify(cd.getHours()).padStart(2, "0")} : ${JSON.stringify(cd.getMinutes()).padStart(2, "0")} : ${JSON.stringify(cd.getSeconds()).padStart(2, "0")}`;
+    tempClock.date = `${JSON.stringify(cd.getFullYear()).padStart(4, "0")} - ${JSON.stringify(cd.getMonth() + 1).padStart(2, "0")} - ${JSON.stringify(cd.getDate()).padStart(2, "0")} ${week[cd.getDay()]}`;
+    setCurrentClock(tempClock);
   }
-  return (zero + num).slice(-digit);
+
+  useEffect(() => {
+    timerID.current = setInterval(updateTime, 1000);
+    updateTime();
+  }, [])
+
+  return (
+    <Wrapper>
+      <DateBlock>{currentClock.date}</DateBlock>
+      <TimeBlock>{currentClock.time}</TimeBlock>
+    </Wrapper>
+  );
 }
