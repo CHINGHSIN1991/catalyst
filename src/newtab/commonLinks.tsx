@@ -124,6 +124,10 @@ export const CommonLinkPanel: React.FC<{}> = () => {
     chrome.storage.sync.get(['commonLinks'], function (result) {
       setCommonLinks(result.commonLinks);
     });
+    chrome.bookmarks.getRecent(
+      5,
+      (res) => console.log(res)
+    )
   }, [])
 
   return (

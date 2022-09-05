@@ -11,12 +11,14 @@ export const PersonalServicePanel: React.FC<{}> = () => {
 
   useEffect(() => {
     // console.log(chrome.identity.getRedirectURL("https://source.unsplash.com/random"));
-    chrome.identity.getProfileUserInfo(
-      (userInfo) => {
-        console.log(userInfo);
-      }
-    );
-    chrome.identity.getAuthToken({ 'interactive': true }, function (token) { console.log(token) });
+    // chrome.identity.getProfileUserInfo(
+    //   (userInfo) => {
+    //     console.log(userInfo);
+    //   }
+    // );
+    // chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+    //   console.log(token);
+    // });
   }, []);
 
   return (
