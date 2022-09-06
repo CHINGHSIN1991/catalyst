@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client'
 import styled from "styled-components";
 import { ResetStyle, GlobalStyle } from "../static/globalStyle"
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect } from "react";
 
 import { CommonLinkPanel } from './commonLinks';
 import { InspirationNotePanel } from './inspirationNotes';
@@ -10,6 +10,7 @@ import { TimePanel } from './timePanel';
 import { ToDoListPanel } from './toDoList';
 import { PersonalServicePanel } from './personalService';
 import { CalendarPanel } from './calendarPanel';
+import { WeatherPanel } from './weatherInfoPanel';
 
 
 const Wrapper = styled.div`
@@ -40,6 +41,14 @@ const FocusPanel = styled.div`
 `
 
 const App: React.FC<{}> = () => {
+  const [tebInfo, setTebInfo] = useState({}) as any;
+
+  useEffect(() => {
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      console.log(tabs[0]);
+      setTebInfo(tabs[0]);
+    });
+  }, [])
   return (
     <Wrapper>
       <ResetStyle />
@@ -50,11 +59,12 @@ const App: React.FC<{}> = () => {
       </MenuContainer>
       <FocusPanel>
         <TimePanel></TimePanel>
+        <WeatherPanel></WeatherPanel>
       </FocusPanel>
       <MenuContainer>
         <PersonalServicePanel></PersonalServicePanel>
         <CalendarPanel></CalendarPanel>
-        <ToDoListPanel></ToDoListPanel>
+        <ToDoListPanel tebInfo={tebInfo}></ToDoListPanel>
       </MenuContainer>
     </Wrapper>
   )

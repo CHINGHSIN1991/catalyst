@@ -26,7 +26,7 @@
       "https://www.googleapis.com/auth/calendar"
     ]
   },
-  "permissions":["storage", "alarms", "notifications", "identity", "identity.email", "contextMenus", "bookmarks", "search", "tabs"],
+  "permissions":["storage", "alarms", "notifications", "identity", "identity.email", "contextMenus", "bookmarks", "search", "tabs", "nativeMessaging","tts"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

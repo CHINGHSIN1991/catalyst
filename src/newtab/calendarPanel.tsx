@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
-import { useScript } from '../hooks/useScript';
 import { PanelBasicSetting } from './styleSetting';
 
 const CalendarWrapper = styled(PanelBasicSetting)`
@@ -35,174 +34,27 @@ type role = {
 }
 
 type timeNode = { dateTime: string, timeZone: string }
+type timeDay = { date: string }
 
 interface calendarItem {
-  colorId: string;
-  created: string;
-  creator: role;
-  end: timeNode;
-  etag: string;
+  colorId?: string;
+  created?: string;
+  creator?: role;
+  end: timeNode | timeDay;
+  etag?: string;
   evenType: string;
-  htmlLink: string;
+  htmlLink?: string;
   iCalUID: string;
-  id: string;
-  kind: string;
-  organizer: role;
-  reminders: { useDefault: boolean };
-  sequence: 0;
-  start: timeNode;
-  status: string;
+  id?: string;
+  kind?: string;
+  organizer?: role;
+  reminders?: { useDefault: boolean };
+  sequence?: 0;
+  start: timeNode | timeDay;
+  status?: string;
   summary: string;
-  update: string;
+  updated?: string;
 }
-
-// interface calendarItemGoogle {
-//   "kind": "calendar#event",
-//   "etag": etag,
-//   "id": string,
-//   "status": string,
-//   "htmlLink": string,
-//   "created": datetime,
-//   "updated": datetime,
-//   "summary": string,
-//   "description": string,
-//   "location": string,
-//   "colorId": string,
-//   "creator": {
-//     "id": string,
-//     "email": string,
-//     "displayName": string,
-//     "self": boolean
-//   },
-//   "organizer": {
-//     "id": string,
-//     "email": string,
-//     "displayName": string,
-//     "self": boolean
-//   },
-//   "start": {
-//     "date": date,
-//     "dateTime": datetime,
-//     "timeZone": string
-//   },
-//   "end": {
-//     "date": date,
-//     "dateTime": datetime,
-//     "timeZone": string
-//   },
-//   "endTimeUnspecified": boolean,
-//   "recurrence": [
-//     string
-//   ],
-//   "recurringEventId": string,
-//   "originalStartTime": {
-//     "date": date,
-//     "dateTime": datetime,
-//     "timeZone": string
-//   },
-//   "transparency": string,
-//   "visibility": string,
-//   "iCalUID": string,
-//   "sequence": integer,
-//   "attendees": [
-//     {
-//       "id": string,
-//       "email": string,
-//       "displayName": string,
-//       "organizer": boolean,
-//       "self": boolean,
-//       "resource": boolean,
-//       "optional": boolean,
-//       "responseStatus": string,
-//       "comment": string,
-//       "additionalGuests": integer
-//     }
-//   ],
-//   "attendeesOmitted": boolean,
-//   "extendedProperties": {
-//     "private": {
-//       (key): string
-//     },
-//     "shared": {
-//       (key): string
-//     }
-//   },
-//   "hangoutLink": string,
-//   "conferenceData": {
-//     "createRequest": {
-//       "requestId": string,
-//       "conferenceSolutionKey": {
-//         "type": string
-//       },
-//       "status": {
-//         "statusCode": string
-//       }
-//     },
-//     "entryPoints": [
-//       {
-//         "entryPointType": string,
-//         "uri": string,
-//         "label": string,
-//         "pin": string,
-//         "accessCode": string,
-//         "meetingCode": string,
-//         "passcode": string,
-//         "password": string
-//       }
-//     ],
-//     "conferenceSolution": {
-//       "key": {
-//         "type": string
-//       },
-//       "name": string,
-//       "iconUri": string
-//     },
-//     "conferenceId": string,
-//     "signature": string,
-//     "notes": string,
-//   },
-//   "gadget": {
-//     "type": string,
-//     "title": string,
-//     "link": string,
-//     "iconLink": string,
-//     "width": integer,
-//     "height": integer,
-//     "display": string,
-//     "preferences": {
-//       (key): string
-//     }
-//   },
-//   "anyoneCanAddSelf": boolean,
-//   "guestsCanInviteOthers": boolean,
-//   "guestsCanModify": boolean,
-//   "guestsCanSeeOtherGuests": boolean,
-//   "privateCopy": boolean,
-//   "locked": boolean,
-//   "reminders": {
-//     "useDefault": boolean,
-//     "overrides": [
-//       {
-//         "method": string,
-//         "minutes": integer
-//       }
-//     ]
-//   },
-//   "source": {
-//     "url": string,
-//     "title": string
-//   },
-//   "attachments": [
-//     {
-//       "fileUrl": string,
-//       "title": string,
-//       "mimeType": string,
-//       "iconLink": string,
-//       "fileId": string
-//     }
-//   ],
-//   "eventType": string
-// }
 
 export const CalendarPanel: React.FC<{}> = () => {
   const [calendarItems, setCalendarItems] = useState([])
@@ -211,6 +63,7 @@ export const CalendarPanel: React.FC<{}> = () => {
   const [authToken, setAuthToken] = useState("")
   const [isEditOn, setIsEditOn] = useState(false)
   const [editItem, setEditItem] = useState({} as calendarItem)
+
 
   function delEvent(item: calendarItem) {
     console.log(item);
@@ -223,7 +76,8 @@ export const CalendarPanel: React.FC<{}> = () => {
   }
 
   useEffect(() => {
-    console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
+    // console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
+    // console.log(new Date(Date.now() + 86400000).toISOString());
     chrome.identity.getAuthToken({ 'interactive': false }, function (token) {
       setAuthToken(token);
       const headers = new Headers({
@@ -233,7 +87,7 @@ export const CalendarPanel: React.FC<{}> = () => {
 
       const queryParams = { headers };
 
-      fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?maxResults=10&timeMin=${(new Date()).toISOString()}`, queryParams)
+      fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?maxResults=10&timeMin=${(new Date()).toISOString()}&timeMax=${new Date(Date.now() + 86400000).toISOString()}`, queryParams)
         .then((response) => response.json()) // Transform the data into json
         .then(function (data) {
           console.log(data);
@@ -283,9 +137,6 @@ const CalendarModule: React.FC<{ setIsCreateOn: (boo: boolean) => void; userInfo
 
   function postEvent() {
     const current = new Date(`${tempEvent.date} ${tempEvent.startTime}`);
-    console.log(current.toISOString());
-    const offset = new Date().getTimezoneOffset();
-    console.log(offset);
     console.log({
       iCalUID: uuidv4(),
       start: {

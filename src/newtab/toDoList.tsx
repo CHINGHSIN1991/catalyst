@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 import { PanelBasicSetting } from './styleSetting';
 
+import { handleInputChange } from '../utils/inputHandler';
+
 const WorksPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */
-`
+`;
 const ListItem = styled.div`
   border: solid 1px;
   display: flex;
-`
+`;
 const WorkContent = styled.div`
   border: solid 1px;
   width: 120px;
-`
+`;
 
 interface todo {
   workContent: string;
@@ -26,20 +28,21 @@ interface todo {
   alertSend?: boolean;
 }
 
-export const ToDoListPanel: React.FC<{}> = () => {
+export const ToDoListPanel: React.FC<{ tebInfo: { id: number; }; }> = (props) => {
   const [workList, setWorkList] = useState([]);
   const [tempTodo, setTempTodo] = useState({
     workContent: "",
     isSetAlert: false,
   } as todo);
   const [isEditOn, setIsEditOn] = useState(false);
+  const toDoListPort = useRef(null);
 
   function editTodo() {
-    let tempWorkList = []
+    let tempWorkList = [];
     if (tempTodo.id) {
-      let tempItem = { ...tempTodo }
+      let tempItem = { ...tempTodo };
       if (tempTodo.isSetAlert && tempTodo.alertDate && tempTodo.alertTime) {
-        tempItem = { ...tempItem, alertSend: false }
+        tempItem = { ...tempItem, alertSend: false };
       } else {
         delete tempItem.alertDate;
         delete tempItem.alertTime;
@@ -51,21 +54,21 @@ export const ToDoListPanel: React.FC<{}> = () => {
         } else {
           tempWorkList.push(item);
         }
-      })
+      });
     } else {
       if (workList) {
-        tempWorkList = [...workList]
+        tempWorkList = [...workList];
       }
-      let tempTodoToAdd = { ...tempTodo, id: Date.now(), isDone: false }
+      let tempTodoToAdd = { ...tempTodo, id: Date.now(), isDone: false };
       if (tempTodo.isSetAlert && tempTodo.alertTime && tempTodo.alertDate) {
-        tempTodoToAdd = { ...tempTodoToAdd, alertSend: false }
+        tempTodoToAdd = { ...tempTodoToAdd, alertSend: false };
       } else {
-        tempTodoToAdd = { ...tempTodoToAdd, isSetAlert: false }
+        tempTodoToAdd = { ...tempTodoToAdd, isSetAlert: false };
         delete tempTodoToAdd.alertDate;
         delete tempTodoToAdd.alertTime;
         delete tempTodoToAdd.alertSend;
       }
-      tempWorkList.push(tempTodoToAdd)
+      tempWorkList.push(tempTodoToAdd);
     }
     chrome.storage.sync.set({ todoList: tempWorkList }, function () {
       console.log(tempWorkList);
@@ -74,21 +77,6 @@ export const ToDoListPanel: React.FC<{}> = () => {
       setIsEditOn(false);
     });
 
-  }
-
-  function handleContent(e: React.ChangeEvent<HTMLInputElement>) {
-    setTempTodo({ ...tempTodo, workContent: e.target.value });
-    console.log({ ...tempTodo, workContent: e.target.value });
-  }
-
-  function handleDate(e: React.ChangeEvent<HTMLInputElement>) {
-    setTempTodo({ ...tempTodo, alertDate: e.target.value });
-    console.log({ ...tempTodo, alertDate: e.target.value });
-  }
-
-  function handleTime(e: React.ChangeEvent<HTMLInputElement>) {
-    setTempTodo({ ...tempTodo, alertTime: e.target.value });
-    console.log({ ...tempTodo, alertTime: e.target.value });
   }
 
   function handleIsSetAlert(e: React.ChangeEvent<HTMLInputElement>) {
@@ -104,7 +92,7 @@ export const ToDoListPanel: React.FC<{}> = () => {
       } else {
         tempWorkList.push(todo);
       }
-    })
+    });
     chrome.storage.sync.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList);
     });
@@ -117,37 +105,46 @@ export const ToDoListPanel: React.FC<{}> = () => {
       } else {
         tempWorkList.push(todo);
       }
-    })
+    });
     chrome.storage.sync.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList);
     });
+    todoListPort.postMessage({ msg: "update" });
   }
 
   useEffect(() => {
     chrome.storage.sync.get(['todoList'], function (result) {
       setWorkList(result.todoList);
     });
-  }, [])
+    toDoListPort.current = chrome.runtime.connect({ name: "todo" }) as chrome.runtime.Port;
+    console.log(toDoListPort.current);
+    toDoListPort.current.onMessage.addListener(function (res: { msg: string; }) {
+      console.log(res);
+      if (res.msg === "update") {
+        console.log("todolist panel update");
+      }
+    });
+  }, []);
 
   return (
     <WorksPanel>
       To do list
       {workList && !!workList.length && workList.map((item: todo) => {
-        return <ToDoItem key={item.id} changeIsDone={changeIsDone} delTodo={delTodo} setTempTodo={setTempTodo} item={item as todo} setIsEditOn={setIsEditOn}></ToDoItem>
+        return <ToDoItem key={item.id} changeIsDone={changeIsDone} delTodo={delTodo} setTempTodo={setTempTodo} item={item as todo} setIsEditOn={setIsEditOn}></ToDoItem>;
       })
 
       }
-      <button onClick={() => { setIsEditOn(true) }}>Add</button>
+      <button onClick={() => { setIsEditOn(true); }}>Add</button>
       {isEditOn &&
         <div>
           <label htmlFor=""> Work content
-            <input type="text" value={tempTodo.workContent} onChange={handleContent} />
+            <input type="text" name="workContent" value={tempTodo.workContent} onChange={(e) => handleInputChange(e, tempTodo, setTempTodo)} />
           </label>
           <input type="checkbox" checked={tempTodo.isSetAlert} onChange={handleIsSetAlert} />
           Set alert
           {tempTodo.isSetAlert && <label htmlFor="">
-            <input onChange={handleDate} value={tempTodo.alertDate || ""} type="date" />
-            <input onChange={handleTime} value={tempTodo.alertTime || ""} type="time" />
+            <input name="alertDate" onChange={(e) => handleInputChange(e, tempTodo, setTempTodo)} value={tempTodo.alertDate || ""} type="date" />
+            <input name="alertTime" onChange={(e) => handleInputChange(e, tempTodo, setTempTodo)} value={tempTodo.alertTime || ""} type="time" />
           </label>}
           <button onClick={editTodo}>Confirm</button>
           <button onClick={() => { setIsEditOn(false); setTempTodo({ workContent: "", id: 0, isDone: false, isSetAlert: false }); }}>Cancel</button>
@@ -155,16 +152,16 @@ export const ToDoListPanel: React.FC<{}> = () => {
       }
     </WorksPanel >
   );
-}
+};
 
-const ToDoItem: React.FC<{ item: todo, changeIsDone: (id: number) => void, delTodo: (id: number) => void, setTempTodo: (item: todo) => void, setIsEditOn: (boo: boolean) => void }> = (props) => {
+const ToDoItem: React.FC<{ item: todo, changeIsDone: (id: number) => void, delTodo: (id: number) => void, setTempTodo: (item: todo) => void, setIsEditOn: (boo: boolean) => void; }> = (props) => {
   return (
     <ListItem>
-      <input type="checkbox" checked={props.item.isDone} onChange={() => { props.changeIsDone(props.item.id) }} />
+      <input type="checkbox" checked={props.item.isDone} onChange={() => { props.changeIsDone(props.item.id); }} />
       <WorkContent>{props.item.workContent}</WorkContent>
-      {props.item.isSetAlert ? `deadline: ${props.item.alertDate} ${props.item.alertTime}` : <button onClick={() => { props.setTempTodo({ ...props.item, isSetAlert: true }); props.setIsEditOn(true) }}>set alert</button>}
-      <button onClick={() => { props.setTempTodo(props.item); props.setIsEditOn(true) }}>edit</button>
-      <button onClick={() => { props.delTodo(props.item.id) }}>x</button>
+      {props.item.isSetAlert ? `deadline: ${props.item.alertDate} ${props.item.alertTime}` : <button onClick={() => { props.setTempTodo({ ...props.item, isSetAlert: true }); props.setIsEditOn(true); }}>set alert</button>}
+      <button onClick={() => { props.setTempTodo(props.item); props.setIsEditOn(true); }}>edit</button>
+      <button onClick={() => { props.delTodo(props.item.id); }}>x</button>
     </ListItem>
   );
-}
+};

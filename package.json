@@ -10,7 +10,7 @@
   "author": "Ching-Hsin, Chen",
   "license": "ISC",
   "devDependencies": {
-    "@types/chrome": "^0.0.195",
+    "@types/chrome": "^0.0.196",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "clean-webpack-plugin": "^4.0.0",
