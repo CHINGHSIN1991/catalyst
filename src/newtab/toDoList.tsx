@@ -29,7 +29,7 @@ interface todo {
 }
 
 export const ToDoListPanel: React.FC<{ tebInfo: { id: number; }; }> = (props) => {
-  const [workList, setWorkList] = useState([]);
+  const [workList, setWorkList] = useState(null);
   const [tempTodo, setTempTodo] = useState({
     workContent: "",
     isSetAlert: false,
@@ -84,6 +84,7 @@ export const ToDoListPanel: React.FC<{ tebInfo: { id: number; }; }> = (props) =>
   }
 
   function changeIsDone(id: number) {
+    delTodo;
     let tempWorkList = [];
     workList.forEach((todo) => {
       if (todo.id === id) {
@@ -99,37 +100,40 @@ export const ToDoListPanel: React.FC<{ tebInfo: { id: number; }; }> = (props) =>
   }
 
   function delTodo(id: number) {
-    let tempWorkList = [];
-    workList.forEach((todo) => {
-      if (todo.id === id) {
-      } else {
-        tempWorkList.push(todo);
-      }
-    });
+    const tempWorkList = workList.filter((todo) => todo.id !== id);
     chrome.storage.sync.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList);
     });
-    todoListPort.postMessage({ msg: "update" });
+    toDoListPort.current.postMessage({ msg: "update" });
   }
 
   useEffect(() => {
     chrome.storage.sync.get(['todoList'], function (result) {
       setWorkList(result.todoList);
     });
-    toDoListPort.current = chrome.runtime.connect({ name: "todo" }) as chrome.runtime.Port;
-    console.log(toDoListPort.current);
-    toDoListPort.current.onMessage.addListener(function (res: { msg: string; }) {
-      console.log(res);
-      if (res.msg === "update") {
-        console.log("todolist panel update");
-      }
+    const queryOptions = { active: true, lastFocusedWindow: true };
+    chrome.tabs.query(queryOptions).then((res) => {
+      toDoListPort.current = chrome.tabs.connect(res[0].id, { name: "todo" });
+      toDoListPort.current.onMessage.addListener(function (res: { msg: string; }) {
+        console.log(res);
+        if (res.msg === "update") {
+          console.log("todolist panel update");
+        }
+      });
     });
+    // toDoListPort.current = chrome.runtime.connect({ name: "todo" });
+    // toDoListPort.current.onMessage.addListener(function (res: { msg: string; }) {
+    //   console.log(res);
+    //   if (res.msg === "update") {
+    //     console.log("todolist panel update");
+    //   }
+    // });
   }, []);
 
   return (
     <WorksPanel>
       To do list
-      {workList && !!workList.length && workList.map((item: todo) => {
+      {workList && workList.map((item: todo) => {
         return <ToDoItem key={item.id} changeIsDone={changeIsDone} delTodo={delTodo} setTempTodo={setTempTodo} item={item as todo} setIsEditOn={setIsEditOn}></ToDoItem>;
       })
 
