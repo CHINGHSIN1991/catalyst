@@ -79,7 +79,6 @@ const App: React.FC<{}> = () => {
       <GlobalStyle />
       <label htmlFor="">category
         <select value={currentCategory} onChange={handleCurrentCategory} name="" id="">
-          <option value={"other"}>{"other"}</option>
           {noteCategories.map((category, index) => { return <option key={category + index} value={category}>{category}</option> })}
         </select>
         <input value={tempCategory} onChange={handleTempCategory} type="text" />

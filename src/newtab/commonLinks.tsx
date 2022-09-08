@@ -3,16 +3,17 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 import { PanelBasicSetting } from './styleSetting';
+import { handleInputChange } from '../utils/inputHandler';
 
 const OrgFunctionPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */
-`
+`;
 const CommonLinksList = styled.ul`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   /* border: solid 1px; */
-`
+`;
 const CommonLink = styled.li`
   border:solid 1px;
   padding: 8px;
@@ -20,7 +21,7 @@ const CommonLink = styled.li`
   align-items: center;
   flex-direction: column;
   cursor: pointer;
-`
+`;
 const CommonLinkIcon = styled.img`
   width: 40px;
   height: 40px;
@@ -28,7 +29,7 @@ const CommonLinkIcon = styled.img`
   /* border-radius: 50%; */
   border: solid 1px;
   object-fit: cover;
-`
+`;
 export const CommonLinkPanel: React.FC<{}> = () => {
   const [editLink, setEditLink] = useState({
     id: 0,
@@ -44,23 +45,8 @@ export const CommonLinkPanel: React.FC<{}> = () => {
     commonLinkUrl: "",
   });
 
-
-  function handleEditLink(e: React.ChangeEvent<HTMLInputElement>) {
-    setEditLink({ ...editLink, [e.target.name]: e.target.value });
-    // console.log({ ...editLink, [e.target.name]: e.target.value });
-  }
-
-  function handleSearchQuery(e: React.ChangeEvent<HTMLInputElement>) {
-    setSearchQuery(e.target.value);
-    console.log(e.target.value);
-  }
-
-  function handleLinkChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setTempCommonLink({ ...tempCommonLink, [e.target.name]: e.target.value })
-  }
-
   function addCommonLink() {
-    let tempLinks = commonLinks;
+    let tempLinks = commonLinks || [];
     const linkUrl = new URL(tempCommonLink.commonLinkUrl);
     const id = Date.now();
     const name = tempCommonLink.commonLinkName;
@@ -75,20 +61,20 @@ export const CommonLinkPanel: React.FC<{}> = () => {
 
   }
 
-  function openTab(item: { name: string, id: number, logo: string, url: string }) {
+  function openTab(item: { name: string, id: number, logo: string, url: string; }) {
     setIsEditOn(true);
     setEditLink(item);
   }
 
   function changeCommonLink() {
-    let tempLinks = []
+    let tempLinks = [];
     commonLinks.forEach((item) => {
       if (item.id === editLink.id) {
-        tempLinks.push(editLink)
+        tempLinks.push(editLink);
       } else {
-        tempLinks.push(item)
+        tempLinks.push(item);
       }
-    })
+    });
     setChromeSyncLinks(tempLinks);
     setEditLink({
       id: 0,
@@ -99,7 +85,7 @@ export const CommonLinkPanel: React.FC<{}> = () => {
     setIsEditOn(false);
   }
 
-  function setChromeSyncLinks(links: { name: string, id: number, logo: string, url: string }[]) {
+  function setChromeSyncLinks(links: { name: string, id: number, logo: string, url: string; }[]) {
     chrome.storage.sync.set({ commonLinks: links }, function () {
       console.log(links);
       setCommonLinks(links);
@@ -107,9 +93,8 @@ export const CommonLinkPanel: React.FC<{}> = () => {
   }
 
   function delCommonLink(id: number) {
-    let tempLinks = commonLinks.filter((link) => link.id !== id)
+    let tempLinks = commonLinks.filter((link) => link.id !== id);
     chrome.storage.sync.set({ commonLinks: tempLinks }, function () {
-      console.log(tempLinks);
       setCommonLinks([...tempLinks]);
     });
   }
@@ -118,41 +103,44 @@ export const CommonLinkPanel: React.FC<{}> = () => {
     chrome.search.query({
       disposition: "NEW_TAB",
       text: searchQuery
-    }, () => { })
+    }, () => { });
   }
 
   useEffect(() => {
     chrome.storage.sync.get(['commonLinks'], function (result) {
-      console.log(result.commonLinks);
       setCommonLinks(result.commonLinks);
     });
-  }, [])
+    chrome.bookmarks.getRecent(
+      5,
+      (res) => console.log(res)
+    );
+  }, []);
 
   return (
     <OrgFunctionPanel>
-      <input type="text" onChange={handleSearchQuery} /><button onClick={search}>Search</button>
+      <input type="text" onChange={(e) => handleInputChange(e, searchQuery, setSearchQuery)} /><button onClick={search}>Search</button>
       <CommonLinksList>
-        {commonLinks.map((commonLink) => {
+        {commonLinks && commonLinks.map((commonLink) => {
           return <CommonLink key={commonLink.id}>
-            <button onClick={() => { openTab(commonLink) }}>edit</button>
-            <button onClick={() => { delCommonLink(commonLink.id) }}>x</button>
+            <button onClick={() => { openTab(commonLink); }}>edit</button>
+            <button onClick={() => { delCommonLink(commonLink.id); }}>x</button>
             <a href={commonLink.url} target="_blank">
               <CommonLinkIcon src={commonLink.logo}></CommonLinkIcon>
               <p>{commonLink.name}</p>
             </a>
-          </CommonLink>
+          </CommonLink>;
         })}
       </CommonLinksList>
-      <label htmlFor="">LinkTitle<input name="commonLinkName" value={tempCommonLink.commonLinkName} onChange={handleLinkChange} type="text" /></label>
-      <label htmlFor="">LinkUrl<input name="commonLinkUrl" value={tempCommonLink.commonLinkUrl} onChange={handleLinkChange} type="text" /></label>
+      <label htmlFor="">LinkTitle<input name="commonLinkName" value={tempCommonLink.commonLinkName} onChange={(e) => handleInputChange(e, tempCommonLink, setTempCommonLink)} type="text" /></label>
+      <label htmlFor="">LinkUrl<input name="commonLinkUrl" value={tempCommonLink.commonLinkUrl} onChange={(e) => handleInputChange(e, tempCommonLink, setTempCommonLink)} type="text" /></label>
       <button onClick={addCommonLink}>Add</button>
       {isEditOn &&
         <div>
-          <label htmlFor="">LinkTitle<input name="name" value={editLink.name} onChange={handleEditLink} type="text" /></label>
-          <label htmlFor="">LinkUrl<input name="url" value={editLink.url} onChange={handleEditLink} type="text" /></label>
-          <button onClick={changeCommonLink}>Conform</button>
-          <button onClick={() => { setIsEditOn(false) }}>Cancel</button>
+          <label htmlFor="">LinkTitle<input name="name" value={editLink.name} onChange={(e) => handleInputChange(e, editLink, setEditLink)} type="text" /></label>
+          <label htmlFor="">LinkUrl<input name="url" value={editLink.url} onChange={(e) => handleInputChange(e, editLink, setEditLink)} type="text" /></label>
+          <button onClick={changeCommonLink}>Confirm</button>
+          <button onClick={() => { setIsEditOn(false); }}>Cancel</button>
         </div>}
     </OrgFunctionPanel>
   );
-}
+};

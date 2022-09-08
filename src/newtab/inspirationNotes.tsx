@@ -100,7 +100,6 @@ export const InspirationNotePanel: React.FC<{}> = () => {
     chrome.storage.sync.get(['inspirationNotes', 'noteCategories'], (result) => {
       setInspirationNotes(result.inspirationNotes);
       setNoteCategories(result.noteCategories);
-      console.log(result.inspirationNotes);
     });
   }, [])
 
@@ -108,7 +107,7 @@ export const InspirationNotePanel: React.FC<{}> = () => {
     <TempLinksPanel>
       Inspiration Notes
       <hr />
-      {!!noteCategories.length && noteCategories.map((category, index) => {
+      {noteCategories && !!noteCategories.length && noteCategories.map((category, index) => {
         return (
           <TempLinks key={category + index}>
             {inspirationNotes[category] && category}
@@ -134,7 +133,7 @@ export const InspirationNotePanel: React.FC<{}> = () => {
         <div>
           <label htmlFor="">Title<input name="title" type="text" value={tempNote.title} onChange={handleTempNote} /></label>
           <label htmlFor="">Quick Note<input name="note" type="text" value={tempNote.note} onChange={handleTempNote} /></label>
-          <button onClick={changeNote}>Conform</button>
+          <button onClick={changeNote}>Confirm</button>
           <button onClick={() => { setIsEditOn(false) }}>Cancel</button>
         </div>
       }
