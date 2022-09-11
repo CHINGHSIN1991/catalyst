@@ -119,7 +119,7 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
           setAuthToken(token);
           const dayStart = new Date();
           const timeStampStart = Date.parse(`${dayStart.getFullYear()}-${dayStart.getMonth() + 1}-${dayStart.getDate()} 00:00`);
-          const dayEnd = new Date(timeStampStart + 86400000);
+          const dayEnd = new Date(timeStampStart + 259200000);
           fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => setCalendarItems(sortByDeadline(res.items)));
         });
       }
