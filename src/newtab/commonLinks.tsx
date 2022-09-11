@@ -38,7 +38,7 @@ export const CommonLinkPanel: React.FC<{}> = () => {
     url: "",
   });
   const [isEditOn, setIsEditOn] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState({ text: "" });
   const [commonLinks, setCommonLinks] = useState([]);
   const [tempCommonLink, setTempCommonLink] = useState({
     commonLinkName: "",
@@ -102,7 +102,7 @@ export const CommonLinkPanel: React.FC<{}> = () => {
   function search() {
     chrome.search.query({
       disposition: "NEW_TAB",
-      text: searchQuery
+      text: searchQuery.text
     }, () => { });
   }
 
@@ -110,15 +110,15 @@ export const CommonLinkPanel: React.FC<{}> = () => {
     chrome.storage.sync.get(['commonLinks'], function (result) {
       setCommonLinks(result.commonLinks);
     });
-    chrome.bookmarks.getRecent(
-      5,
-      (res) => console.log(res)
-    );
+    // chrome.bookmarks.getRecent(
+    //   5,
+    //   (res) => console.log(res)
+    // );
   }, []);
 
   return (
     <OrgFunctionPanel>
-      <input type="text" onChange={(e) => handleInputChange(e, searchQuery, setSearchQuery)} /><button onClick={search}>Search</button>
+      <input type="text" name="text" onChange={(e) => handleInputChange(e, searchQuery, setSearchQuery)} /><button onClick={search}>Search</button>
       <CommonLinksList>
         {commonLinks && commonLinks.map((commonLink) => {
           return <CommonLink key={commonLink.id}>
