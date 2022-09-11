@@ -9,3 +9,17 @@ export async function fetchWeatherData(lat:number,lon:number) :Promise<any>{
   const data = await res.json()
   return data
 }
+
+export async function fetchCalendarData(id: string, dayStart: Date, dayEnd: Date, token: string){
+  const headers = new Headers({
+    'Authorization': 'Bearer ' + token,
+    'Content-Type': 'application/json'
+  });
+  const queryParams = { headers };
+  const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${id}/events?timeMin=${dayStart.toISOString()}&timeMax=${dayEnd.toISOString()}`, queryParams)
+  if(! res.ok) {
+    throw new Error ('can not get data')
+  }
+  const data = await res.json()
+  return data
+}

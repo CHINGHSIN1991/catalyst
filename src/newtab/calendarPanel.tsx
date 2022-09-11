@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
 import { PanelBasicSetting } from './styleSetting';
+import { fetchCalendarData } from '../utils/api';
 
 const CalendarWrapper = styled(PanelBasicSetting)`
   /* border: solid 1px;   */
-`
+`;
 const CalendarModuleWrapper = styled.div`
   width: 100vw;
   height: 100vh;
@@ -18,7 +19,7 @@ const CalendarModuleWrapper = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-`
+`;
 const CalendarEditPanel = styled.div`
   width: 480px;
   height: 480px;
@@ -26,15 +27,15 @@ const CalendarEditPanel = styled.div`
   background-color: #fff;
   display: flex;
   flex-direction: column;
-`
+`;
 
 
 type role = {
-  email: string, displayName: string, self: boolean
-}
+  email: string, displayName: string, self: boolean;
+};
 
-type timeNode = { dateTime: string, timeZone: string }
-type timeDay = { date: string }
+type timeNode = { dateTime: string, timeZone: string; };
+type timeDay = { date: string; };
 
 interface calendarItem {
   colorId?: string;
@@ -48,7 +49,7 @@ interface calendarItem {
   id?: string;
   kind?: string;
   organizer?: role;
-  reminders?: { useDefault: boolean };
+  reminders?: { useDefault: boolean; };
   sequence?: 0;
   start: timeNode | timeDay;
   status?: string;
@@ -57,16 +58,23 @@ interface calendarItem {
 }
 
 export const CalendarPanel: React.FC<{}> = () => {
-  const [calendarItems, setCalendarItems] = useState([])
-  const [isCreateOn, setIsCreateOn] = useState(false)
-  const [userInfo, setUserInfo] = useState({ email: "", id: "", })
-  const [authToken, setAuthToken] = useState("")
-  const [isEditOn, setIsEditOn] = useState(false)
-  const [editItem, setEditItem] = useState({} as calendarItem)
+  const [calendarItems, setCalendarItems] = useState([]);
+  const [isCreateOn, setIsCreateOn] = useState(false);
+  const [userInfo, setUserInfo] = useState({ email: "", id: "", });
+  const [authToken, setAuthToken] = useState("");
+  const [isEditOn, setIsEditOn] = useState(false);
+  const [editItem, setEditItem] = useState({} as calendarItem);
 
 
   function delEvent(item: calendarItem) {
     console.log(item);
+    fetch(`https://www.googleapis.com/calendar/v3/calendars/${userInfo.email}/events/${item.id}`, {
+      headers: new Headers({
+        'Authorization': 'Bearer ' + authToken,
+        'Content-Type': 'application/json'
+      }),
+      method: "DELETE",
+    }).then((res) => { console.log(res); }).catch((err) => { console.log(err.message); });
   }
 
   function editEvent(item: calendarItem) {
@@ -75,31 +83,26 @@ export const CalendarPanel: React.FC<{}> = () => {
     setEditItem(item);
   }
 
+  function getTime(timeString: string) {
+    const time = new Date(timeString);
+    return `${time.getMonth() + 1}/${time.getDate()} - ${time.getHours()}:${time.getMinutes()} `;
+  }
+
   useEffect(() => {
-    // console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
-    // console.log(new Date(Date.now() + 86400000).toISOString());
-    chrome.identity.getAuthToken({ 'interactive': false }, function (token) {
-      setAuthToken(token);
-      const headers = new Headers({
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      })
-
-      const queryParams = { headers };
-
-      fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?maxResults=10&timeMin=${(new Date()).toISOString()}&timeMax=${new Date(Date.now() + 86400000).toISOString()}`, queryParams)
-        .then((response) => response.json()) // Transform the data into json
-        .then(function (data) {
-          console.log(data);
-          setCalendarItems(data.items);
-        })
-    })
     chrome.identity.getProfileUserInfo(
-      (userInfo) => {
-        setUserInfo(userInfo);
+      (res) => {
+        setUserInfo({ email: res.email, id: res.id });
+        chrome.identity.getAuthToken({ 'interactive': false }, function (token) {
+          setAuthToken(token);
+          const cd = new Date();
+          const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
+          const dayStart = new Date(timeStampStart);
+          const dayEnd = new Date(timeStampStart + 86400000);
+          fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => setCalendarItems(res.items));
+        });
       }
     );
-  }, [])
+  }, []);
 
   return (
     <CalendarWrapper>
@@ -107,13 +110,13 @@ export const CalendarPanel: React.FC<{}> = () => {
       {isEditOn && <CalendarEditModule editItem={editItem} setIsEditOn={setIsEditOn}></CalendarEditModule>}
       <button onClick={() => setIsCreateOn(true)}>Create</button>
       {calendarItems && !!calendarItems.length && calendarItems.map((item) => {
-        return <div key={item.id}>{item.summary}<button onClick={() => { editEvent(item) }}>edit</button><button onClick={() => { delEvent(item) }}>x</button></div>
+        return <div key={item.id}>{getTime(item.start.dateTime)}-{getTime(item.end.dateTime)}<br />{item.summary}<button onClick={() => { editEvent(item); }}>edit</button><button onClick={() => { delEvent(item); }}>x</button></div>;
       })}
     </CalendarWrapper >
   );
-}
+};
 
-const CalendarModule: React.FC<{ setIsCreateOn: (boo: boolean) => void; userInfo: { email: string, id: string }; authToken: string }> = (props) => {
+const CalendarModule: React.FC<{ setIsCreateOn: (boo: boolean) => void; userInfo: { email: string, id: string; }; authToken: string; }> = (props) => {
   const [tempEvent, setTempEvent] = useState({
     summary: "",
     date: "",
@@ -123,16 +126,16 @@ const CalendarModule: React.FC<{ setIsCreateOn: (boo: boolean) => void; userInfo
     iCalUID: "",
     visibility: "public",
     colorId: "",
-  })
+  });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     console.log({ ...tempEvent, [e.target.name]: e.target.value });
-    setTempEvent({ ...tempEvent, [e.target.name]: e.target.value })
+    setTempEvent({ ...tempEvent, [e.target.name]: e.target.value });
   }
 
   function handleSelectChange(e: React.ChangeEvent<HTMLSelectElement>) {
     console.log({ ...tempEvent, [e.target.name]: e.target.value });
-    setTempEvent({ ...tempEvent, [e.target.name]: e.target.value })
+    setTempEvent({ ...tempEvent, [e.target.name]: e.target.value });
   }
 
   function postEvent() {
@@ -150,7 +153,7 @@ const CalendarModule: React.FC<{ setIsCreateOn: (boo: boolean) => void; userInfo
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
       },
       summary: tempEvent.summary
-    })
+    });
     fetch(`https://www.googleapis.com/calendar/v3/calendars/${props.userInfo.email}/events/import`, {
       headers: new Headers({
         'Authorization': 'Bearer ' + props.authToken,
@@ -171,7 +174,7 @@ const CalendarModule: React.FC<{ setIsCreateOn: (boo: boolean) => void; userInfo
         },
         summary: tempEvent.summary
       })
-    }).then((res) => { return res.json() }).then((res) => { console.log(res) }).catch((err) => { console.log(err.message) })
+    }).then((res) => { return res.json(); }).then((res) => { console.log(res); }).catch((err) => { console.log(err.message); });
   }
 
   return (
@@ -228,13 +231,12 @@ const CalendarModule: React.FC<{ setIsCreateOn: (boo: boolean) => void; userInfo
       </CalendarEditPanel>
     </CalendarModuleWrapper >
   );
-}
+};
 
-const CalendarEditModule: React.FC<{ editItem: calendarItem; setIsEditOn: (boo: boolean) => void }> = (props) => {
+const CalendarEditModule: React.FC<{ editItem: calendarItem; setIsEditOn: (boo: boolean) => void; }> = (props) => {
   return (
     <CalendarModuleWrapper>
       <CalendarEditPanel>{JSON.stringify(props.editItem)}<button onClick={() => props.setIsEditOn(false)}>Cancel</button></CalendarEditPanel>
-
     </CalendarModuleWrapper>
   );
-}
+};

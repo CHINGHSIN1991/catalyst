@@ -6,11 +6,11 @@ const Dotenv = require('dotenv-webpack')
 
 module.exports = {
   entry: {
-    popup: path.resolve('src/popup/popup.tsx'),
+    popup: path.resolve('src/popup/Popup.tsx'),
     options: path.resolve('src/options/options.tsx'),
     newtab: path.resolve('src/newtab/newtab.tsx'),
     background: path.resolve('src/background/background.ts'),
-    contentScript: path.resolve('src/contentScript/contentScript.ts'),
+    contentScript: path.resolve('src/contentScript/contentScript.tsx'),
   },
   module: {
     rules: [
@@ -18,6 +18,13 @@ module.exports = {
         use: 'ts-loader',
         test: /\.tsx|ts?$/,
         exclude: /node_modules/,
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg|otf)$/, // to import images and fonts
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]',
+        },
       },
     ],
   },
@@ -45,7 +52,9 @@ module.exports = {
   },
   optimization: {
     splitChunks: {
-      chunks: 'all',
+      chunks(chunk) {
+        return chunk.name !== 'contentScript'
+      },
     },
   },
 }
