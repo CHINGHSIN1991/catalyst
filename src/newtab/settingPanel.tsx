@@ -60,23 +60,55 @@ const BackgroundImage = styled.div`
 
 export const SettingPanel: React.FC<{ currentBackground: string; customBackgrounds: string[]; setCustomBackgrounds: (bgs: string[]) => void; }> = (props) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [personalBgSet, setPersonalBgSet] = useState(null);
+  const [bgOption, setBgOption] = useState("Random");
 
   function addCustomBackgrounds() {
-    if (!props.customBackgrounds.find((img) => img === props.currentBackground)) {
-      const tempBackgrounds = [...props.customBackgrounds, props.currentBackground];
-      chrome.storage.sync.set({ customBackgrounds: JSON.stringify(tempBackgrounds) }, function () {
-        props.setCustomBackgrounds(tempBackgrounds);
-      });
+    if (bgOption !== "Random") {
+      const tempBgList = [...personalBgSet];
+      tempBgList[parseInt(bgOption)].push(props.currentBackground);
+      setPersonalBgSet(tempBgList);
+    }
+    // if (!props.customBackgrounds.find((img) => img === props.currentBackground)) {
+    //   const tempBackgrounds = [...props.customBackgrounds, props.currentBackground];
+    //   chrome.storage.sync.set({ customBackgrounds: JSON.stringify(tempBackgrounds) }, function () {
+    //     props.setCustomBackgrounds(tempBackgrounds);
+    //   });
+    // }
+  }
+
+  function delCustomBackground(index: number) {
+    let tempBgList = [...personalBgSet];
+    tempBgList[parseInt(bgOption)].splice(index, 1);
+    setPersonalBgSet(tempBgList);
+  }
+
+  function addBgSet() {
+    if (personalBgSet) {
+      setPersonalBgSet([...personalBgSet, []]);
+    } else {
+      setPersonalBgSet([[]]);
     }
   }
 
-  function delCustomBackground(id: string) {
-    const tempBackgrounds = props.customBackgrounds.filter((bg) => bg !== id);
-    chrome.storage.sync.set({ customBackgrounds: JSON.stringify(tempBackgrounds) }, function () {
-      props.setCustomBackgrounds(tempBackgrounds);
+  useEffect(() => {
+    chrome.storage.sync.get(['personalBgSet', 'bgOption'], function (result) {
+      setPersonalBgSet(result.personalBgSet);
+      setBgOption(result.bgOption);
     });
+  }, []);
 
-  }
+  useEffect(() => {
+    chrome.storage.sync.set({ personalBgSet: personalBgSet }, function () {
+      console.log(personalBgSet);
+    });
+  }, [personalBgSet]);
+
+  useEffect(() => {
+    chrome.storage.sync.set({ bgOption: bgOption }, function () {
+      console.log(bgOption);
+    });
+  }, [bgOption]);
 
   return (
     <SettingPanelWrapper>
@@ -84,11 +116,17 @@ export const SettingPanel: React.FC<{ currentBackground: string; customBackgroun
         <PanelWrapper>
           <BackgroundWrapper>
             <button onClick={() => setIsPanelOpen(false)}>close</button>
+            {bgOption === "Random" ? "Random" : parseInt(bgOption) + 1}<BackgroundImage bg={props.currentBackground}></BackgroundImage>
+            <div>
+              <button onClick={() => setBgOption("Random")}>Random</button>
+              {personalBgSet && personalBgSet.map((_, index: number) => { return <button key={index + 1} onClick={() => setBgOption(`${index}`)}>{index + 1}</button>; })}
+              <button onClick={addBgSet}>add custom set</button>
+            </div>
             <button onClick={addCustomBackgrounds}>Add</button>
+
             <BackgroundContainer>
-              <BackgroundImage bg={props.currentBackground}></BackgroundImage>
-              {!!props.customBackgrounds.length && props.customBackgrounds.map((bg) => {
-                return <BackgroundImage key={bg} bg={bg}><button onClick={() => { delCustomBackground(bg); }}>x</button></BackgroundImage>;
+              {!!parseInt(bgOption + 1) && personalBgSet[parseInt(bgOption)].map((bg, index) => {
+                return <BackgroundImage key={`${bg}+${index}`} bg={bg}><button onClick={() => { delCustomBackground(index); }}>x</button></BackgroundImage>;
               })}
             </BackgroundContainer>
           </BackgroundWrapper>

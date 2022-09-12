@@ -17,10 +17,7 @@ import { BulletinBoard } from './BulletinBoard';
 import { CurrentFocusPanel } from './CurrentFocusPanel';
 
 
-const Body = styled.body`
-  width: 100vw;
-  height: 100vh;
-`;
+import { getBackgroundImg } from '../utils/api';
 
 const Wrapper = styled.div`
   /* border: solid 5px; */
@@ -69,26 +66,56 @@ const MainBoard = styled.div`
   display: flex;
 `;
 
+type backgroundInfo = {
+  url: string,
+  user: string,
+  profile: string,
+  downloadLink: string,
+};
+
 const App: React.FC<{}> = () => {
-  const [currentBackground, setCurrentBackground] = useState("https://images.unsplash.com/photo-1662436267764-13f43cfe0a12?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1779&q=80");
+  const [currentBackground, setCurrentBackground] = useState({
+    url: "https://images.unsplash.com/photo-1662900547193-7ef6d19ffcfc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80",
+    user: "Pascal Scholl",
+    profile: "https://unsplash.com/@hghfve",
+    downloadLink: "https://unsplash.com/photos/asmUeIsNIzw/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjYyOTgyNjk2&force=true",
+  });
+  const backgroundList = useRef(null);
   const [customBackgrounds, setCustomBackgrounds] = useState<string[]>([]);
   const [isBoardOn, setIsBoardOn] = useState(false);
-  const [tebInfo, setTebInfo] = useState({}) as any;
   const timeIntervalId = useRef(null);
+  // const [tebInfo, setTebInfo] = useState(null);
 
 
   useEffect(() => {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-      // console.log(tabs[0]);
-      setTebInfo(tabs[0]);
+    // chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+    //   setTebInfo(tabs[0]);
+    // });
+    getBackgroundImg("nature").then((res) => {
+      const tempBackgrounds = [];
+      res.forEach((item) => {
+        tempBackgrounds.push(
+          {
+            url: item.urls.full,
+            user: item.user.name,
+            profile: item.user.links.html,
+            downloadLink: item.links.download,
+          });
+      });
+      backgroundList.current = tempBackgrounds;
     });
-    chrome.storage.sync.get(['customBackgrounds'], function (result) {
-      setCustomBackgrounds(JSON.parse(result.customBackgrounds));
-    });
-    // timeIntervalId.current = setInterval(() => fetch("https://source.unsplash.com/random/600×1200").then((res) => setCurrentBackground(res.url)), 300000);
+    timeIntervalId.current = setInterval(() => {
+      const index = Math.floor(Math.random() * backgroundList.current.length);
+      setCurrentBackground(backgroundList.current[index]);
+    }, 60000);
   }, []);
+
+  useEffect(() => {
+
+  }, []);
+
   return (
-    <Wrapper currentBackground={currentBackground}>
+    <Wrapper currentBackground={currentBackground.url}>
       <Container isBoardOn={isBoardOn}>
         <MainBoard>
           <ResetStyle />
@@ -96,7 +123,7 @@ const App: React.FC<{}> = () => {
           <MenuContainer>
             <CommonLinkPanel></CommonLinkPanel>
             <InspirationNotePanel></InspirationNotePanel>
-            <SettingPanel currentBackground={currentBackground} customBackgrounds={customBackgrounds} setCustomBackgrounds={setCustomBackgrounds}></SettingPanel>
+            <SettingPanel currentBackground={currentBackground.url} customBackgrounds={customBackgrounds} setCustomBackgrounds={setCustomBackgrounds}></SettingPanel>
           </MenuContainer>
           <FocusPanel>
             <TimePanel></TimePanel>
@@ -109,7 +136,7 @@ const App: React.FC<{}> = () => {
           <MenuContainer>
             <PersonalServicePanel></PersonalServicePanel>
             <CalendarPanel></CalendarPanel>
-            <ToDoListPanel tebInfo={tebInfo}></ToDoListPanel>
+            <ToDoListPanel></ToDoListPanel>
           </MenuContainer>
         </MainBoard>
         <BulletinBoard setIsBoardOn={setIsBoardOn}></BulletinBoard>

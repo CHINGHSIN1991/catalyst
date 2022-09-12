@@ -136,13 +136,11 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
     }
   }, [taskOnGoing]);
 
-  console.log(calendarItems);
-
   return (
     <Wrapper>
       <FocusBlock>
         {taskOnGoing !== null && taskOnGoing && `Current focus: ${calendarItems[0].summary} (till ${getTime(calendarItems[0].end.dateTime)})`}
-        {taskOnGoing !== null && !taskOnGoing && `Task next on: ${calendarItems[0].summary} (start at ${getTime(calendarItems[0].start.dateTime)})`}
+        {taskOnGoing !== null && !taskOnGoing && `Upcoming: ${calendarItems[0].summary} (start at ${getTime(calendarItems[0].start.dateTime)})`}
       </FocusBlock>
     </Wrapper>
   );

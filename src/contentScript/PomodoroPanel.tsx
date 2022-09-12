@@ -43,10 +43,9 @@ export const PomodoroPanel: React.FC<{}> = () => {
 
   return (
     <Wrapper>
-      <div style={{ fontSize: "4rem", color: "white" }}>{pomoTimer}</div>
-      <input type="number" />
-      <button onClick={triggerTimer}>{isRunning ? "Pause" : "Start"}</button>
-      <button onClick={clearTimer}>Clear</button>
+      <div>{pomoTimer}</div>
+      <button onClick={(e) => { e.stopPropagation(); triggerTimer(); }}>{isRunning ? "Pause" : "Start"}</button>
+      <button onClick={(e) => { e.stopPropagation(); clearTimer(); }}>Clear</button>
     </Wrapper>
   );
 };
