@@ -52,7 +52,7 @@ interface calendarItem {
 export const CurrentFocusPanel: React.FC<{}> = () => {
   const [userInfo, setUserInfo] = useState({ email: "", id: "", });
   const [authToken, setAuthToken] = useState("");
-  const [calendarItems, setCalendarItems] = useState(null);
+  const [calendarItem, setCalendarItem] = useState(null);
   const [taskOnGoing, setTaskOnGoing] = useState(null);
   const [updateTime, setUpdateTime] = useState(null);
 
@@ -77,22 +77,42 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
     return tempItems;
   }
 
+  function checkIsCurrent(items: calendarItem[]) {
+    let tempItems = [...items];
+    let focusItem: calendarItem;
+    const current = Date.now();
+    focusItem = tempItems.find((item) => {
+      let startTime: string;
+      if ("dateTime" in item.start) {
+        startTime = item.start.dateTime;
+      } else {
+        startTime = item.start.date;
+      }
+      return Date.parse(startTime) < current;
+    });
+    if (focusItem) {
+      return focusItem;
+    } else {
+      return items[0];
+    }
+  }
+
   function showFocus() {
     const current = Date.now();
     let updateTime: number;
-    if (calendarItems && calendarItems.length) {
+    if (calendarItem) {
       let startTime = "";
       let endTime = "";
-      if ("dateTime" in calendarItems[0].start) {
-        startTime = calendarItems[0].start.dateTime;
+      if ("dateTime" in calendarItem.start) {
+        startTime = calendarItem.start.dateTime;
       } else {
-        startTime = calendarItems[0].start.date;
+        startTime = calendarItem.start.date;
       }
       if (Date.parse(startTime) < current) {
-        if ("dateTime" in calendarItems[0].end) {
-          endTime = calendarItems[0].end.dateTime;
+        if ("dateTime" in calendarItem.end) {
+          endTime = calendarItem.end.dateTime;
         } else {
-          endTime = calendarItems[0].end.date;
+          endTime = calendarItem.end.date;
         }
         console.log("on going");
         setTaskOnGoing(true);
@@ -120,7 +140,7 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
           const dayStart = new Date();
           const timeStampStart = Date.parse(`${dayStart.getFullYear()}-${dayStart.getMonth() + 1}-${dayStart.getDate()} 00:00`);
           const dayEnd = new Date(timeStampStart + 259200000);
-          fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => setCalendarItems(sortByDeadline(res.items)));
+          fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => setCalendarItem(checkIsCurrent(sortByDeadline(res.items))));
         });
       }
     );
@@ -128,7 +148,7 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
 
   useEffect(() => {
     showFocus();
-  }, [calendarItems]);
+  }, [calendarItem]);
 
   useEffect(() => {
     if (updateTime) {
@@ -139,8 +159,8 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
   return (
     <Wrapper>
       <FocusBlock>
-        {taskOnGoing !== null && taskOnGoing && `Current focus: ${calendarItems[0].summary} (till ${getTime(calendarItems[0].end.dateTime)})`}
-        {taskOnGoing !== null && !taskOnGoing && `Upcoming: ${calendarItems[0].summary} (start at ${getTime(calendarItems[0].start.dateTime)})`}
+        {taskOnGoing !== null && taskOnGoing && `Current focus: ${calendarItem.summary} (till ${getTime(calendarItem.end.dateTime)})`}
+        {taskOnGoing !== null && !taskOnGoing && `Upcoming: ${calendarItem.summary} (start at ${getTime(calendarItem.start.dateTime)})`}
       </FocusBlock>
     </Wrapper>
   );

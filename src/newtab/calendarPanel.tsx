@@ -154,7 +154,7 @@ const CalendarModule: React.FC<{ setIsCreateOn: (boo: boolean) => void; userInfo
       },
       summary: tempEvent.summary
     });
-    fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/${props.userInfo.email}/events/import`, {
+    fetch(`https://www.googleapis.com/calendar/v3/calendars/${props.userInfo.email}/events/import`, {
       headers: new Headers({
         'Authorization': 'Bearer ' + props.authToken,
         'Content-Type': 'application/json'

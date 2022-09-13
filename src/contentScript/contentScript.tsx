@@ -4,7 +4,6 @@ console.log(window.location.href);
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import styled from "styled-components";
-import { ResetStyle, GlobalStyle } from "../static/globalStyle";
 import { useState, useEffect } from "react";
 
 import { PomodoroPanel } from './PomodoroPanel';
@@ -13,7 +12,7 @@ import { PomodoroPanel } from './PomodoroPanel';
 const Wrapper = styled.div`
   box-sizing: border-box;
   position: fixed;
-  right: 28px;
+  right: 24px;
   bottom: 16px;
   min-width: ${(props) => { return props.isOpen ? "240px" : "56px"; }};
   min-height: ${(props) => { return props.isOpen ? "160px" : "56px"; }};
@@ -30,6 +29,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const Logo = styled.img`
   width: 32px;
   height: 32px;
@@ -75,7 +75,7 @@ const App: React.FC<{}> = () => {
     <Wrapper isOpen={isOpen} onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}>
       {isOpen && <PomodoroPanel></PomodoroPanel>}
       {!isOpen && <Logo src="https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/CatalystLogo.png?alt=media&token=578673e6-464a-446b-9202-8517c14beb84"></Logo>}
-      {isOpen && workList && workList.map((item: todo) => { return <div><input type="checkbox" checked={item.isDone} onClick={(e) => { e.stopPropagation(); }} onChange={() => { changeIsDone(item.id); }} />{item.workContent}</div>; })}
+      {isOpen && workList && workList.map((item: todo) => { return <div key={item.id}><input type="checkbox" checked={item.isDone} onClick={(e) => { e.stopPropagation(); }} onChange={() => { changeIsDone(item.id); }} />{item.workContent}</div>; })}
     </Wrapper>
   );
 };
