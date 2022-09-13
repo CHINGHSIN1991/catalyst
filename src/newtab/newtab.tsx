@@ -21,6 +21,7 @@ import { getBackgroundImg } from '../utils/api';
 
 const Wrapper = styled.div`
   /* border: solid 5px; */
+  font-family: 'Noto Sans';
   position: fixed;
   left: 0;
   top: 0;
@@ -44,16 +45,19 @@ const Container = styled.div`
 `;
 
 const MenuContainer = styled.div`
-  border: solid 1px;
+  /* border: solid 1px; */
+  font-family: 'Noto Sans TC', 'Microsoft JhengHei';
   width: 360px;
+  color: white;
   height: 100%;
   display: flex;
   flex-direction: column;
 `;
 
 const FocusPanel = styled.div`
-  border: solid 1px;
+  /* border: solid 1px; */
   width: calc(100% - 640px);
+  color: white;
   height: 100%;
   display: flex;
   flex-direction: column;
