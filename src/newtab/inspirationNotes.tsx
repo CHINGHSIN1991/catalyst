@@ -5,22 +5,22 @@ import { useState, useEffect } from "react";
 import { PanelBasicSetting } from './styleSetting';
 
 const TempLinksPanel = styled(PanelBasicSetting)`
-`
+`;
 
 const NoteLinkIcon = styled.img`
   width: 24px;
   height: 24px;
   object-fit: cover;
-`
+`;
 
 const TempLinks = styled.ul`
   border: solid 1px;
   width: 100%;
-`
+`;
 
 const TempLink = styled.li`
   cursor: pointer;
-`
+`;
 
 interface note {
   id: number;
@@ -31,8 +31,8 @@ interface note {
 }
 
 export const InspirationNotePanel: React.FC<{}> = () => {
-  const [noteCategories, setNoteCategories] = useState([])
-  const [inspirationNotes, setInspirationNotes] = useState({});
+  const [noteCategories, setNoteCategories] = useState([]);
+  const [inspirationNotes, setInspirationNotes] = useState(null);
   const [tempNote, setTempNote] = useState({
     id: 0,
     logo: "",
@@ -48,48 +48,49 @@ export const InspirationNotePanel: React.FC<{}> = () => {
   }
 
   function handleTempNote(e: React.ChangeEvent<HTMLInputElement>) {
-    setTempNote({ ...tempNote, [e.target.name]: e.target.value })
+    setTempNote({ ...tempNote, [e.target.name]: e.target.value });
     console.log({ ...tempNote, [e.target.name]: e.target.value });
   }
 
   function changeNote() {
-    let tempNotes = {}
-    noteCategories.forEach((category) => {
+    let tempNotes = {};
+    ["no category", ...noteCategories].forEach((category) => {
       if (inspirationNotes[category]) {
-        let tempArray = []
+        let tempArray = [];
         inspirationNotes[category].forEach((note: note) => {
           if (note.id === tempNote.id) {
-            tempArray.push(tempNote)
+            tempArray.push(tempNote);
           } else {
-            tempArray.push(note)
+            tempArray.push(note);
           }
-        })
-        tempNotes[category] = tempArray
+        });
+        tempNotes[category] = tempArray;
       }
-    })
+    });
     setChromeSyncNotes(tempNotes);
     setIsEditOn(false);
   }
 
   function delNote(id: number) {
-    let tempNotes = {}
-    noteCategories.forEach((category) => {
+    let tempNotes = {};
+    let tempCategories = ["no category", ...noteCategories];
+    tempCategories.forEach((category) => {
       if (inspirationNotes[category]) {
-        let tempArray = []
+        let tempArray = [];
         inspirationNotes[category].forEach((note: note) => {
           if (note.id === id) {
           } else {
-            tempArray.push(note)
+            tempArray.push(note);
           }
-        })
-        tempNotes[category] = tempArray
+        });
+        tempNotes[category] = tempArray;
       }
-    })
+    });
     setChromeSyncNotes(tempNotes);
     setIsEditOn(false);
   }
 
-  function setChromeSyncNotes(notes: { [key: string]: note[] }) {
+  function setChromeSyncNotes(notes: { [key: string]: note[]; }) {
     chrome.storage.sync.set({ inspirationNotes: notes }, function () {
       console.log(notes);
       setInspirationNotes(notes);
@@ -101,21 +102,40 @@ export const InspirationNotePanel: React.FC<{}> = () => {
       setInspirationNotes(result.inspirationNotes);
       setNoteCategories(result.noteCategories);
     });
-  }, [])
+  }, []);
 
   return (
     <TempLinksPanel>
       Inspiration Notes
       <hr />
-      {noteCategories && !!noteCategories.length && noteCategories.map((category, index) => {
+      {inspirationNotes && "no category" in inspirationNotes &&
+        <TempLinks>
+          {inspirationNotes["no category"] && inspirationNotes["no category"].map((note: note) => {
+            return (
+              <TempLink key={note.id}>
+                <button onClick={() => { openTab(note); }}>edit</button>
+                <button onClick={() => { delNote(note.id); }}>x</button>
+                <a href={note.url} target="_blank">
+                  <NoteLinkIcon src={note.logo}></NoteLinkIcon>
+                  <div>
+                    <div>{note.title}</div>
+                    <div>{note.note}</div>
+                  </div>
+                </a>
+              </TempLink>
+            );
+          })}
+        </TempLinks>
+      }
+      {noteCategories && inspirationNotes && noteCategories.map((category, index) => {
         return (
           <TempLinks key={category + index}>
-            {inspirationNotes[category] && category}
+            {inspirationNotes[category] && !!inspirationNotes[category].length && category}
             {inspirationNotes[category] && inspirationNotes[category].map((note: note) => {
               return (
                 <TempLink key={note.id}>
-                  <button onClick={() => { openTab(note) }}>edit</button>
-                  <button onClick={() => { delNote(note.id) }}>x</button>
+                  <button onClick={() => { openTab(note); }}>edit</button>
+                  <button onClick={() => { delNote(note.id); }}>x</button>
                   <a href={note.url} target="_blank">
                     <NoteLinkIcon src={note.logo}></NoteLinkIcon>
                     <div>
@@ -134,10 +154,9 @@ export const InspirationNotePanel: React.FC<{}> = () => {
           <label htmlFor="">Title<input name="title" type="text" value={tempNote.title} onChange={handleTempNote} /></label>
           <label htmlFor="">Quick Note<input name="note" type="text" value={tempNote.note} onChange={handleTempNote} /></label>
           <button onClick={changeNote}>Confirm</button>
-          <button onClick={() => { setIsEditOn(false) }}>Cancel</button>
+          <button onClick={() => { setIsEditOn(false); }}>Cancel</button>
         </div>
       }
-
     </TempLinksPanel>
   );
-}
+};

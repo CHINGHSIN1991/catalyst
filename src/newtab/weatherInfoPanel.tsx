@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 
-import { fetchWeatherData } from '../utils/api';
+import { fetchWeatherData, getLocationKey, fetchAccuWeatherData } from '../utils/api';
 
 const Wrapper = styled.div`
   /* border: solid 1px; */
@@ -13,25 +13,8 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const DateBlock = styled.div`
-  font-size: 2rem;
-  text-align: center;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
-  /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
-`;
 
-const TimeBlock = styled.div`
-  font-size: 7rem;
-  text-align: center;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
-  /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
-`;
-
-interface weatherData {
+interface openWeatherData {
   coord: {
     lon: number,
     lat: number,
@@ -81,17 +64,75 @@ interface weatherData {
   cod: number;
 }
 
+type accuDayWeatherData = {
+  HasPrecipitation: boolean,
+  Icon: number,
+  IconPhrase: string,
+  LocalSource: {
+    Id: number,
+    Number: string,
+    WeatherCode: string,
+  };
+  PrecipitationIntensity: string,
+  PrecipitationType: string,
+};
+
+type accuTemperature = {
+  Value: number,
+  Unit: string,
+  UnitType: number,
+};
+type accuTemperatureSet = {
+  Maximum: accuTemperature,
+  Minimum: accuTemperature,
+};
+
+type accuWeatherData = {
+  Date: string,
+  Day: accuDayWeatherData,
+  EpochDate: number,
+  Link: string,
+  MobileLink: string,
+  Night: accuDayWeatherData,
+  Sources: string[],
+  Temperature: accuTemperatureSet,
+};
+
+type accuWeatherHeadline = {
+  Category: string,
+  EffectiveDate: string,
+  EffectiveEpochDate: Date,
+  EndDate: string,
+  EndEpochDateL: Date,
+  Link: string,
+  MobileLink: string,
+  Severity: number,
+  Text: string,
+};
+interface accuWeatherDataSet {
+  DailyForecasts: accuWeatherData[],
+  Headline: accuWeatherHeadline,
+}
+
 export const WeatherPanel: React.FC<{}> = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isDataLoad, setIsDataLoad] = useState(false);
-  const [weatherData, setWeatherData] = useState<weatherData>(null);
+  const [weatherData, setWeatherData] = useState<accuWeatherDataSet>(null);
 
   useEffect(() => {
     if (isPanelOpen && !isDataLoad) {
+      // navigator.geolocation.getCurrentPosition((position) => {
+      //   const lat = position.coords.latitude;
+      //   const lon = position.coords.longitude;
+      //   console.log(lat, lon);
+      //   fetchWeatherData(lat, lon).then((res) => setWeatherData(res)).catch((res) => console.log(res));
+      // });
       navigator.geolocation.getCurrentPosition((position) => {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
-        fetchWeatherData(lat, lon).then((res) => setWeatherData(res)).catch((res) => console.log(res));
+        getLocationKey(lat, lon)
+          .then((res) => fetchAccuWeatherData(res.Key).then((res) => { setWeatherData(res); setIsDataLoad(true); }))
+          .catch((res) => console.log(res));
       });
     }
   }, [isPanelOpen, isDataLoad]);
@@ -99,7 +140,9 @@ export const WeatherPanel: React.FC<{}> = () => {
   return (
     <Wrapper>
       <button onClick={() => setIsPanelOpen(!isPanelOpen)}>{isPanelOpen ? "Close weather panel" : "Open weather panel"}</button>
-      {weatherData && <div>{weatherData.name}</div>}
+      {isPanelOpen && weatherData && weatherData.DailyForecasts.map((item) => {
+        return (<div key={item.Date} style={{ color: "white" }}><div>{item.Date}</div><div>{JSON.stringify(item.Temperature)}</div></div>);
+      })}
     </Wrapper>
   );
 };

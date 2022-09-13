@@ -99,7 +99,7 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
       />
       <button onClick={addNote}>ENTER</button>
       <button onClick={clearAll}> Clear all</button>
-      <button onClick={sortByCreateTime}>Sort by create time</button>
+      <button onClick={sortByCreateTime}>Sort by created time</button>
       <MemoContainer>
         {notes.map((item, index: number) => {
           return (

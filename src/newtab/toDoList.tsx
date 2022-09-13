@@ -28,7 +28,7 @@ interface todo {
   alertSend?: boolean;
 }
 
-export const ToDoListPanel: React.FC<{ tebInfo: { id: number; }; }> = (props) => {
+export const ToDoListPanel: React.FC<{}> = () => {
   const [workList, setWorkList] = useState(null);
   const [tempTodo, setTempTodo] = useState({
     workContent: "",
@@ -84,7 +84,6 @@ export const ToDoListPanel: React.FC<{ tebInfo: { id: number; }; }> = (props) =>
   }
 
   function changeIsDone(id: number) {
-    delTodo;
     let tempWorkList = [];
     workList.forEach((todo) => {
       if (todo.id === id) {
