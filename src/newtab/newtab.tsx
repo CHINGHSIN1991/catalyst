@@ -1,20 +1,23 @@
 import React, { useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import styled from "styled-components";
+import { Provider } from 'react-redux';
+import { store } from './features/store';
 import { ResetStyle, GlobalStyle } from "../static/globalStyle";
 import { useState, useEffect } from "react";
 
-import { CommonLinkPanel } from './commonLinks';
-import { InspirationNotePanel } from './inspirationNotes';
-import { TimePanel } from './timePanel';
-import { ToDoListPanel } from './toDoList';
-import { PersonalServicePanel } from './personalService';
-import { CalendarPanel } from './calendarPanel';
-import { WeatherPanel } from './weatherInfoPanel';
-import { SettingPanel } from './settingPanel';
-import { PomodoroPanel } from './PomodoroPanel';
-import { BulletinBoard } from './BulletinBoard';
-import { CurrentFocusPanel } from './CurrentFocusPanel';
+import { ShortcutsPanel } from './components/ShortcutsPanel';
+import { InspirationNotePanel } from './components/InspirationNotes';
+import { TimePanel } from './components/TimePanel';
+import { ToDoListPanel } from './components/ToDoList';
+import { PersonalServicePanel } from './components/PersonalService';
+import { CalendarPanel } from './components/CalendarPanel';
+import { WeatherPanel } from './components/WeatherInfoPanel';
+import { SettingPanel } from './components/SettingPanel';
+import { PomodoroPanel } from './components/PomodoroPanel';
+import { BulletinBoard } from './components/BulletinBoard';
+import { CurrentFocusPanel } from './components/CurrentFocusPanel';
+import { EditPanel } from './components/EditPanel';
 
 
 import { getBackgroundImg } from '../utils/api';
@@ -35,6 +38,14 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
+const HeightLimiter = styled.div`
+  /* border: solid 1px black; */
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 96px);
+`;
+
 const Container = styled.div`
   left: ${(props: { isBoardOn: boolean; }) => { return props.isBoardOn ? "-100vw" : "0"; }};
   display: flex;
@@ -46,8 +57,8 @@ const Container = styled.div`
 
 const MenuContainer = styled.div`
   /* border: solid 1px; */
-  font-family: 'Noto Sans TC', 'Microsoft JhengHei';
-  width: 360px;
+  font-family: 'Noto Sans', 'Microsoft JhengHei';
+  width: 400px;
   color: white;
   height: 100%;
   display: flex;
@@ -56,7 +67,7 @@ const MenuContainer = styled.div`
 
 const FocusPanel = styled.div`
   /* border: solid 1px; */
-  width: calc(100% - 640px);
+  width: calc(100% - 800px);
   color: white;
   height: 100%;
   display: flex;
@@ -146,41 +157,46 @@ const App: React.FC<{}> = () => {
   }, [bgOption]);
 
   return (
-    <Wrapper currentBackground={currentBackground.url}>
-      <Container isBoardOn={isBoardOn}>
-        <MainBoard>
-          <ResetStyle />
-          <GlobalStyle />
-          <MenuContainer>
-            <CommonLinkPanel></CommonLinkPanel>
-            <InspirationNotePanel></InspirationNotePanel>
-            <SettingPanel
-              currentBackground={currentBackground}
-              currentBgList={currentBgList}
-              setCurrentBgList={setCurrentBgList}
-              personalBgSet={personalBgSet}
-              setPersonalBgSet={setPersonalBgSet}
-              bgOption={bgOption}
-              setBgOption={setBgOption}
-            ></SettingPanel>
-          </MenuContainer>
-          <FocusPanel>
-            <TimePanel></TimePanel>
-            <CurrentFocusPanel></CurrentFocusPanel>
-            <button>Menu trigger</button>
-            <PomodoroPanel></PomodoroPanel>
-            <WeatherPanel></WeatherPanel>
-            <button onClick={() => { setIsBoardOn(true); }}>Bulletin Board trigger</button>
-          </FocusPanel>
-          <MenuContainer>
-            <PersonalServicePanel></PersonalServicePanel>
-            <CalendarPanel></CalendarPanel>
-            <ToDoListPanel></ToDoListPanel>
-          </MenuContainer>
-        </MainBoard>
-        <BulletinBoard setIsBoardOn={setIsBoardOn}></BulletinBoard>
-      </Container>
-    </Wrapper>
+    <Provider store={store}>
+      <Wrapper currentBackground={currentBackground.url}>
+        <Container isBoardOn={isBoardOn}>
+          <MainBoard>
+            <ResetStyle />
+            <GlobalStyle />
+            <MenuContainer>
+              <HeightLimiter>
+                <ShortcutsPanel></ShortcutsPanel>
+                <InspirationNotePanel></InspirationNotePanel>
+              </HeightLimiter>
+              <SettingPanel
+                currentBackground={currentBackground}
+                currentBgList={currentBgList}
+                setCurrentBgList={setCurrentBgList}
+                personalBgSet={personalBgSet}
+                setPersonalBgSet={setPersonalBgSet}
+                bgOption={bgOption}
+                setBgOption={setBgOption}
+              ></SettingPanel>
+            </MenuContainer>
+            <FocusPanel>
+              <TimePanel></TimePanel>
+              <CurrentFocusPanel></CurrentFocusPanel>
+              <button>Menu trigger</button>
+              <PomodoroPanel></PomodoroPanel>
+              <WeatherPanel></WeatherPanel>
+              <button onClick={() => { setIsBoardOn(true); }}>Bulletin Board trigger</button>
+            </FocusPanel>
+            <MenuContainer>
+              <PersonalServicePanel></PersonalServicePanel>
+              <CalendarPanel></CalendarPanel>
+              <ToDoListPanel></ToDoListPanel>
+            </MenuContainer>
+          </MainBoard>
+          <BulletinBoard setIsBoardOn={setIsBoardOn}></BulletinBoard>
+        </Container>
+      </Wrapper>
+      <EditPanel></EditPanel>
+    </Provider>
   );
 };
 

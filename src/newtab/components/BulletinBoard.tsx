@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
 
-import { handleInputChange } from "../utils/inputHandler";
+import { handleInputChange } from "../../utils/inputHandler";
 
 
 const Wrapper = styled.div`

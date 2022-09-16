@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 
-import { fetchCalendarData } from '../utils/api';
+import { fetchCalendarData } from '../../utils/api';
 
 const Wrapper = styled.div`
   /* border: solid 1px; */

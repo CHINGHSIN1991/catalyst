@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom/client';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PomodoroPanel } from './PomodoroPanel';
+import { PomodoroPanel } from './comoponents/PomodoroPanel';
 
 
 const Wrapper = styled.div`

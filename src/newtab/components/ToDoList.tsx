@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PanelBasicSetting } from './styleSetting';
+import { PanelBasicSetting } from '../styleSetting';
 
-import { handleInputChange } from '../utils/inputHandler';
+import { handleInputChange } from '../../utils/inputHandler';
 
 const WorksPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */

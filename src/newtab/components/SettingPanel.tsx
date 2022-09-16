@@ -2,13 +2,18 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PanelBasicSetting } from './styleSetting';
+import { PanelBasicSetting } from '../styleSetting';
 
 const SettingPanelWrapper = styled(PanelBasicSetting)`
+  /* border: solid 1px; */
+  height: 80px;
 `;
 
 const ButtonContainer = styled.div`
+  /* border: solid 1px; */
   width: 100%;
+  margin-top: 8px;
+  height: 40px;
   display: flex;
   align-items: center;
 `;
@@ -109,13 +114,13 @@ export const SettingPanel: React.FC<
 
     useEffect(() => {
       chrome.storage.sync.set({ personalBgSet: props.personalBgSet }, function () {
-        console.log(props.personalBgSet);
+        // console.log(props.personalBgSet);
       });
     }, [props.personalBgSet]);
 
     useEffect(() => {
       chrome.storage.sync.set({ bgOption: props.bgOption }, function () {
-        console.log(props.bgOption);
+        // console.log(props.bgOption);
       });
     }, [props.bgOption]);
 

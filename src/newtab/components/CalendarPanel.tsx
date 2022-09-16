@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
-import { PanelBasicSetting } from './styleSetting';
-import { fetchCalendarData } from '../utils/api';
+import { PanelBasicSetting } from '../styleSetting';
+import { fetchCalendarData } from '../../utils/api';
 
 const CalendarWrapper = styled(PanelBasicSetting)`
   /* border: solid 1px;   */

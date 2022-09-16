@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PanelBasicSetting } from './styleSetting';
+import { PanelBasicSetting } from '../styleSetting';
 
 const PersonalPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */

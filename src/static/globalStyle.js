@@ -47,18 +47,10 @@ table {
 a {
 	text-decoration: none;
 }
-
 `
 
 export const GlobalStyle = createGlobalStyle`
-@font-face {
-  font-family: 'Noto Sans TC';
-	font-weight: normal;
-  src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400&display=swap') format('woff2');
-}
-
 * {
-	font-family: 'Noto Sans', 'Microsoft JhengHei';
 	font-weight: normal;
 	position: relative;
   box-sizing: border-box;

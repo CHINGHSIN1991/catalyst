@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 
-import { fetchWeatherData, getLocationKey, fetchAccuWeatherData } from '../utils/api';
+import { fetchWeatherData, getLocationKey, fetchAccuWeatherData } from '../../utils/api';
 
 const Wrapper = styled.div`
   /* border: solid 1px; */
