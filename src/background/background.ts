@@ -1,52 +1,51 @@
 
 console.log("backgroundScript running!")
 
-const todoListPort = chrome.runtime.connect({ name: "todo" });
-console.log(todoListPort);
-todoListPort.onMessage.addListener((res)=>{
-  console.log(res);
-})
+// const todoListPort = chrome.runtime.connect({ name: "todo" });
+// console.log(todoListPort);
+// todoListPort.onMessage.addListener((res)=>{
+//   console.log(res);
+// })
 
 
+// const clientId = process.env.CLIENT_ID
+// const redirectUri = `https://${chrome.runtime.id}.chromiumapp.org/`
+// const nonce = Math.random().toString(36).substring(2, 15)
 
-const clientId = process.env.CLIENT_ID
-const redirectUri = `https://${chrome.runtime.id}.chromiumapp.org/`
-const nonce = Math.random().toString(36).substring(2, 15)
+// chrome.action.onClicked.addListener(function() {
+//   const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
 
-chrome.action.onClicked.addListener(function() {
-  const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+//   authUrl.searchParams.set('client_id', clientId);
+//   authUrl.searchParams.set('response_type', 'id_token');
+//   authUrl.searchParams.set('redirect_uri', redirectUri);
+//   // Add the OpenID scope. Scopes allow you to access the user’s information.
+//   authUrl.searchParams.set('scope', 'openid profile email');
+//   authUrl.searchParams.set('nonce', nonce);
+//   // Show the consent screen after login.
+//   authUrl.searchParams.set('prompt', 'consent');
 
-  authUrl.searchParams.set('client_id', clientId);
-  authUrl.searchParams.set('response_type', 'id_token');
-  authUrl.searchParams.set('redirect_uri', redirectUri);
-  // Add the OpenID scope. Scopes allow you to access the user’s information.
-  authUrl.searchParams.set('scope', 'openid profile email');
-  authUrl.searchParams.set('nonce', nonce);
-  // Show the consent screen after login.
-  authUrl.searchParams.set('prompt', 'consent');
+//   chrome.identity.launchWebAuthFlow(
+//     {
+//       url: authUrl.href,
+//       interactive: true,
+//     },
+//     (redirectUrl) => {
+//       if (redirectUrl) {
+//         // The ID token is in the URL hash
+//         const urlHash = redirectUrl.split('#')[1];
+//         const params = new URLSearchParams(urlHash);
+//         const jwt = params.get('id_token');
 
-  chrome.identity.launchWebAuthFlow(
-    {
-      url: authUrl.href,
-      interactive: true,
-    },
-    (redirectUrl) => {
-      if (redirectUrl) {
-        // The ID token is in the URL hash
-        const urlHash = redirectUrl.split('#')[1];
-        const params = new URLSearchParams(urlHash);
-        const jwt = params.get('id_token');
+//         // Parse the JSON Web Token
+//         const base64Url = jwt.split('.')[1];
+//         const base64 = base64Url.replace('-', '+').replace('_', '/');
+//         const token = JSON.parse(atob(base64));
 
-        // Parse the JSON Web Token
-        const base64Url = jwt.split('.')[1];
-        const base64 = base64Url.replace('-', '+').replace('_', '/');
-        const token = JSON.parse(atob(base64));
-
-        console.log('token', token);
-      }
-    },
-  );
-});
+//         console.log('token', token);
+//       }
+//     },
+//   );
+// });
 
 
 
@@ -61,13 +60,6 @@ interface todo {
   alertSend?: boolean;
 }
 
-chrome.storage.local.get(["pomoTimer","pomoIsRunning"],(res)=> {
-  chrome.storage.local.set({
-    pomoTimer: "pomoTimer" in res? res.pomoTimer : 0,
-    pomoIsRunning :"pomoIsRunning" in res? res.pomoIsRunning : false
-  })
-})
-
 chrome.alarms.create("TodoListReminder",{
   periodInMinutes: 1/12,
 })
@@ -79,21 +71,20 @@ chrome.alarms.create("PomoTimer",{
 chrome.alarms.onAlarm.addListener((alarm)=>{
   const now = Date.now();
   if(alarm.name==="PomoTimer") {
-    chrome.storage.local.get(["pomoTimer","pomoIsRunning"],(res)=>{
+    chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)=>{
       if (res.pomoIsRunning) {
-        let pomoTimer = res.pomoTimer +1
+        let passedSeconds = res.passedSeconds +1
         let pomoIsRunning = true
-        if (pomoTimer > 25 * 60){
-          console.log(this.registration)
-          // this.registration.showNotification("Pomodoro Timer",{
-          //   body: "25 minutes has padded!",
-          //   icon: "CatalystLogo_128.png"
-          // })
-          pomoTimer = 0;
+        console.log('po'+res.pomoAlertTime)
+        if (passedSeconds > res.pomoAlertTime * 60){
+          passedSeconds = 0;
           pomoIsRunning = false
+          this.registration.showNotification("Pomodoro Timer",{
+            body: `${res.pomoAlertTime} minutes has padded!`,
+            icon: "CatalystLogo_128.png"
+          })          
         }
-        console.log(pomoTimer);
-        chrome.storage.local.set({pomoTimer,pomoIsRunning})
+        chrome.storage.local.set({passedSeconds,pomoIsRunning})
       }
     })
   }
@@ -126,17 +117,25 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
   }  
 })
 
-chrome.runtime.onInstalled.addListener((details) => {
-  chrome.contextMenus.create({
-    title: "Read these text(s) en-US",
-    id: "contextMenu1",
-    contexts: ["page","selection","link"]
+chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)=> {
+  chrome.storage.local.set({
+    passedSeconds: "passedSeconds" in res? res.passedSeconds : 0,
+    pomoIsRunning: "pomoIsRunning" in res? res.pomoIsRunning : false,
+    pomoAlertTime: "pomoAlertTime" in res? res.pomoAlertTime : 1
   })
-  chrome.contextMenus.onClicked.addListener((e)=>{
-    if(e.menuItemId === "contextMenu1"){
-      chrome.tts.speak(e.selectionText,{lang:"en-US"});
-      console.log("speak en-US");
-    }
-  })
-  console.log(details);
 })
+
+// chrome.runtime.onInstalled.addListener((details) => {
+//   chrome.contextMenus.create({
+//     title: "Read these text(s) en-US",
+//     id: "contextMenu1",
+//     contexts: ["page","selection","link"]
+//   })
+//   chrome.contextMenus.onClicked.addListener((e)=>{
+//     if(e.menuItemId === "contextMenu1"){
+//       chrome.tts.speak(e.selectionText,{lang:"en-US"});
+//       console.log("speak en-US");
+//     }
+//   })
+//   console.log(details);
+// })

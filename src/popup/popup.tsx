@@ -83,6 +83,7 @@ const App: React.FC<{}> = () => {
     <Wrapper>
       <ResetStyle />
       <GlobalStyle />
+      <PomodoroPanel></PomodoroPanel>
       {/* <label htmlFor="">category
         <select value={currentCategory} onChange={handleCurrentCategory} name="" id="">
           <option value="no category" selected style={{ color: "lightgray" }}>- Category -</option>
@@ -95,7 +96,6 @@ const App: React.FC<{}> = () => {
 
       <button onClick={addQuickNotes}>save to Inspiration Notes</button> */}
       <NotesPanel></NotesPanel>
-      <PomodoroPanel></PomodoroPanel>
     </Wrapper >
   );
 };

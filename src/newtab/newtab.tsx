@@ -18,7 +18,7 @@ import { PomodoroPanel } from './components/PomodoroPanel';
 import { BulletinBoard } from './components/BulletinBoard';
 import { CurrentFocusPanel } from './components/CurrentFocusPanel';
 import { EditPanel } from './components/EditPanel';
-
+import { TogglePanel } from './components/TogglePanel';
 
 import { getBackgroundImg } from '../utils/api';
 
@@ -48,6 +48,7 @@ const HeightLimiter = styled.div`
 
 const Container = styled.div`
   left: ${(props: { isBoardOn: boolean; }) => { return props.isBoardOn ? "-100vw" : "0"; }};
+  top: 0;
   display: flex;
   width: 200vw;
   height: 100vh;
@@ -57,17 +58,29 @@ const Container = styled.div`
 
 const MenuContainer = styled.div`
   /* border: solid 1px; */
+  position: absolute;
   font-family: 'Noto Sans', 'Microsoft JhengHei';
-  width: 400px;
+  width: 360px;
   color: white;
   height: 100%;
   display: flex;
   flex-direction: column;
+  transition: 0.4s;
+`;
+
+const MenuContainerLeft = styled(MenuContainer)`
+  left: ${(props) => { return props.isMenuOn ? "0px" : "-400px"; }};
+  top: 0px;
+`;
+
+const MenuContainerRight = styled(MenuContainer)`
+  right: ${(props) => { return props.isMenuOn ? "0px" : "-400px"; }};
+  top: 0px;
 `;
 
 const FocusPanel = styled.div`
   /* border: solid 1px; */
-  width: calc(100% - 800px);
+  width: calc(100% - 720px);
   color: white;
   height: 100%;
   display: flex;
@@ -78,7 +91,12 @@ const FocusPanel = styled.div`
 const MainBoard = styled.div`
   width: 100vw;
   height: 100vh;
+  /* border: solid 5px; */
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 `;
 
 type backgroundInfo = {
@@ -104,7 +122,9 @@ const App: React.FC<{}> = () => {
   const [currentBgList, setCurrentBgList] = useState<backgroundInfo[]>(null);
   const [personalBgSet, setPersonalBgSet] = useState(null);
   const [bgOption, setBgOption] = useState<bgOption>(null);
+  const [isMenuOn, setIsMenuOn] = useState(true);
   const [isBoardOn, setIsBoardOn] = useState(false);
+  const [centralPanel, setCentralPanel] = useState("");
   const timeIntervalId = useRef(null);
   // const [tebInfo, setTebInfo] = useState(null);
 
@@ -158,12 +178,12 @@ const App: React.FC<{}> = () => {
 
   return (
     <Provider store={store}>
+      <ResetStyle />
+      <GlobalStyle />
       <Wrapper currentBackground={currentBackground.url}>
         <Container isBoardOn={isBoardOn}>
           <MainBoard>
-            <ResetStyle />
-            <GlobalStyle />
-            <MenuContainer>
+            <MenuContainerLeft isMenuOn={isMenuOn}>
               <HeightLimiter>
                 <ShortcutsPanel></ShortcutsPanel>
                 <InspirationNotePanel></InspirationNotePanel>
@@ -177,20 +197,25 @@ const App: React.FC<{}> = () => {
                 bgOption={bgOption}
                 setBgOption={setBgOption}
               ></SettingPanel>
-            </MenuContainer>
+            </MenuContainerLeft>
             <FocusPanel>
               <TimePanel></TimePanel>
               <CurrentFocusPanel></CurrentFocusPanel>
-              <button>Menu trigger</button>
-              <PomodoroPanel></PomodoroPanel>
-              <WeatherPanel></WeatherPanel>
-              <button onClick={() => { setIsBoardOn(true); }}>Bulletin Board trigger</button>
+              <PomodoroPanel centralPanel={centralPanel}></PomodoroPanel>
+              <WeatherPanel centralPanel={centralPanel}></WeatherPanel>
+              <TogglePanel
+                setIsBoardOn={setIsBoardOn}
+                isMenuOn={isMenuOn}
+                setIsMenuOn={setIsMenuOn}
+                centralPanel={centralPanel}
+                setCentralPanel={setCentralPanel}
+              ></TogglePanel>
             </FocusPanel>
-            <MenuContainer>
+            <MenuContainerRight isMenuOn={isMenuOn}>
               <PersonalServicePanel></PersonalServicePanel>
               <CalendarPanel></CalendarPanel>
               <ToDoListPanel></ToDoListPanel>
-            </MenuContainer>
+            </MenuContainerRight>
           </MainBoard>
           <BulletinBoard setIsBoardOn={setIsBoardOn}></BulletinBoard>
         </Container>

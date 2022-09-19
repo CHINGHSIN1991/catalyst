@@ -4,17 +4,89 @@ import styled from "styled-components";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
 
-import { handleInputChange } from "../../utils/inputHandler";
-
+import { handleInputChange, handleTextAreaChange } from "../../utils/inputHandler";
+import { BulletinTogglePanel } from "./BulletinTogglePanel";
 
 const Wrapper = styled.div`
-  border: solid 1px;
+  /* border: solid 1px; */
   /* display: flex; */
   /* flex-wrap: wrap;
   flex-direction: row; */
   width: 100vw;
   height: 100vh;
   overflow-y:auto;
+`;
+
+const CreatePanel = styled.div`
+  border: solid 1px;
+  padding-top: 24px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MemoInput = styled.textarea`
+  border-radius: 4px;
+  resize: none;
+  padding: 8px;
+  width: 360px;
+  height: 64px;
+  background-color: rgba(240,240,240,0.5);
+  border: solid gray 0.5px;
+  :focus{
+    outline: solid rgba(240,240,240,1);
+  }
+`;
+
+const OptionContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 360px;
+`;
+
+const ColorOption = styled.div`
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  margin: 16px 8px 16px 4px;
+  border-radius: 4px;
+  border: solid 2px white;
+  background-color: ${(props) => { return props.color; }};
+`;
+
+const ColorPick = styled.input`
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  margin: 16px 16px 16px 4px;
+  height: 32px;
+  padding: 0;
+  width: 80px;
+  /* border-radius: 4px; */
+  ::-webkit-color-swatch{
+    border-radius: 4px;
+  }
+`;
+
+const CreateBtn = styled.div`
+  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
+  cursor: pointer;
+  text-align: center;
+  width: 80px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 4px;
+  margin: 16px 4px;
+  background-color: #fff;
+  transition: 0.2s;
+  :hover{
+    background-color: rgba(0,0,0,0.5);
+  }
 `;
 
 const MemoContainer = styled.div`
@@ -88,18 +160,33 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
 
   return (
     <Wrapper>
-      <button onClick={() => { props.setIsBoardOn(false); }}>go back</button>
-      <input
-        type="text"
-        name="note"
-        id=""
-        value={tempNote.note}
-        onChange={(e) => handleInputChange(e, tempNote, setTempNote)}
-        onKeyPress={(e) => addNoteByEnter(e)}
-      />
-      <button onClick={addNote}>ENTER</button>
-      <button onClick={clearAll}> Clear all</button>
-      <button onClick={sortByCreateTime}>Sort by created time</button>
+      <CreatePanel>
+        <MemoInput
+          name="note"
+          value={tempNote.note}
+          onChange={(e) => handleTextAreaChange(e, tempNote, setTempNote)}
+          onKeyPress={(e) => addNoteByEnter(e)}
+        ></MemoInput>
+        {/* <input
+          type="text"
+          name="note"
+          id=""
+          value={tempNote.note}
+          onChange={(e) => handleInputChange(e, tempNote, setTempNote)}
+          onKeyPress={(e) => addNoteByEnter(e)}
+        /> */}
+        <OptionContainer>
+          <ColorOption color="#cc164d"></ColorOption>
+          <ColorOption color="#db8a18"></ColorOption>
+          <ColorOption color="#d4cb26"></ColorOption>
+          <ColorOption color="#36e08b"></ColorOption>
+          <ColorOption color="#1aa1c9"></ColorOption>
+          <ColorOption color="#764d9e"></ColorOption>
+          <ColorPick type="color"></ColorPick>
+          <CreateBtn onClick={addNote}>Create</CreateBtn>
+        </OptionContainer>
+
+      </CreatePanel>
       <MemoContainer>
         {notes.map((item, index: number) => {
           return (
@@ -121,6 +208,7 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
           );
         })}
       </MemoContainer>
+      <BulletinTogglePanel sortByCreateTime={sortByCreateTime} setIsBoardOn={props.setIsBoardOn} clearAll={clearAll}></BulletinTogglePanel>
     </Wrapper>
   );
 };

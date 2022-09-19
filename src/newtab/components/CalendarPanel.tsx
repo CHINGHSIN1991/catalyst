@@ -7,8 +7,10 @@ import { PanelBasicSetting } from '../styleSetting';
 import { fetchCalendarData } from '../../utils/api';
 
 const CalendarWrapper = styled(PanelBasicSetting)`
-  /* border: solid 1px;   */
+  display: flex;
+  flex-grow:0;
 `;
+
 const CalendarModuleWrapper = styled.div`
   width: 100vw;
   height: 100vh;
@@ -20,6 +22,7 @@ const CalendarModuleWrapper = styled.div`
   left: 0;
   top: 0;
 `;
+
 const CalendarEditPanel = styled.div`
   width: 480px;
   height: 480px;
@@ -27,6 +30,58 @@ const CalendarEditPanel = styled.div`
   background-color: #fff;
   display: flex;
   flex-direction: column;
+`;
+
+const CalendarContainer = styled.div`
+  border: solid 1px;
+  max-height: 320px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+    /* background: transparent;
+    border-radius: 4px; */
+  }
+  &::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.4);
+    border: 1px solid slategrey
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: transparent;
+  }
+`;
+
+const CalendarBackgroundContainer = styled.div`
+  position: relative;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 400px;
+`;
+
+const TimeLine = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 32px;
+`;
+
+const TimeValue = styled.div`
+  font-size: 0.75rem;
+  padding-right: 8px;
+  color: rgba(255,255,255,0.8);
+`;
+
+const TimeHr = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255,255,255,0.3);
 `;
 
 
@@ -108,12 +163,32 @@ export const CalendarPanel: React.FC<{}> = () => {
     <CalendarWrapper>
       {isCreateOn && <CalendarModule setIsCreateOn={setIsCreateOn} userInfo={userInfo} authToken={authToken}></CalendarModule>}
       {isEditOn && <CalendarEditModule editItem={editItem} setIsEditOn={setIsEditOn}></CalendarEditModule>}
+      <CalendarContainer>
+        <CalendarBackground></CalendarBackground>
+      </CalendarContainer>
       <button onClick={() => setIsCreateOn(true)}>Create</button>
       {calendarItems && !!calendarItems.length && calendarItems.map((item) => {
         return <div key={item.id}>{getTime(item.start.dateTime)}-{getTime(item.end.dateTime)}<br />{item.summary}<button onClick={() => { editEvent(item); }}>edit</button><button onClick={() => { delEvent(item); }}>x</button></div>;
       })}
     </CalendarWrapper >
   );
+};
+
+
+const CalendarBackground: React.FC<{}> = () => {
+  const timeList = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'];
+  return (
+    <CalendarBackgroundContainer>
+      {timeList.map((time) => {
+        return (
+          <TimeLine>
+            <TimeValue>{`${time}:00`}</TimeValue>
+            <TimeHr />
+          </TimeLine>);
+      })}
+    </CalendarBackgroundContainer>
+  );
+
 };
 
 const CalendarModule: React.FC<{ setIsCreateOn: (boo: boolean) => void; userInfo: { email: string, id: string; }; authToken: string; }> = (props) => {

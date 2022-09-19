@@ -62,8 +62,9 @@ const ShortcutsList = styled.ul`
     width: 6px;
   }
   &::-webkit-scrollbar-button {
-    background: transparent;
-    border-radius: 4px;
+    display: none;
+    /* background: transparent;
+    border-radius: 4px; */
   }
   &::-webkit-scrollbar-track-piece {
     background: transparent;
@@ -147,7 +148,7 @@ const Shortcut = styled.li`
   margin: 2px;
   border-radius: 4px;
   padding: 12px 24px;
-  width: 84px;
+  width: 74px;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -182,8 +182,9 @@ const ScrollContainer = styled.div`
     width: 6px;
   }
   &::-webkit-scrollbar-button {
-    background: transparent;
-    border-radius: 4px;
+    display: none;
+    /* background: transparent;
+    border-radius: 4px; */
   }
   &::-webkit-scrollbar-track-piece {
     background: transparent;

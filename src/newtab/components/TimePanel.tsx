@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 
 const Wrapper = styled.div`
   /* border: solid 1px; */
+  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -14,16 +15,18 @@ const Wrapper = styled.div`
 const DateBlock = styled.div`
   font-size: 2rem;
   text-align: center;
-  font-weight: bold;
+  font-weight: normal;
   color: white;
-  text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
+  padding-bottom: 24px;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
   /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
 `;
 
 const TimeBlock = styled.div`
   font-size: 7rem;
   text-align: center;
-  font-weight: bold;
+  font-weight: normal;
+  padding-bottom: 24px;
   color: white;
   text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
   /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
