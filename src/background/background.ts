@@ -125,17 +125,17 @@ chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)
   })
 })
 
-// chrome.runtime.onInstalled.addListener((details) => {
-//   chrome.contextMenus.create({
-//     title: "Read these text(s) en-US",
-//     id: "contextMenu1",
-//     contexts: ["page","selection","link"]
-//   })
-//   chrome.contextMenus.onClicked.addListener((e)=>{
-//     if(e.menuItemId === "contextMenu1"){
-//       chrome.tts.speak(e.selectionText,{lang:"en-US"});
-//       console.log("speak en-US");
-//     }
-//   })
-//   console.log(details);
-// })
+chrome.runtime.onInstalled.addListener((details) => {
+  chrome.contextMenus.create({
+    title: "Read these text(s) en-US",
+    id: "contextMenu1",
+    contexts: ["page","selection","link"]
+  })
+  chrome.contextMenus.onClicked.addListener((e)=>{
+    if(e.menuItemId === "contextMenu1"){
+      chrome.tts.speak(e.selectionText,{lang:"en-US"});
+      console.log("speak en-US");
+    }
+  })
+  console.log(details);
+})

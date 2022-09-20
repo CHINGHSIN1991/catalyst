@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PanelBasicSetting } from '../styleSetting';
+import { PanelBasicSetting, PanelTitle } from '../styleSetting';
 import { useSelector } from 'react-redux';
 
 import { getShortcuts } from '../features/reducers/shortcutsSlice';
@@ -160,21 +160,12 @@ const EditTrigger = styled.div`
   /* border: solid 1px; */
 `;
 
-const PanelTitle = styled.div`
-  display: flex;
-  flex-shrink: 0;
-  width: 100%;
-  padding-bottom: 8px;
-  font-weight: bold;
-  text-align: start;
-`;
-
 const ScrollContainer = styled.div`
   display: flex;
   flex-direction: column;
   /* height: auto; */ 
   padding-right: 2px;
-  max-height: ${(props) => { return `calc(100vh - (280px + ${Math.ceil((props.ShortcutNumber + 1) / 4) * 88}px ))`; }};
+  max-height: ${(props) => { return `calc(100vh - (288px + ${Math.ceil((props.ShortcutNumber + 1) / 4) * 88}px ))`; }};
   flex-grow: 1;
   overflow-y: scroll;
 

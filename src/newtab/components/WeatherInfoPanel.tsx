@@ -21,14 +21,14 @@ const Wrapper = styled.div`
   /* border: solid 1px; */
   background-color: rgba(0,0,0,0.3);
   backdrop-filter: blur(8px);
-  height: ${(props) => props.centralPanel === "Weather" ? "160px" : "0px"};
-  width: ${(props) => props.centralPanel === "Weather" ? "600px" : "0px"};
+  height: ${(props) => props.centralPanel === "Weather" ? "128px" : "0px"};
+  width: ${(props) => props.centralPanel === "Weather" ? "400px" : "0px"};
   transition: 0.1s;
   overflow: hidden;
 `;
 
 const DailyDataContainer = styled.div`
-  border: solid 1px;
+  /* border: solid 1px; */
   display: flex;
   justify-content: space-between;
   padding: 16px;
@@ -37,7 +37,7 @@ const DailyDataContainer = styled.div`
 `;
 
 const DailyData = styled.div`
-  border: solid 1px;
+  /* border: solid 1px; */
   padding: 16px;
 `;
 
@@ -155,33 +155,33 @@ export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
   const [weatherData, setWeatherData] = useState<accuWeatherDataSet>(null);
 
   function getWeatherData(currentTime: number) {
-    // navigator.geolocation.getCurrentPosition((position) => {
-    //   const lat = position.coords.latitude;
-    //   const lon = position.coords.longitude;
-    //   getLocationKey(lat, lon)
-    //     .then((res) => fetchAccuWeatherData(res.Key).then((res) => {
-    //       const weatherData = { ...res, updateTime: currentTime };
-    //       chrome.storage.sync.set({ weatherData }, function () {
-    //         setWeatherData(weatherData);
-    //       });
-    //     }))
-    //     .catch((res) => console.log(res));
-    // });
+    navigator.geolocation.getCurrentPosition((position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      getLocationKey(lat, lon)
+        .then((res) => fetchAccuWeatherData(res.Key).then((res) => {
+          const weatherData = { ...res, updateTime: currentTime };
+          chrome.storage.sync.set({ weatherData }, function () {
+            setWeatherData(weatherData);
+          });
+        }))
+        .catch((res) => console.log(res));
+    });
   }
 
   useEffect(() => {
-    chrome.storage.local.get(["weatherData"], (res) => {
-      const currentTime = Date.now();
-      if (res.weatherData) {
-        if ((currentTime - res.weatherDate.updateTime) < 8640000) {
-          setWeatherData(res.weatherData);
-        } else {
-          getWeatherData(currentTime);
-        }
-      } else {
-        getWeatherData(currentTime);
-      }
-    });
+    // chrome.storage.local.get(["weatherData"], (res) => {
+    //   const currentTime = Date.now();
+    //   if (res.weatherData) {
+    //     if ((currentTime - res.weatherDate.updateTime) < 8640000) {
+    //       setWeatherData(res.weatherData);
+    //     } else {
+    //       getWeatherData(currentTime);
+    //     }
+    //   } else {
+    //     getWeatherData(currentTime);
+    //   }
+    // });
   }, []);
 
   return (
@@ -191,8 +191,8 @@ export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
         {weatherData && weatherData.DailyForecasts.map((item: any) => {
           console.log(item);
           return (
-            <DailyData key={item.id}>
-              <WeatherIcon icon={item.Icon}></WeatherIcon>
+            <DailyData key={item.Date}>
+              <WeatherIcon icon={item.Day.Icon}></WeatherIcon>
             </DailyData>);
         })}
       </DailyDataContainer>

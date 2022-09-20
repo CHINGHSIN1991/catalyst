@@ -6,6 +6,7 @@ import { fetchCalendarData } from '../../utils/api';
 
 const Wrapper = styled.div`
   /* border: solid 1px; */
+  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -14,11 +15,12 @@ const Wrapper = styled.div`
 `;
 
 const FocusBlock = styled.div`
-  font-size: 2rem;
+  font-size: 1.75rem;
   text-align: center;
-  font-weight: bold;
+  font-weight: normal;
   color: white;
-  /* text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0); */
+  text-shadow: 0 0 10px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
+  transform: translateY(-80px);
   /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
 `;
 
@@ -159,8 +161,8 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
   return (
     <Wrapper>
       <FocusBlock>
-        {taskOnGoing !== null && taskOnGoing && `Current focus: ${calendarItem.summary} (till ${getTime(calendarItem.end.dateTime)})`}
-        {taskOnGoing !== null && !taskOnGoing && `Upcoming: ${calendarItem.summary} (start at ${getTime(calendarItem.start.dateTime)})`}
+        {taskOnGoing !== null && taskOnGoing && `Current focus: ${calendarItem.summary}（till ${getTime(calendarItem.end.dateTime)}）`}
+        {taskOnGoing !== null && !taskOnGoing && `Upcoming: ${calendarItem.summary}（start at ${getTime(calendarItem.start.dateTime)}）`}
       </FocusBlock>
     </Wrapper>
   );

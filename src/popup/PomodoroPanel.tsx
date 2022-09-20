@@ -5,24 +5,29 @@ import { useState, useEffect, useRef } from "react";
 import { handleInputChange } from '../utils/inputHandler';
 
 const Wrapper = styled.div`
-
+  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
+  border-bottom: solid 1px;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content:center ;
 `;
 
 const TimerInput = styled.input`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   background-color: rgba(255,255,255,0);
-  /* border: none; */
+  border: none;
   /* border-bottom: solid 2px white; */
   outline: none;
   text-align: end;
-  font-size: 2.5rem;
-  width: 56px;
+  font-size: 2rem;
+  width: 40px;
 `;
 
 const Timer = styled.div`
   display: flex;
   align-items: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -133,10 +138,6 @@ export const PomodoroPanel: React.FC<{}> = () => {
           </svg>
         </Btn>
       </ButtonContainer>
-      <input type="number" />
-      <button>Start</button>
-      <button>Pause</button>
-      <button>Clear</button>
     </Wrapper>
   );
 };

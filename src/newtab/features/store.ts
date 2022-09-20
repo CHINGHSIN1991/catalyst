@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import shortcutsReducer from './reducers/shortcutsSlice'
 import editPanelStateReducer from "./reducers/editSlice";
+import calendarReducer from './reducers/calendarSlice'
 
 export const store = configureStore({
   reducer: {
     shortcuts: shortcutsReducer,
     editPanelState: editPanelStateReducer,
+    events: calendarReducer,
   }
 })
 

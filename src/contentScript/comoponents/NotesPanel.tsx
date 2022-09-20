@@ -2,9 +2,11 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { handleInputChange } from '../utils/inputHandler';
+import { handleInputChange } from '../../utils/inputHandler';
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export const NotesPanel = () => {
@@ -35,31 +37,32 @@ export const NotesPanel = () => {
   }
 
   function addQuickNotes() {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      console.log(tabs[0]);
-      const linkUrl = new URL(tabs[0].url);
-      const timeStamp = Date.now();
-      const inspirationNote = {
-        id: timeStamp,
-        title: tabs[0].title,
-        url: linkUrl.href,
-        logo: `https://icon.horse/icon/${linkUrl.hostname}`,
-        note: quickNote
-      };
-      // chrome.storage.sync.set({ inspirationNotes: {} }, () => { console.log('done') });
-      chrome.storage.sync.get(['inspirationNotes'], (result) => {
-        let tempInspirationNotes = result.inspirationNotes;
-        let targetCategoryNotes = [];
-        if (tempInspirationNotes) {
-          targetCategoryNotes = tempInspirationNotes[currentCategory] || [];
-        }
-        targetCategoryNotes.push(inspirationNote);
-        tempInspirationNotes = { ...tempInspirationNotes, [currentCategory]: targetCategoryNotes };
-        console.log(tempInspirationNotes);
-        chrome.storage.sync.set({ inspirationNotes: tempInspirationNotes }, () => { console.log('done'); });
-        setQuickNote("");
-      });
-    });
+    const linkUrl = window.location.href;
+    // chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    //   console.log(tabs[0]);
+    //   const linkUrl = new URL(tabs[0].url);
+    //   const timeStamp = Date.now();
+    //   const inspirationNote = {
+    //     id: timeStamp,
+    //     title: tabs[0].title,
+    //     url: linkUrl.href,
+    //     logo: `https://icon.horse/icon/${linkUrl.hostname}`,
+    //     note: quickNote
+    //   };
+    //   // chrome.storage.sync.set({ inspirationNotes: {} }, () => { console.log('done') });
+    //   chrome.storage.sync.get(['inspirationNotes'], (result) => {
+    //     let tempInspirationNotes = result.inspirationNotes;
+    //     let targetCategoryNotes = [];
+    //     if (tempInspirationNotes) {
+    //       targetCategoryNotes = tempInspirationNotes[currentCategory] || [];
+    //     }
+    //     targetCategoryNotes.push(inspirationNote);
+    //     tempInspirationNotes = { ...tempInspirationNotes, [currentCategory]: targetCategoryNotes };
+    //     console.log(tempInspirationNotes);
+    //     chrome.storage.sync.set({ inspirationNotes: tempInspirationNotes }, () => { console.log('done'); });
+    //     setQuickNote("");
+    //   });
+    // });
   }
 
   useEffect(() => {
@@ -72,7 +75,7 @@ export const NotesPanel = () => {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper onClick={(e) => e.stopPropagation()}>
       <label htmlFor="">category
         <select value={currentCategory} onChange={handleCurrentCategory} name="" id="">
           <option value="no category" selected style={{ color: "lightgray" }}>- Category -</option>

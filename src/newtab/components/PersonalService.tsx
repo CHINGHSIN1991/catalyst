@@ -44,6 +44,10 @@ const ServiceLinks = styled.div`
   &::-webkit-scrollbar-track {
     box-shadow: transparent;
   }
+  @media (max-width:1580px) {
+  /* 銀幕寬度小於1200套用此區塊 */
+    max-height: 80px;
+  }
 `;
 
 const ServiceLink = styled.a`
@@ -135,7 +139,7 @@ export const PersonalServicePanel: React.FC<{}> = () => {
       </WelcomeMessage>
       <ServiceLinks>
         {serviceList.map((item) => {
-          return <ServiceLink href={item.link} target="_blank">
+          return <ServiceLink key={item.imgUrl.light} href={item.link} target="_blank">
             <ServiceIcon src={item.imgUrl.light} />
             <ServiceTitle>{item.name.english}</ServiceTitle>
           </ServiceLink>;

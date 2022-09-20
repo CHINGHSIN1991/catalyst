@@ -19,8 +19,8 @@ const Wrapper = styled.div`
   /* border: solid 1px; */
   background-color: rgba(0,0,0,0.3);
   backdrop-filter: blur(8px);
-  height: ${(props) => props.centralPanel === "Pomodoro" ? "120px" : "0px"};
-  width: ${(props) => props.centralPanel === "Pomodoro" ? "480px" : "0px"};
+  height: ${(props) => props.centralPanel === "Pomodoro" ? "128px" : "0px"};
+  width: ${(props) => props.centralPanel === "Pomodoro" ? "400px" : "0px"};
   transition: 0.1s;
   overflow: hidden;
 `;
@@ -43,7 +43,7 @@ const TimerInput = styled.input`
   color: white;
   text-align: end;
   font-size: 2.5rem;
-  width: 56px;
+  width: 48px;
 `;
 
 const Timer = styled.div`
@@ -116,7 +116,6 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
         setIsRunning(false);
       }
       if (res.pomoAlertTime) {
-        console.log(res.alertTime);
         setPomoAlertTime({ value: res.pomoAlertTime });
       } else {
         setPomoAlertTime({ value: 45 });
@@ -128,7 +127,6 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
     chrome.storage.local.set({ pomoAlertTime: pomoAlertTime.value }, () => console.log('set' + pomoAlertTime.value));
   }, [pomoAlertTime]);
 
-  console.log(pomoAlertTime);
   return (
     <Wrapper centralPanel={props.centralPanel}>
       <FocusPanelTitle>Pomodoro Timer</FocusPanelTitle>

@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom/client';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PomodoroPanel } from './comoponents/PomodoroPanel';
+import { NotesPanel } from './comoponents/NotesPanel';
 
 
 const Wrapper = styled.div`
@@ -18,7 +18,8 @@ const Wrapper = styled.div`
   min-height: ${(props) => { return props.isOpen ? "160px" : "56px"; }};
   border-radius: ${(props) => { return props.isOpen ? "8px 8px 0px 8px" : "50% 50% 0px 50%"; }};
   overflow: hidden;
-  background-color: gray;  
+  background-color: gray;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);;
   color: black;
   z-index: 99999;
   padding: ${(props) => { return props.isOpen ? "24px" : "8px"; }};;
@@ -73,9 +74,9 @@ const App: React.FC<{}> = () => {
 
   return (
     <Wrapper isOpen={isOpen} onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}>
-      {isOpen && <PomodoroPanel></PomodoroPanel>}
+
+      {isOpen && <NotesPanel></NotesPanel>}
       {!isOpen && <Logo src="https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/CatalystLogo.png?alt=media&token=578673e6-464a-446b-9202-8517c14beb84"></Logo>}
-      {isOpen && workList && workList.map((item: todo) => { return <div key={item.id}><input type="checkbox" checked={item.isDone} onClick={(e) => { e.stopPropagation(); }} onChange={() => { changeIsDone(item.id); }} />{item.workContent}</div>; })}
     </Wrapper>
   );
 };

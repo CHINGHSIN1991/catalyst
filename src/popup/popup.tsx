@@ -5,12 +5,18 @@ import { ResetStyle, GlobalStyle } from "../static/globalStyle";
 // import { useState, useEffect } from "react";
 
 import { PomodoroPanel } from './PomodoroPanel';
-import { NotesPanel } from './NotesPanel';
+import { ToDoList } from './ToDoList';
 
 const Wrapper = styled.div`
-  width: 300px;
-  height: 200px;
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  min-height: 120px;
+  /* background-color: rgba(0,0,0,0.5); */
 `;
+
 const App: React.FC<{}> = () => {
   // const [noteCategories, setNoteCategories] = useState([]);
   // const [tempCategory, setTempCategory] = useState("");
@@ -84,6 +90,7 @@ const App: React.FC<{}> = () => {
       <ResetStyle />
       <GlobalStyle />
       <PomodoroPanel></PomodoroPanel>
+      <ToDoList></ToDoList>
       {/* <label htmlFor="">category
         <select value={currentCategory} onChange={handleCurrentCategory} name="" id="">
           <option value="no category" selected style={{ color: "lightgray" }}>- Category -</option>
@@ -95,7 +102,7 @@ const App: React.FC<{}> = () => {
       <label htmlFor="">quick note<textarea value={quickNote} onChange={handleQuickNote} name="" id=""></textarea></label>
 
       <button onClick={addQuickNotes}>save to Inspiration Notes</button> */}
-      <NotesPanel></NotesPanel>
+      {/* <NotesPanel></NotesPanel> */}
     </Wrapper >
   );
 };

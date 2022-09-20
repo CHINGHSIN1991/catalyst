@@ -17,7 +17,8 @@ const DateBlock = styled.div`
   text-align: center;
   font-weight: normal;
   color: white;
-  padding-bottom: 24px;
+  padding-bottom: 32px;
+  transform: translateY(-80px);
   text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
   /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
 `;
@@ -26,8 +27,9 @@ const TimeBlock = styled.div`
   font-size: 7rem;
   text-align: center;
   font-weight: normal;
-  padding-bottom: 24px;
+  padding-bottom: 32px;
   color: white;
+  transform: translateY(-80px);
   text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
   /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
 `;

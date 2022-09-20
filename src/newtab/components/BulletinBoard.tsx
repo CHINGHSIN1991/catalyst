@@ -8,17 +8,13 @@ import { handleInputChange, handleTextAreaChange } from "../../utils/inputHandle
 import { BulletinTogglePanel } from "./BulletinTogglePanel";
 
 const Wrapper = styled.div`
-  /* border: solid 1px; */
-  /* display: flex; */
-  /* flex-wrap: wrap;
-  flex-direction: row; */
   width: 100vw;
   height: 100vh;
   overflow-y:auto;
 `;
 
 const CreatePanel = styled.div`
-  border: solid 1px;
+  /* border: solid 1px; */
   padding-top: 24px;
   width: 100%;
   display: flex;
@@ -50,7 +46,7 @@ const ColorOption = styled.div`
   cursor: pointer;
   width: 16px;
   height: 16px;
-  margin: 16px 8px 16px 4px;
+  margin: 8px 8px 8px 4px;
   border-radius: 4px;
   border: solid 2px white;
   background-color: ${(props) => { return props.color; }};
@@ -63,7 +59,7 @@ const ColorPick = styled.input`
   background: none;
   border: 0;
   cursor: pointer;
-  margin: 16px 16px 16px 4px;
+  margin: 8px 16px 8px 4px;
   height: 32px;
   padding: 0;
   width: 80px;
@@ -81,7 +77,7 @@ const CreateBtn = styled.div`
   height: 24px;
   line-height: 24px;
   border-radius: 4px;
-  margin: 16px 4px;
+  margin: 8px 4px;
   background-color: #fff;
   transition: 0.2s;
   :hover{
