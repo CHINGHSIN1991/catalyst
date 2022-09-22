@@ -1,3 +1,4 @@
+
 console.log("backgroundScript running!")
 
 const todoListPort = chrome.runtime.connect({ name: "todo" });
@@ -6,6 +7,50 @@ todoListPort.onMessage.addListener((res)=>{
   console.log(res);
 })
 
+
+
+const clientId = process.env.CLIENT_ID
+const redirectUri = `https://${chrome.runtime.id}.chromiumapp.org/`
+const nonce = Math.random().toString(36).substring(2, 15)
+
+chrome.action.onClicked.addListener(function() {
+  const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+
+  authUrl.searchParams.set('client_id', clientId);
+  authUrl.searchParams.set('response_type', 'id_token');
+  authUrl.searchParams.set('redirect_uri', redirectUri);
+  // Add the OpenID scope. Scopes allow you to access the user’s information.
+  authUrl.searchParams.set('scope', 'openid profile email');
+  authUrl.searchParams.set('nonce', nonce);
+  // Show the consent screen after login.
+  authUrl.searchParams.set('prompt', 'consent');
+
+  chrome.identity.launchWebAuthFlow(
+    {
+      url: authUrl.href,
+      interactive: true,
+    },
+    (redirectUrl) => {
+      if (redirectUrl) {
+        // The ID token is in the URL hash
+        const urlHash = redirectUrl.split('#')[1];
+        const params = new URLSearchParams(urlHash);
+        const jwt = params.get('id_token');
+
+        // Parse the JSON Web Token
+        const base64Url = jwt.split('.')[1];
+        const base64 = base64Url.replace('-', '+').replace('_', '/');
+        const token = JSON.parse(atob(base64));
+
+        console.log('token', token);
+      }
+    },
+  );
+});
+
+
+
+////////////////////////////
 interface todo {
   workContent: string;
   isDone: boolean;
@@ -16,13 +61,43 @@ interface todo {
   alertSend?: boolean;
 }
 
+chrome.storage.local.get(["pomoTimer","pomoIsRunning"],(res)=> {
+  chrome.storage.local.set({
+    pomoTimer: "pomoTimer" in res? res.pomoTimer : 0,
+    pomoIsRunning :"pomoIsRunning" in res? res.pomoIsRunning : false
+  })
+})
+
 chrome.alarms.create("TodoListReminder",{
   periodInMinutes: 1/12,
 })
 
+chrome.alarms.create("PomoTimer",{
+  periodInMinutes: 1/60,
+})
+
 chrome.alarms.onAlarm.addListener((alarm)=>{
   const now = Date.now();
-  if(alarm.name="TodoListReminder"){
+  if(alarm.name==="PomoTimer") {
+    chrome.storage.local.get(["pomoTimer","pomoIsRunning"],(res)=>{
+      if (res.pomoIsRunning) {
+        let pomoTimer = res.pomoTimer +1
+        let pomoIsRunning = true
+        if (pomoTimer > 25 * 60){
+          console.log(this.registration)
+          // this.registration.showNotification("Pomodoro Timer",{
+          //   body: "25 minutes has padded!",
+          //   icon: "CatalystLogo_128.png"
+          // })
+          pomoTimer = 0;
+          pomoIsRunning = false
+        }
+        console.log(pomoTimer);
+        chrome.storage.local.set({pomoTimer,pomoIsRunning})
+      }
+    })
+  }
+  if(alarm.name==="TodoListReminder"){
     chrome.storage.sync.get(['todoList'], function (result) {
       if(result.todoList){
         let tempList = [];
@@ -37,13 +112,13 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
             console.log(tempTodo)
             tempList.push(tempTodo)
             console.log(todo.workContent);
-            todoListPort.postMessage({msg: "update"})
+            // todoListPort.postMessage({msg: "update"})
           } else {
             tempList.push(todo);
           }        
         })
         chrome.storage.sync.set({ todoList: tempList }, function () {
-          console.log("set");
+          // console.log("set");
         });
       }
       
@@ -53,18 +128,19 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
 
 chrome.runtime.onInstalled.addListener((details) => {
   chrome.contextMenus.create({
-    title: "Read these text(s) en-JM",
+    title: "Read these text(s) en-US",
     id: "contextMenu1",
-    contexts: ["page","selection"]
+    contexts: ["page","selection","link"]
   })
   chrome.contextMenus.onClicked.addListener((e)=>{
     if(e.menuItemId === "contextMenu1"){
-      chrome.tts.speak(e.selectionText,{lang:"en-JM"});
-      console.log("speak zhTW");
+      chrome.tts.speak(e.selectionText,{lang:"en-US"});
+      console.log("speak en-US");
     }
   })
   console.log(details);
 })
+
 
 
 const languageList = [
@@ -94,12 +170,7 @@ const languageList = [
   {"LangCultureName": "bg-BG", "DisplayCN": "保加利亞 - 保加利亞", "DisplayEN":"Bulgarian - Bulgaria"},
   {"LangCultureName": "ca-ES", "DisplayCN": "加泰羅尼亞語 - 加泰羅尼語", "DisplayEN":"Catalan - Catalan"},
   {"LangCultureName": "zh-CN", "DisplayCN": "中文 - 中國", "DisplayEN":"Chinese - China"},
-  {"LangCultureName": "zh-HK", "DisplayCN": "中文 - 香港特別行政區", "DisplayEN":"Chinese - Hong Kong SAR"},
-  {"LangCultureName": "zh-MO", "DisplayCN": "中文 - 澳門特別行政區", "DisplayEN":"Chinese - Macau SAR"},
-  {"LangCultureName": "zh-SG", "DisplayCN": "中文 - 新加坡", "DisplayEN":"Chinese - Singapore"},
   {"LangCultureName": "zh-TW", "DisplayCN": "中文 - 台灣", "DisplayEN":"Chinese - Taiwan"},
-  {"LangCultureName": "zh-CHS", "DisplayCN": "簡體中文）", "DisplayEN":"Chinese (Simplified)"},
-  {"LangCultureName": "zh-CHT", "DisplayCN": "繁體中文）", "DisplayEN":"Chinese (Traditional)"},
   {"LangCultureName": "hr-HR", "DisplayCN": "克羅地亞 - 克羅地亞", "DisplayEN":"Croatian - Croatia"},
   {"LangCultureName": "cs-CZ", "DisplayCN": "捷克 - 捷克共和國", "DisplayEN":"Czech - Czech Republic"},
   {"LangCultureName": "da-DK", "DisplayCN": "丹麥語 - 丹麥語", "DisplayEN":"Danish - Denmark"},
