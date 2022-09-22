@@ -18,7 +18,7 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font: inherit;
+	/* font: inherit; */
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
@@ -44,10 +44,27 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+a {
+	text-decoration: none;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 `
 
 export const GlobalStyle = createGlobalStyle`
 * {
+	font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
+	font-weight: normal;
+	position: relative;
   box-sizing: border-box;
 }
 `

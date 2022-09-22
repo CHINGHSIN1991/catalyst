@@ -4,30 +4,35 @@ import { useState, useEffect, useRef } from "react";
 
 const Wrapper = styled.div`
   /* border: solid 1px; */
+  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const DateBlock = styled.div`
   font-size: 2rem;
   text-align: center;
-  font-weight: bold;
+  font-weight: normal;
   color: white;
-  text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
+  padding-bottom: 32px;
+  transform: translateY(-80px);
+  text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
   /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
-`
+`;
 
 const TimeBlock = styled.div`
   font-size: 7rem;
   text-align: center;
-  font-weight: bold;
+  font-weight: normal;
+  padding-bottom: 32px;
   color: white;
+  transform: translateY(-80px);
   text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
   /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
-`
+`;
 
 
 export const TimePanel: React.FC<{}> = () => {
@@ -36,12 +41,12 @@ export const TimePanel: React.FC<{}> = () => {
   const [currentClock, setCurrentClock] = useState({
     time: "",
     date: "",
-  })
+  });
 
 
   function updateTime() {
     const cd = new Date();
-    const tempClock = { ...currentClock }
+    const tempClock = { ...currentClock };
     tempClock.time = `${JSON.stringify(cd.getHours()).padStart(2, "0")} : ${JSON.stringify(cd.getMinutes()).padStart(2, "0")} : ${JSON.stringify(cd.getSeconds()).padStart(2, "0")}`;
     tempClock.date = `${JSON.stringify(cd.getFullYear()).padStart(4, "0")} - ${JSON.stringify(cd.getMonth() + 1).padStart(2, "0")} - ${JSON.stringify(cd.getDate()).padStart(2, "0")} ${week[cd.getDay()]}`;
     setCurrentClock(tempClock);
@@ -50,7 +55,7 @@ export const TimePanel: React.FC<{}> = () => {
   useEffect(() => {
     timerID.current = setInterval(updateTime, 1000);
     updateTime();
-  }, [])
+  }, []);
 
   return (
     <Wrapper>
@@ -58,4 +63,4 @@ export const TimePanel: React.FC<{}> = () => {
       <TimeBlock>{currentClock.time}</TimeBlock>
     </Wrapper>
   );
-}
+};
