@@ -298,7 +298,6 @@ export const ToDoListPanel: React.FC<{}> = () => {
       }
     }
     chrome.storage.sync.set({ todoList: tempWorkList }, function () {
-      console.log(tempWorkList);
       setWorkList(tempWorkList);
       setTempTodo({ workContent: "", id: 0, isDone: false, isSetAlert: false });
       setIsEditOn(false);
@@ -330,7 +329,7 @@ export const ToDoListPanel: React.FC<{}> = () => {
     chrome.storage.sync.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList);
     });
-    toDoListPort.current.postMessage({ msg: "update" });
+    // toDoListPort.current.postMessage({ msg: "update" });
   }
 
   useEffect(() => {

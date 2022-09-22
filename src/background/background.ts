@@ -75,14 +75,14 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
       if (res.pomoIsRunning) {
         let passedSeconds = res.passedSeconds +1
         let pomoIsRunning = true
-        console.log('po'+res.pomoAlertTime)
         if (passedSeconds > res.pomoAlertTime * 60){
           passedSeconds = 0;
           pomoIsRunning = false
-          this.registration.showNotification("Pomodoro Timer",{
-            body: `${res.pomoAlertTime} minutes has padded!`,
-            icon: "CatalystLogo_128.png"
-          })          
+          console.log(this);
+          // this.registration.showNotification("Pomodoro Timer",{
+          //   body: `${res.pomoAlertTime} minutes has padded!`,
+          //   icon: "CatalystLogo_128.png"
+          // })          
         }
         chrome.storage.local.set({passedSeconds,pomoIsRunning})
       }
@@ -94,15 +94,14 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
         let tempList = [];
         result.todoList.forEach((todo: todo)=>{
           if(todo.isSetAlert && !todo.alertSend && (Date.parse(`${todo.alertDate} ${todo.alertTime}`)<now)){
+            console.log(this);
             this.registration.showNotification("To do list reminder",{
               body: `The set time of work item "${todo.workContent}" has passed`,
               icon: "CatalystLogo_128.png"
             })
             const tempTodo = {...todo}
             tempTodo.alertSend = true;
-            console.log(tempTodo)
             tempList.push(tempTodo)
-            console.log(todo.workContent);
             // todoListPort.postMessage({msg: "update"})
           } else {
             tempList.push(todo);

@@ -80,10 +80,6 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
   function triggerTimer() {
     chrome.storage.local.set({ pomoIsRunning: !isRunning });
     setIsRunning(!isRunning);
-    if (!isRunning) {
-      updateTime();
-      pomoTimeId.current = setInterval(updateTime, 1000);
-    }
   }
 
   function clearTimer() {
@@ -91,7 +87,6 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
     setIsRunning(false);
     setPassedSeconds(0);
     setPomoTimer({ minutes: '00', seconds: '00' });
-    clearInterval(pomoTimeId.current);
     chrome.storage.local.get(["pomoAlertTime"], (res) => {
       if (res.pomoAlertTime) {
         setPomoAlertTime({ value: res.pomoAlertTime });
@@ -100,11 +95,12 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
   }
 
   function updateTime() {
-    chrome.storage.local.get(["passedSeconds"], (res) => {
-      const minutes = `${pomoAlertTime.value - Math.ceil(res.passedSeconds / 60)}`.padStart(2, "0");
+    chrome.storage.local.get(["passedSeconds", "pomoAlertTime", 'pomoIsRunning'], (res) => {
+      const minutes = `${res.pomoAlertTime - Math.ceil(res.passedSeconds / 60)}`.padStart(2, "0");
       const seconds = `${res.passedSeconds % 60 && 60 - res.passedSeconds % 60}`.padStart(2, "0");
       setPassedSeconds(res.passedSeconds);
       setPomoTimer({ minutes, seconds });
+      setIsRunning(res.pomoIsRunning);
     });
   }
 
@@ -121,10 +117,12 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
         setPomoAlertTime({ value: 45 });
       }
     });
+    updateTime();
+    pomoTimeId.current = setInterval(updateTime, 1000);
   }, []);
 
   useEffect(() => {
-    chrome.storage.local.set({ pomoAlertTime: pomoAlertTime.value }, () => console.log('set' + pomoAlertTime.value));
+    chrome.storage.local.set({ pomoAlertTime: pomoAlertTime.value });
   }, [pomoAlertTime]);
 
   return (
@@ -136,6 +134,8 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
             <TimerInput
               type="number"
               name="value"
+              max='60'
+              min='1'
               value={pomoAlertTime.value}
               onChange={(e) => handleInputChange(e, pomoAlertTime, setPomoAlertTime)}
             ></TimerInput>}

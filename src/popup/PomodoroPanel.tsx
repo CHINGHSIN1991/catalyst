@@ -4,24 +4,35 @@ import { useState, useEffect, useRef } from "react";
 
 import { handleInputChange } from '../utils/inputHandler';
 
-const Wrapper = styled.div`
+const PomodoroContainer = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
-  border-bottom: solid 1px;
-  padding: 8px 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content:center ;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 4px;
+  padding-bottom: 16px;
+  width: 100%;
+`;
+
+const Title = styled.div`
+  width: 100%;
+  padding: 12px 8px;
+  color: rgb(100,100,100);
+  font-weight: bold;
 `;
 
 const TimerInput = styled.input`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   background-color: rgba(255,255,255,0);
   border: none;
-  /* border-bottom: solid 2px white; */
+  border-bottom: solid 2px rgb(160,160,160);
   outline: none;
   text-align: end;
   font-size: 2rem;
   width: 40px;
+  height: 32px;
 `;
 
 const Timer = styled.div`
@@ -41,10 +52,14 @@ const Btn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 28px;
-  height: 28px;
-  background-color: rgba(0,0,0,0.1);
+  width: 24px;
+  height: 24px;
+  background-color: rgba(0,0,0,0);
   cursor: pointer;
+  transition: 0.2s;
+  :hover{
+    background-color: rgba(255,255,255,0.5);
+  }
 `;
 
 export const PomodoroPanel: React.FC<{}> = () => {
@@ -58,10 +73,6 @@ export const PomodoroPanel: React.FC<{}> = () => {
   function triggerTimer() {
     chrome.storage.local.set({ pomoIsRunning: !isRunning });
     setIsRunning(!isRunning);
-    if (!isRunning) {
-      updateTime();
-      pomoTimeId.current = setInterval(updateTime, 1000);
-    }
   }
 
   function clearTimer() {
@@ -69,20 +80,20 @@ export const PomodoroPanel: React.FC<{}> = () => {
     setIsRunning(false);
     setPassedSeconds(0);
     setPomoTimer({ minutes: '00', seconds: '00' });
-    clearInterval(pomoTimeId.current);
     chrome.storage.local.get(["pomoAlertTime"], (res) => {
       if (res.pomoAlertTime) {
-        setPomoAlertTime(res.pomoAlertTime);
+        setPomoAlertTime({ value: res.pomoAlertTime });
       }
     });
   }
 
   function updateTime() {
-    chrome.storage.local.get(["passedSeconds"], (res) => {
-      const minutes = `${pomoAlertTime.value - Math.ceil(res.passedSeconds / 60)}`.padStart(2, "0");
+    chrome.storage.local.get(["passedSeconds", "pomoAlertTime", 'pomoIsRunning'], (res) => {
+      const minutes = `${res.pomoAlertTime - Math.ceil(res.passedSeconds / 60)}`.padStart(2, "0");
       const seconds = `${res.passedSeconds % 60 && 60 - res.passedSeconds % 60}`.padStart(2, "0");
       setPassedSeconds(res.passedSeconds);
       setPomoTimer({ minutes, seconds });
+      setIsRunning(res.pomoIsRunning);
     });
   }
 
@@ -94,8 +105,7 @@ export const PomodoroPanel: React.FC<{}> = () => {
         setIsRunning(false);
       }
       if (res.pomoAlertTime) {
-        console.log(res.alertTime);
-        setPomoAlertTime(res.pomoAlertTime);
+        setPomoAlertTime({ value: res.pomoAlertTime });
       } else {
         setPomoAlertTime({ value: 45 });
       }
@@ -105,16 +115,20 @@ export const PomodoroPanel: React.FC<{}> = () => {
   }, []);
 
   useEffect(() => {
-    chrome.storage.local.set({ pomoAlertTime: pomoAlertTime.value }, () => console.log('set' + pomoAlertTime.value));
+    chrome.storage.local.set({ pomoAlertTime: pomoAlertTime.value });
   }, [pomoAlertTime]);
 
+
   return (
-    <Wrapper>
+    <PomodoroContainer>
+      <Title>Pomodoro timer</Title>
       <Timer>
         {!isRunning && passedSeconds === 0 &&
           <TimerInput
             type="number"
             name="value"
+            max='60'
+            min='1'
             value={pomoAlertTime.value}
             onChange={(e) => handleInputChange(e, pomoAlertTime, setPomoAlertTime)}
           ></TimerInput>}
@@ -138,7 +152,7 @@ export const PomodoroPanel: React.FC<{}> = () => {
           </svg>
         </Btn>
       </ButtonContainer>
-    </Wrapper>
+    </PomodoroContainer>
   );
 };
 

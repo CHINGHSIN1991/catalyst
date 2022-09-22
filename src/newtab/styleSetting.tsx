@@ -31,7 +31,7 @@ export const EditPanelWrapper = styled.div`
 
 export const FocusPanelTitle = styled.div`
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   text-align: center;
   font-size: 1rem;
 `;
@@ -40,7 +40,7 @@ export const PanelTitle = styled.div`
   display: flex;
   flex-shrink: 0;
   width: 100%;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
   font-weight: bold;
   text-align: start;
 `;

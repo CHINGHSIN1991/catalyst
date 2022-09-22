@@ -116,11 +116,11 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
         } else {
           endTime = calendarItem.end.date;
         }
-        console.log("on going");
+        // console.log("on going");
         setTaskOnGoing(true);
         updateTime = (Date.parse(endTime) - current);
       } else {
-        console.log("show next on");
+        // console.log("show next on");
         setTaskOnGoing(false);
         updateTime = (current - Date.parse(startTime));
       }

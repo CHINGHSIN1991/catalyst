@@ -37,6 +37,7 @@ const CalendarEditPanel = styled.div`
 
 const CalendarContainer = styled.div`
   /* border: solid 1px; */
+  position: relative;
   max-height: 480px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -92,6 +93,15 @@ const TimeHr = styled.div`
   background-color: rgba(255,255,255,0.3);
 `;
 
+const TimeLineDisplay = styled.div`
+  position: absolute;
+  margin-left:39px;
+  width: calc(100% - 39px);
+  top: ${(props) => { return `calc(${(props.timeLineInfo.current - props.timeLineInfo.startTime) / 86400000 * 768}px + 15px)`; }};
+  height: 2px;
+  box-shadow: 0px 0px 5px 2px rgba(255, 255, 255, 0.2);
+  background-color: rgba(255,255,255,0.7);
+`;
 
 type role = {
   email: string, displayName: string, self: boolean;
@@ -122,6 +132,7 @@ interface calendarItem {
 
 export const CalendarPanel: React.FC<{}> = () => {
   const dispatch = useDispatch();
+  const [timeLineInfo, setTimeLineInfo] = useState({ current: 0, startTime: 0 });
   const [calendarItems, setCalendarItems] = useState([]);
   const [isCreateOn, setIsCreateOn] = useState(false);
   const [userInfo, setUserInfo] = useState({ email: "", id: "", });
@@ -152,6 +163,13 @@ export const CalendarPanel: React.FC<{}> = () => {
     return `${time.getMonth() + 1}/${time.getDate()} - ${time.getHours()}:${time.getMinutes()} `;
   }
 
+  function setTimeLine() {
+    const current = Date.now();
+    const cd = new Date();
+    const startTime = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
+    setTimeLineInfo({ current, startTime });
+  }
+
   useEffect(() => {
     chrome.identity.getProfileUserInfo(
       (res) => {
@@ -169,6 +187,11 @@ export const CalendarPanel: React.FC<{}> = () => {
     );
   }, []);
 
+  useEffect(() => {
+    setTimeLine();
+    setInterval(() => setTimeLine(), 30000);
+  }, []);
+
   return (
     <CalendarWrapper>
       <PanelTitle>Calendar</PanelTitle>
@@ -176,6 +199,7 @@ export const CalendarPanel: React.FC<{}> = () => {
       {isEditOn && <CalendarEditModule editItem={editItem} setIsEditOn={setIsEditOn}></CalendarEditModule>} */}
       <CalendarContainer>
         <CalendarBackground></CalendarBackground>
+        <TimeLineDisplay timeLineInfo={timeLineInfo}></TimeLineDisplay>
       </CalendarContainer>
       {/* <button onClick={() => setIsCreateOn(true)}>Create</button> */}
       {calendarItems && !!calendarItems.length && calendarItems.map((item) => {
@@ -201,4 +225,10 @@ const CalendarBackground: React.FC<{}> = () => {
     </CalendarBackgroundContainer>
   );
 
+};
+
+const CurrentLine: React.FC<{}> = () => {
+  return (
+    <TimeLineDisplay></TimeLineDisplay>
+  );
 };

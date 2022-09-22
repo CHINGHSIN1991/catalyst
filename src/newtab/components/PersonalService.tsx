@@ -17,13 +17,12 @@ const WelcomeMessage = styled.div`
 `;
 
 const ServiceLinks = styled.div`
-  max-height: 120px;
+  max-height: 104px;
   overflow-y: scroll;
   width: 100%;
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  justify-content: space-between;
 
   &::-webkit-scrollbar {
     width: 6px;
@@ -46,7 +45,7 @@ const ServiceLinks = styled.div`
   }
   @media (max-width:1580px) {
   /* 銀幕寬度小於1200套用此區塊 */
-    max-height: 80px;
+    max-height: 72px;
   }
 `;
 
@@ -55,9 +54,9 @@ const ServiceLink = styled.a`
   padding: 8px;
   border-radius: 4px;
   margin: 0 8px;
-  width: 64px;
-  margin: 0 4px;
-  height:80px;
+  width: 58px;
+  margin: 4px 2px;
+  height: 64px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -70,8 +69,8 @@ const ServiceLink = styled.a`
 `;
 
 const ServiceIcon = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
 `;
 
