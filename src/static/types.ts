@@ -16,3 +16,4 @@ type PersonalSettings = {
     size: "SMALL" | "MIDDLE" | "LARGE"
   }
 }
+
