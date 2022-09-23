@@ -267,3 +267,5 @@ export const serviceList = [
     link: "https://photos.google.com"
   },
 ]
+
+export const memoColorList = [ '#EAEAEA', '#FFDCF1', '#FFF4C0', '#DCFFCC', '#DEF9FF', '#EEDCFF']

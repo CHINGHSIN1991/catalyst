@@ -1,21 +1,15 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-import { handleInputChange } from '../../utils/inputHandler';
+import { handleTextAreaChange } from '../../utils/inputHandler';
+import { memoColorList } from '../../static/optionList';
 
 const Wrapper = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: flex;
   flex-direction: column;
-`;
-
-const TagsPanel = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  /* border: solid 1px; */
-  width: 200px;
 `;
 
 const InputContainer = styled.div`
@@ -40,6 +34,7 @@ const NoteArea = styled.textarea`
   border: solid 1px rgb(200,200,200);
   border-radius: 4px;
   padding: 12px;
+  margin: 0;
   resize: none;
   &::-webkit-scrollbar {
     width: 6px;
@@ -115,21 +110,42 @@ const Color = styled.div`
   background-color: ${(props) => { return props.code; }};
 `;
 
-const colorList = ['#EAEAEA', '#FFDCF1', '#FFF4C0', '#DCFFCC', '#DEF9FF', '#EEDCFF'];
+type memo = {
+  id: string,
+  memo: string,
+  color: string,
+  position: { x: number, y: number; },
+  createTime: number,
+  createAt?: { title: string, url: string; },
+};
 
 export const MemoPanel = () => {
   const [currentColor, setCurrentColor] = useState('#EAEAEA');
-  const [quickNote, setQuickNote] = useState("");
+  const [tempMemo, setTempMemo] = useState({ memo: '' });
 
-
-  function handleQuickNote(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setQuickNote(e.target.value);
+  function addMemo() {
+    let tempMemoList = [];
+    const newMemo = {
+      id: uuidv4(),
+      memo: tempMemo.memo,
+      color: currentColor,
+      position: { x: 0, y: 0 },
+      createTime: Date.now(),
+      createAt: { title: window.document.title, url: window.location.href },
+    };
+    chrome.storage.local.get(['memos'], (res) => {
+      if (res.memos) {
+        tempMemoList = res.memos;
+      }
+      tempMemoList.push(newMemo);
+      chrome.storage.local.set({ memos: tempMemoList }, () => { console.log('done'); setTempMemo({ memo: '' }); });
+    });
   }
 
   return (
     <Wrapper>
       <ColorPanel onClick={(e) => e.stopPropagation()}>
-        {colorList && colorList.map((code) => {
+        {memoColorList && memoColorList.map((code) => {
           return (<ColorContainer
             code={code}
             onClick={() => setCurrentColor(code)}
@@ -140,9 +156,15 @@ export const MemoPanel = () => {
       </ColorPanel>
       <InputContainer>
         <Title>Memo</Title>
-        <NoteArea onClick={(e) => e.stopPropagation()} value={quickNote} onChange={handleQuickNote} name="" id="" bgColor={currentColor}></NoteArea>
+        <NoteArea
+          onClick={(e) => e.stopPropagation()}
+          onChange={(e) => handleTextAreaChange(e, tempMemo, setTempMemo)}
+          value={tempMemo.memo}
+          name="memo"
+          id=""
+          bgColor={currentColor}></NoteArea>
       </InputContainer>
-      <AddNoteBtn>Add to Bulletin Board</AddNoteBtn>
+      <AddNoteBtn onClick={(e) => { e.stopPropagation(); addMemo(); }}>Add to Bulletin Board</AddNoteBtn>
     </Wrapper >
   );
 };

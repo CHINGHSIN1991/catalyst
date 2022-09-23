@@ -133,6 +133,7 @@ const NoteArea = styled.textarea`
   border: none;
   border-radius: 4px;
   padding: 4px 8px;
+  margin: 0;
   resize: none;
   :focus {
     background-color: rgb(200,200,200) !important;
@@ -170,10 +171,6 @@ export const NotesPanel = () => {
 
   function handleCurrentCategory(e: React.ChangeEvent<HTMLSelectElement>) {
     setCurrentCategory(e.target.value);
-  }
-
-  function handleQuickNote(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setNoteLink({ ...noteLink, note: e.target.value });
   }
 
   function addCategory() {
