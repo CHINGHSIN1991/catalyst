@@ -9,7 +9,7 @@ import { FocusPanelTitle } from '../styleSetting';
 const Wrapper = styled.div`
   /* border: solid 1px; */
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
   position: absolute;
@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   background-color: rgba(0,0,0,0.3);
   backdrop-filter: blur(8px);
   height: ${(props) => props.centralPanel === "Weather" ? "128px" : "0px"};
-  width: ${(props) => props.centralPanel === "Weather" ? "440px" : "0px"};
+  width: ${(props) => props.centralPanel === "Weather" ? "480px" : "0px"};
   transition: 0.1s;
   overflow: hidden;
 `;
@@ -40,6 +40,7 @@ const MainInfo = styled.div`
   /* border: solid 1px; */
   border-right: solid 1px rgba(255,255,255,0.2);
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   align-items: center;
   /* width: 40px; */

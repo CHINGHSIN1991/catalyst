@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { getEditPanelState, setEditPanel } from '../../features/reducers/editSlice';
 import { editShortcut } from '../../features/reducers/shortcutsSlice';
-import { EditPanelWrapper } from '../../styleSetting';
+import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../styleSetting';
 import { InputComponent, PanelButton } from '../../../static/components';
 import { handleInputChange } from '../../../utils/inputHandler';
 
@@ -15,25 +15,6 @@ const Wrapper = styled(EditPanelWrapper)`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const PanelTitle = styled.div`
-  font-family: 'Noto Sans', 'Microsoft JhengHei';
-  margin-bottom: 12px;
-  font-weight: bold;
-  text-align: center;
-  /* width: 100%; */
-`;
-
-const TitleText = styled.div`
-  padding: 0 8px;
-`;
-
-const UnderLine = styled.div`
-  width: 100%;
-  height: 1px;
-  margin-top: 8px;
-  background-color: darkgrey;
 `;
 
 const ButtonContainer = styled.div`
@@ -77,13 +58,13 @@ export const ShortcutEditPanel: React.FC<{}> = () => {
 
   return (
     <Wrapper onClick={(e: Event) => e.stopPropagation()}>
-      <PanelTitle>
-        <TitleText>
+      <EditPanelTitle>
+        <EditPanelTitleText>
           {editPanelState.name === 'ShortcutEdit' && 'Edit shortcut'}
           {editPanelState.name === 'ShortcutAdd' && 'Add shortcut'}
-        </TitleText>
-        <UnderLine></UnderLine>
-      </PanelTitle>
+        </EditPanelTitleText>
+        <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
+      </EditPanelTitle>
       <InputComponent name="name" title="Name" value={shortcut.name} onChange={(e) => handleInputChange(e, shortcut, setShortcut)}></InputComponent>
       <InputComponent name="url" title="URL" value={shortcut.url} onChange={(e) => handleInputChange(e, shortcut, setShortcut)}></InputComponent>
       <ButtonContainer>

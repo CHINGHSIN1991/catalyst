@@ -195,11 +195,14 @@ const EditOption2 = styled(EditOption)`
 `;
 
 const AddToDoContainer = styled.div`
-  /* border: solid 1px; */
+  border-radius: 4px;
+  background-color: rgba(255,255,255,0.1);
   width: 100%;
-  height: ${(props) => { return props.isEditOn ? "98px" : "40px"; }};
+  height: ${(props) => { return props.isEditOn ? "86px" : "0px"; }};
   overflow: hidden;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   transition: 0.2s;
   flex-direction: column;
 `;
@@ -240,6 +243,24 @@ const AlarmTrigger = styled.div`
   margin-left: 28px;
   width: 16px;
   cursor: pointer;
+`;
+
+const EditButton = styled.div`
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.75rem;
+  width: 100%;
+  border: solid 1px;
+  background-color: rgba(200,200,200,0.2);
+  border-radius: 4px;
+  margin: 0 4px;
+  padding: 4px;
+  margin-top: 4px;
+  transition: 0.2s;
+
+  :hover{
+    background-color: rgba(200,200,200,0.5);
+  }
 `;
 
 interface todo {
@@ -358,13 +379,14 @@ export const ToDoListPanel: React.FC<{}> = () => {
   return (
     <WorksPanel>
       <PanelTitle>To do list</PanelTitle>
+      {!!!tempTodo.id && <AddToDoPanel isEditOn={isEditOn} setIsEditOn={setIsEditOn} tempTodo={tempTodo} setTempTodo={setTempTodo} editTodo={editTodo} handleIsSetAlert={handleIsSetAlert}></AddToDoPanel>}
       <ToDoElements>
         {workList && workList.map((item: todo) => {
           return <ToDoElement key={item.id} editTodo={editTodo} changeIsDone={changeIsDone} delTodo={delTodo} setTempTodo={setTempTodo} item={item as todo} setIsEditOn={setIsEditOn} tempTodo={tempTodo}></ToDoElement>;
         })
         }
       </ToDoElements>
-      {!!!tempTodo.id && <AddToDoPanel tempTodo={tempTodo} setTempTodo={setTempTodo} editTodo={editTodo} handleIsSetAlert={handleIsSetAlert}></AddToDoPanel>}
+      <CreateButton onClick={() => { setIsEditOn(!isEditOn); }}>+</CreateButton>
     </WorksPanel >
   );
 };
@@ -443,16 +465,12 @@ const AddToDoPanel: React.FC<{
   setTempTodo: (tempTodo: todo) => void;
   editTodo: () => void;
   handleIsSetAlert: (e) => void;
+  isEditOn: boolean;
+  setIsEditOn: (boo: boolean) => void;
 }> = (props) => {
-  const [isEditOn, setIsEditOn] = useState(false);
 
   return (
-    <AddToDoContainer isEditOn={isEditOn}>
-      {!isEditOn && <CreateButton onClick={() => { setIsEditOn(true); }}>Add to do</CreateButton>}
-      {isEditOn && <div style={{ display: "flex" }}>
-        <CreateButton onClick={() => { props.editTodo(); setIsEditOn(false); }}>Done</CreateButton>
-        <CreateButton onClick={() => { setIsEditOn(false); }}>Cancel</CreateButton>
-      </div>}
+    <AddToDoContainer isEditOn={props.isEditOn}>
       <ToDoLabel htmlFor="workContent">
         <ToDoTitle>To do</ToDoTitle>
         <ToDoInput style={{ width: "224px" }} type="text" id="workContent" name="workContent" value={props.tempTodo.workContent} onChange={(e) => handleInputChange(e, props.tempTodo, props.setTempTodo)} />
@@ -470,6 +488,10 @@ const AddToDoPanel: React.FC<{
         <ToDoInput name="alertDate" onChange={(e) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertDate || ""} type="date" />
         <ToDoInput name="alertTime" onChange={(e) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertTime || ""} type="time" />
       </ToDoLabel>}
+      {props.isEditOn && <div style={{ display: "flex", paddingBottom: "4px" }}>
+        <EditButton onClick={() => { props.editTodo(); props.setIsEditOn(false); }}>Done</EditButton>
+        <EditButton onClick={() => { props.setIsEditOn(false); }}>Cancel</EditButton>
+      </div>}
     </AddToDoContainer>
   );
 };
