@@ -130,7 +130,7 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
 
   function getTime(timeString: string) {
     const time = new Date(timeString);
-    return `${time.getMonth() + 1}/${time.getDate()} - ${time.getHours()}:${time.getMinutes()} `;
+    return `${time.getMonth() + 1}/${time.getDate()} - ${`${time.getHours()}`.padStart(2, "0")}:${`${time.getMinutes()}`.padStart(2, "0")}`;
   }
 
   useEffect(() => {

@@ -36,13 +36,13 @@ const calendarSlice = createSlice({
   initialState,
   reducers: {
     loadEvents(state, { payload }) {
-      // console.log('events');
-      // console.log(payload);
+      console.log('events');
+      console.log(payload);
       state.events = payload;
     },
   }
 })
 
 export const {loadEvents} = calendarSlice.actions
-export const getEvents = (state: { events: { events: calendarItem}; }) => state.events.events
+export const getEvents = (state: { events: { events: calendarItem[]}; }) => state.events.events
 export default calendarSlice.reducer

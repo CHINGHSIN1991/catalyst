@@ -241,12 +241,6 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
     }
   };
 
-  // function sortByCreateTime() {
-  //   let tempMemos = [...memos];
-  //   tempMemos.forEach((item) => item.position = { x: 0, y: 0 });
-  //   setMemos(tempMemos);
-  // }
-
   function sortByCreateTime() {
     let tempMemos = [...memos];
     tempMemos.sort((a, b) => a.createTime - b.createTime);
