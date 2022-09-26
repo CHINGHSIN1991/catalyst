@@ -136,6 +136,7 @@ const Memo = styled.div`
   border-radius: 4px;
   padding: 28px 16px 16px;
   word-break: break-all;
+  box-shadow: 2px 2px 8px 1px rgba(0, 0, 0, 0.3);
 `;
 
 const MemoWrapper = styled.div`
@@ -197,7 +198,9 @@ const MemoEditOption = styled.div`
 `;
 
 const MemoTextContent = styled.div`
-  
+  font-size: 14px;
+  line-height: 20px;
+  word-break: break-word;
 `;
 
 const CreateAtContainer = styled.div`
@@ -303,7 +306,7 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
   }, []);
 
   useEffect(() => {
-    chrome.storage.local.set({ memos }, () => { console.log('done'); });
+    chrome.storage.local.set({ memos });
   }, [memos]);
 
   return (

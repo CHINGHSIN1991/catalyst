@@ -1,12 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { userInfo } from '../../../static/types'
 
-// type userInfo = {
-//   email: string,
-//   id: string,
-//   authToken: string,
-// }
-
 const initialState = {
   userInfo: {
     email: '',
@@ -20,8 +14,8 @@ const userInfoSlice = createSlice({
   initialState,
   reducers: {
     loadUserInfo(state, { payload }) {
-      console.log('userInfo');
-      console.log(payload);
+      // console.log('userInfo');
+      // console.log(payload);
       state.userInfo = payload;
     },
   }

@@ -6,8 +6,9 @@ export const PanelBasicSetting = styled.div`
   padding: 12px;
   border-radius: 4px;
   margin: 8px;
-  background-color: rgba(0,0,0,0.3);
-  backdrop-filter: blur(8px);
+  border: solid 0.5px rgba(120,120,120,0.4);
+  background-color: rgba(0,0,0,0.4);
+  backdrop-filter: blur(16px);
 `;
 
 export const PanelOpenBackground = styled.div`

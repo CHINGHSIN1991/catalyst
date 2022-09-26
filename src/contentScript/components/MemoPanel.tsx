@@ -7,6 +7,7 @@ import { handleTextAreaChange } from '../../utils/inputHandler';
 import { memoColorList } from '../../static/optionList';
 
 const Wrapper = styled.div`
+  color: rgba(40,40,40,0);
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: flex;
   flex-direction: column;
@@ -26,6 +27,7 @@ const Title = styled.div`
 `;
 
 const NoteArea = styled.textarea`
+  color: rgba(40,40,40,1);
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   box-sizing: border-box;
   width: 200px !important;

@@ -52,12 +52,9 @@ interface calendarItem {
 }
 
 export const CurrentFocusPanel: React.FC<{}> = () => {
-  const [userInfo, setUserInfo] = useState({ email: "", id: "", });
-  const [authToken, setAuthToken] = useState("");
   const [calendarItem, setCalendarItem] = useState(null);
   const [taskOnGoing, setTaskOnGoing] = useState(null);
   const [updateTime, setUpdateTime] = useState(null);
-
 
   function sortByDeadline(items: calendarItem[]) {
     let tempItems = items;
@@ -67,12 +64,12 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
       if ("dateTime" in a.end) {
         aValue = a.end.dateTime;
       } else {
-        aValue = a.end.date;
+        aValue = `${a.end.date} 00:00:00`;
       }
       if ("dateTime" in b.end) {
         bValue = b.end.dateTime;
       } else {
-        bValue = b.end.date;
+        bValue = `${b.end.date} 23:59:59`;
       }
       return Date.parse(aValue) - Date.parse(bValue);
     });
@@ -108,13 +105,13 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
       if ("dateTime" in calendarItem.start) {
         startTime = calendarItem.start.dateTime;
       } else {
-        startTime = calendarItem.start.date;
+        startTime = `${calendarItem.start.date} 00:00`;
       }
       if (Date.parse(startTime) < current) {
         if ("dateTime" in calendarItem.end) {
           endTime = calendarItem.end.dateTime;
         } else {
-          endTime = calendarItem.end.date;
+          endTime = `${calendarItem.end.date} 23:59`;
         }
         // console.log("on going");
         setTaskOnGoing(true);
@@ -136,13 +133,11 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
   useEffect(() => {
     chrome.identity.getProfileUserInfo(
       (res) => {
-        setUserInfo({ email: res.email, id: res.id });
         chrome.identity.getAuthToken({ 'interactive': false }, function (token) {
-          setAuthToken(token);
           const dayStart = new Date();
           const timeStampStart = Date.parse(`${dayStart.getFullYear()}-${dayStart.getMonth() + 1}-${dayStart.getDate()} 00:00`);
           const dayEnd = new Date(timeStampStart + 259200000);
-          fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => setCalendarItem(checkIsCurrent(sortByDeadline(res.items))));
+          fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => { setCalendarItem(checkIsCurrent(sortByDeadline(res.items))); });
         });
       }
     );

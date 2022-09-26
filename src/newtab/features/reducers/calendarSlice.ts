@@ -1,31 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-
-type role = {
-  email: string, displayName: string, self: boolean;
-};
-
-type timeNode = { dateTime: string, timeZone: string; };
-type timeDay = { date: string; };
-
-interface calendarItem {
-  colorId?: string;
-  created?: string;
-  creator?: role;
-  end: timeNode | timeDay;
-  etag?: string;
-  evenType: string;
-  htmlLink?: string;
-  iCalUID: string;
-  id?: string;
-  kind?: string;
-  organizer?: role;
-  reminders?: { useDefault: boolean; };
-  sequence?: 0;
-  start: timeNode | timeDay;
-  status?: string;
-  summary: string;
-  updated?: string;
-}
+import { calendarItem } from '../../../static/types'
 
 const initialState = {
   events: []
@@ -36,8 +10,8 @@ const calendarSlice = createSlice({
   initialState,
   reducers: {
     loadEvents(state, { payload }) {
-      console.log('events');
-      console.log(payload);
+      // console.log('events');
+      // console.log(payload);
       state.events = payload;
     },
   }
