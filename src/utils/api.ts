@@ -1,6 +1,9 @@
+import { userInfo, tempEvent } from "../static/types"
+import { v4 as uuidv4 } from 'uuid';
+
 export async function fetchWeatherData(lat:number,lon:number) :Promise<any>{
-  console.log(lat)
-  console.log(lon)
+  // console.log(lat)
+  // console.log(lon)
   const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.OPEN_WEATHER_API_KEY}`)
   if(!res.ok) {
     throw new Error('something wrong')
@@ -10,8 +13,8 @@ export async function fetchWeatherData(lat:number,lon:number) :Promise<any>{
 }
 
 export async function getLocationKey(lat:number,lon:number) :Promise<any>{
-  console.log(lat)
-  console.log(lon)
+  // console.log(lat)
+  // console.log(lon)
   const res = await fetch(`http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${process.env.ACCU_WEATHER_API_KEY}&q=${lat},${lon}`)
   if(!res.ok) {
     throw new Error('something wrong')
@@ -43,10 +46,50 @@ export async function fetchCalendarData(id: string, dayStart: Date, dayEnd: Date
   return data
 }
 
+export async function postNewEvent(userInfo: userInfo, tempEvent: tempEvent) {
+    let requestBody = {
+      iCalUID: uuidv4(),
+      summary: tempEvent.summary,
+      visibility: tempEvent.visibility,
+      colorId: tempEvent.colorId,
+      start: {},
+      end: {},
+    }
+    if(tempEvent.isAllDay) {
+      requestBody.start = {date: tempEvent.startDate}
+      requestBody.end = {date: tempEvent.endDate} 
+    } else {
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+      // console.log(timeZone)
+      // console.log((new Date(`${tempEvent.startDate} ${tempEvent.startTime}`)).toISOString())
+      requestBody.start = {
+        dateTime: (new Date(`${tempEvent.startDate} ${tempEvent.startTime}`)).toISOString(),
+        timeZone
+      }
+      requestBody.end = {
+        dateTime: (new Date(`${tempEvent.endDate} ${tempEvent.endTime}`)).toISOString(),
+        timeZone
+      }
+    }
+    const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${userInfo.email}/events/import`, {
+      headers: new Headers({
+        'Authorization': 'Bearer ' + userInfo.authToken,
+        'Content-Type': 'application/json'
+      }),
+      method: "POST",
+      body: JSON.stringify(requestBody)
+    })
+    if(! res.ok) {
+      throw new Error ('post fail')
+    }
+    const data = await res.json()
+    return data
+}
+
 export async function getBackgroundImg(query?: string) {
   const page = Math.floor(Math.random()*100);
   if(query){
-    console.log(query);
+    // console.log(query);
     const res = await fetch(`https://api.unsplash.com/photos/?client_id=${process.env.UNSPLASH_API_KEY}&query=${query}&page=${page}`)
     if(! res.ok) {
       throw new Error ('can not get image')

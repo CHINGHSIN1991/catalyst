@@ -267,3 +267,19 @@ export const serviceList = [
     link: "https://photos.google.com"
   },
 ]
+
+export const memoColorList = [ '#EAEAEA', '#FFDCF1', '#FFF4C0', '#DCFFCC', '#DEF9FF', '#EEDCFF']
+
+export const calendarColorList = [
+  {name:'Tomato',code:'#DD4440',colorId:'11'},
+  {name:'Tangerine',code:'#F16D44',colorId:'6'},
+  {name:'Banana',code:'#EEC04C',colorId:'5'},
+  {name:'Basil',code:'#3E9065',colorId:'10'},
+  {name:'Sage',code:'#47B382',colorId:'2'},
+  {name:'Peacock',code:'#30A7E3',colorId:'7'},
+  {name:'Blueberry',code:'#6470BD',colorId:'9'},
+  {name:'Lavender',code:'#7E89C9',colorId:'1'},
+  {name:'Grape',code:'#9F53B3',colorId:'3'},
+  {name:'Flamingo',code:'#DF857D',colorId:'4'},
+  {name:'Graphite',code:'#737373',colorId:'8'},
+]

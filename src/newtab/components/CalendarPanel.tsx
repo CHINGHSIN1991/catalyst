@@ -5,9 +5,13 @@ import { useState, useEffect } from "react";
 import { PanelBasicSetting, PanelTitle, CreateButton } from '../styleSetting';
 import { fetchCalendarData } from '../../utils/api';
 
-import { loadEvents } from '../features/reducers/calendarSlice';
+import { calendarColorList } from '../../static/optionList';
+import { getEvents, loadEvents } from '../features/reducers/calendarSlice';
+import { loadUserInfo, getUserInfo } from '../features/reducers/userInfoSlice';
 import { setEditPanel } from '../features/reducers/editSlice';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { calendarItem } from '../../static/types';
 
 const CalendarWrapper = styled(PanelBasicSetting)`
   display: flex;
@@ -24,15 +28,6 @@ const CalendarModuleWrapper = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-`;
-
-const CalendarEditPanel = styled.div`
-  width: 480px;
-  height: 480px;
-  padding: 24px;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
 `;
 
 const CalendarContainer = styled.div`
@@ -74,6 +69,66 @@ const CalendarBackgroundContainer = styled.div`
   height: 432px;
 `;
 
+const CalendarBarsContainer = styled.div`  
+  position: absolute;
+  display: flex;
+  flex-wrap: nowrap;
+  left: 40px;
+  top: 0px;
+  width: calc(100% - 40px);
+  height: 800px;
+  overflow: hidden;
+`;
+
+const BarColumn = styled.div`
+  /* display: flex; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+// base = { props.dateStart / 3600000 };
+// start = { props.getTimeStamp(item.start, 'start') / 3600000 };
+// end = { props.getTimeStamp(item.end, 'end') / 3600000 };
+// color;
+const EventItem = styled.div`
+  /* border: solid 1px white; */
+  border-radius: 4px;
+  position: absolute;
+  width: calc(100% - 8px);
+  top: ${(props) => { return `${(props.start - props.base) * 32 + 16}px`; }};
+  height: ${(props) => { return `${(props.end - props.start) * 32}px`; }};
+  background-color: ${(props) => { return props.color; }};
+  opacity: 0.8;
+`;
+
+const EventContent = styled.div`
+  font-size: 10px;
+  padding: 4px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(40,40,40,0.3);
+  border-radius: 4px;
+  overflow: hidden;
+`;
+
+const EventValue = styled.div`
+  /* border: solid 1px; */
+  padding-bottom: 4px;
+  width: 100%;
+`;
+
+const InfoCard = styled.div`
+  position: fixed;
+  left: ${(props) => { return `-${props.position.x / 10}px`; }};
+  top: ${(props) => { return `-${props.position.y / 10}px`; }};
+  width: 120px;
+  height: 40px;
+  background-color: #fff;
+  border: solid 1px;
+`;
+
 const TimeLine = styled.div`
   width: 100%;
   display: flex;
@@ -103,60 +158,24 @@ const TimeLineDisplay = styled.div`
   background-color: rgba(255,255,255,0.7);
 `;
 
-type role = {
-  email: string, displayName: string, self: boolean;
-};
-
-type timeNode = { dateTime: string, timeZone: string; };
-type timeDay = { date: string; };
-
-interface calendarItem {
-  colorId?: string;
-  created?: string;
-  creator?: role;
-  end: timeNode | timeDay;
-  etag?: string;
-  evenType: string;
-  htmlLink?: string;
-  iCalUID: string;
-  id?: string;
-  kind?: string;
-  organizer?: role;
-  reminders?: { useDefault: boolean; };
-  sequence?: 0;
-  start: timeNode | timeDay;
-  status?: string;
-  summary: string;
-  updated?: string;
-}
-
 export const CalendarPanel: React.FC<{}> = () => {
   const dispatch = useDispatch();
+  const userInfo = useSelector(getUserInfo);
+  const events = useSelector(getEvents);
+  const [dateStart, setDateStart] = useState(0);
   const [timeLineInfo, setTimeLineInfo] = useState({ current: 0, startTime: 0 });
   const [calendarItems, setCalendarItems] = useState([]);
-  const [isCreateOn, setIsCreateOn] = useState(false);
-  const [userInfo, setUserInfo] = useState({ email: "", id: "", });
-  const [authToken, setAuthToken] = useState("");
-  const [isEditOn, setIsEditOn] = useState(false);
-  const [editItem, setEditItem] = useState({} as calendarItem);
 
-
-  function delEvent(item: calendarItem) {
-    console.log(item);
-    fetch(`https://www.googleapis.com/calendar/v3/calendars/${userInfo.email}/events/${item.id}`, {
-      headers: new Headers({
-        'Authorization': 'Bearer ' + authToken,
-        'Content-Type': 'application/json'
-      }),
-      method: "DELETE",
-    }).then((res) => { console.log(res); }).catch((err) => { console.log(err.message); });
-  }
-
-  function editEvent(item: calendarItem) {
-    console.log(item);
-    setIsEditOn(true);
-    setEditItem(item);
-  }
+  // function delEvent(item: calendarItem) {
+  //   console.log(item);
+  //   fetch(`https://www.googleapis.com/calendar/v3/calendars/${userInfo.email}/events/${item.id}`, {
+  //     headers: new Headers({
+  //       'Authorization': 'Bearer ' + authToken,
+  //       'Content-Type': 'application/json'
+  //     }),
+  //     method: "DELETE",
+  //   }).then((res) => { console.log(res); }).catch((err) => { console.log(err.message); });
+  // }
 
   function getTime(timeString: string) {
     const time = new Date(timeString);
@@ -170,42 +189,67 @@ export const CalendarPanel: React.FC<{}> = () => {
     setTimeLineInfo({ current, startTime });
   }
 
+  function getTimeStamp(data, key) {
+    let timeStamp = 0;
+    if ('date' in data) {
+      if (key === 'start') {
+        timeStamp = Date.parse(`${data.date}T00:00:00`);
+      } else {
+        timeStamp = Date.parse(`${data.date}T23:59:59`);
+      }
+    } else {
+      timeStamp = Date.parse(data.dateTime);
+    }
+    return timeStamp;
+  }
+
   useEffect(() => {
     chrome.identity.getProfileUserInfo(
       (res) => {
-        setUserInfo({ email: res.email, id: res.id });
         chrome.identity.getAuthToken({ 'interactive': false }, function (token) {
-          setAuthToken(token);
+          dispatch(loadUserInfo({ email: res.email, id: res.id, authToken: token }));
           const cd = new Date();
           const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
+          setDateStart(timeStampStart);
           const dayStart = new Date(timeStampStart);
           const dayEnd = new Date(timeStampStart + 86400000);
           fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => dispatch(loadEvents(res.items)));
-          // fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => console.log(res.items));
         });
       }
     );
-  }, []);
-
-  useEffect(() => {
     setTimeLine();
     setInterval(() => setTimeLine(), 30000);
   }, []);
 
+  useEffect(() => {
+    let sortedEvents = [...events];
+    let tempDisplayEvent = [] as calendarItem[][];
+    sortedEvents.sort((a, b) => getTimeStamp(a.start, 'start') - getTimeStamp(b.start, 'start'));
+    for (let i = 0; i < sortedEvents.length; i++) {
+      if (i === 0) {
+        tempDisplayEvent.push([sortedEvents[i]]);
+      } else {
+        const temp = tempDisplayEvent.find(elem => getTimeStamp(sortedEvents[i].start, 'start') - getTimeStamp(elem[elem.length - 1].end, 'end') >= 0);
+        if (temp) {
+          temp.push(sortedEvents[i]);
+        } else {
+          tempDisplayEvent.push([sortedEvents[i]]);
+        }
+      }
+    }
+    setCalendarItems(tempDisplayEvent);
+  }, [events]);
+
+
   return (
     <CalendarWrapper>
       <PanelTitle>Calendar</PanelTitle>
-      {/* {isCreateOn && <CalendarModule setIsCreateOn={setIsCreateOn} userInfo={userInfo} authToken={authToken}></CalendarModule>}
-      {isEditOn && <CalendarEditModule editItem={editItem} setIsEditOn={setIsEditOn}></CalendarEditModule>} */}
       <CalendarContainer>
         <CalendarBackground></CalendarBackground>
+        <CalendarBars calendarItems={calendarItems} getTimeStamp={getTimeStamp} dateStart={dateStart}></CalendarBars>
         <TimeLineDisplay timeLineInfo={timeLineInfo}></TimeLineDisplay>
       </CalendarContainer>
-      {/* <button onClick={() => setIsCreateOn(true)}>Create</button> */}
-      {calendarItems && !!calendarItems.length && calendarItems.map((item) => {
-        return <div key={item.id}>{getTime(item.start.dateTime)}-{getTime(item.end.dateTime)}<br />{item.summary}<button onClick={() => { editEvent(item); }}>edit</button><button onClick={() => { delEvent(item); }}>x</button></div>;
-      })}
-      <CreateButton onClick={() => { dispatch(setEditPanel({ name: 'EventEdit' })); }}>Create event</CreateButton>
+      <CreateButton onClick={() => { dispatch(setEditPanel({ name: 'EventAdd' })); }}>+</CreateButton>
     </CalendarWrapper >
   );
 };
@@ -224,11 +268,65 @@ const CalendarBackground: React.FC<{}> = () => {
       })}
     </CalendarBackgroundContainer>
   );
-
 };
 
-const CurrentLine: React.FC<{}> = () => {
+const CalendarBars: React.FC<{ calendarItems: calendarItem[][]; dateStart: number; getTimeStamp: (data: {}, key: string) => number; }> = (props) => {
+  const [infoCard, setInfoCard] = useState({
+    position: { x: 0, y: 0 },
+    info: {
+      summary: '',
+      start: '',
+      end: '',
+    }
+  });
+
+  function getTimeString(data, key) {
+    if ('date' in data) {
+      if (key === 'start') {
+        const time = new Date(`${data.date} 00:00`);
+        return `${time.getMonth() + 1}/${time.getDate()} 00:00`;
+      } else {
+        const time = new Date(`${data.date} 23:59`);
+        return ` ${time.getMonth() + 1}/${time.getDate()} 23:59`;
+      }
+    } else {
+      const time = new Date(data.dateTime);
+      return `${time.getMonth() + 1}/${time.getDate()} ${`${time.getHours()}`.padStart(2, "0")}:${`${time.getMinutes()}`.padStart(2, "0")}`;
+    }
+  }
+
+  function getTime(data, key) {
+    if ('date' in data) {
+      if (key === 'start') {
+        return '00:00';
+      } else {
+        return '23:59';
+      }
+    } else {
+      const time = new Date(data.dateTime);
+      return `${`${time.getHours()}`.padStart(2, "0")}:${`${time.getMinutes()}`.padStart(2, "0")}`;
+    }
+  }
+
   return (
-    <TimeLineDisplay></TimeLineDisplay>
+    <CalendarBarsContainer>
+      {props.calendarItems.map((bars) => {
+        return <BarColumn key={bars[0].iCalUID}>{bars.map((item) => {
+          return <EventItem
+            title={`${item.summary} ( ${getTimeString(item.start, 'start')} to ${getTimeString(item.end, 'end')} )`}
+            key={item.iCalUID}
+            base={props.dateStart / 3600000}
+            start={props.getTimeStamp(item.start, 'start') / 3600000}
+            end={props.getTimeStamp(item.end, 'end') / 3600000}
+            color={(calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', colorId: '7' }).code}
+          ><EventContent>
+              <EventValue>{item.summary}</EventValue>
+              <EventValue>{getTime(item.start, 'start')} - {getTime(item.end, 'end')}</EventValue>
+            </EventContent>
+          </EventItem>;
+        })
+        }</BarColumn>;
+      })}
+    </CalendarBarsContainer>
   );
 };

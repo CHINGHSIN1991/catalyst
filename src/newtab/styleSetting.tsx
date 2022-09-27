@@ -6,8 +6,9 @@ export const PanelBasicSetting = styled.div`
   padding: 12px;
   border-radius: 4px;
   margin: 8px;
-  background-color: rgba(0,0,0,0.3);
-  backdrop-filter: blur(8px);
+  border: solid 0.5px rgba(120,120,120,0.4);
+  background-color: rgba(0,0,0,0.4);
+  backdrop-filter: blur(16px);
 `;
 
 export const PanelOpenBackground = styled.div`
@@ -46,18 +47,38 @@ export const PanelTitle = styled.div`
 `;
 
 export const CreateButton = styled.div`
+  position: absolute;
   cursor: pointer;
   text-align: center;
-  font-size: 0.75rem;
-  width: 100%;
-  border: solid 1px;
-  background-color: rgba(200,200,200,0.2);
-  border-radius: 4px;
-  padding: 8px;
-  margin-top: 8px;
+  right: 8px;
+  top: 8px;
+  font-size: 1.5rem;
+  line-height: 20px;
+  width: 24px;
+  height: 24px;
+  /* border: solid 1px; */
+  background-color: rgba(200,200,200,0.1);
+  border-radius: 50%;
   transition: 0.2s;
-
   :hover{
     background-color: rgba(200,200,200,0.5);
   }
+`;
+
+export const EditPanelTitle = styled.div`
+  margin-bottom: 12px;
+  font-weight: bold;
+  text-align: center;
+`;
+
+export const EditPanelTitleText = styled.div`
+  font-weight: bold;
+  padding: 0 8px;
+`;
+
+export const EditPanelTitleUnderLine = styled.div`
+  width: 100%;
+  height: 1px;
+  margin-top: 8px;
+  background-color: darkgrey;
 `;

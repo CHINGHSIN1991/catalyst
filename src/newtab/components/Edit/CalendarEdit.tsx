@@ -1,24 +1,177 @@
 import React from 'react';
 import styled from "styled-components";
-import { v4 as uuidv4 } from 'uuid';
-import { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from 'react-redux';
 
-import { PanelBasicSetting } from '../../styleSetting';
-import { getEditPanelState, setEditPanel } from '../../features/reducers/editSlice';
-import { editShortcut } from '../../features/reducers/shortcutsSlice';
-import { EditPanelWrapper } from '../../styleSetting';
-import { InputComponent, PanelButton } from '../../../static/components';
+import { useState } from "react";
+import { useSelector } from 'react-redux';
+
+import { getUserInfo } from '../../features/reducers/userInfoSlice';
+import { setEditPanel } from '../../features/reducers/editSlice';
+import { loadEvents } from '../../features/reducers/calendarSlice';
+import { postNewEvent, fetchCalendarData } from '../../../utils/api';
+
+import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../styleSetting';
 import { handleInputChange } from '../../../utils/inputHandler';
+import { calendarColorList } from '../../../static/optionList';
+import { tempEvent } from '../../../static/types';
+import { PanelButton, ButtonContainer } from '../../../static/components';
+import { useDispatch } from 'react-redux';
 
 
-const CalendarWrapper = styled.div`
-  width: 480px;
-  height: 480px;
+const CalendarWrapper = styled(EditPanelWrapper)`
+  width: 360px;
   padding: 24px;
-  background-color: #fff;
   display: flex;
   flex-direction: column;
+  align-items: center;
+`;
+
+const FormSet = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  /* overflow: hidden; */
+  height: 36px;
+  padding-bottom: 6px;
+`;
+
+// const InputSet = styled(formSet)`
+//   height: 36px;
+//   padding-bottom: 6px;
+// `;
+
+// const DateSet = styled(formSet)`
+//   /* border: solid 1px; */
+//   height: ${(props) => { return props.isAllDay ? '36px' : '0px'; }};
+//   padding-bottom: ${(props) => { return props.isAllDay ? '6px' : '0px'; }};;
+// `;
+
+const InputTitle = styled.div`
+  /* border: solid 1px; */
+  font-size: 12px;
+  width: 80px;
+`;
+
+const InputValue = styled.input`
+  width: ${(props) => { return `${props.width}%`; }};
+  font-size: 1rem;
+  height: 28px;
+  line-height: 28px;
+  border: solid 0.5px lightgray;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(255,255,255,0);
+  outline: none;
+  color: rgba(80,80,80,1);
+  font-size: 14px;
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(0.4);
+    /* color: gray; */
+  }
+`;
+
+const SwitchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 28px;
+  margin-bottom: 8px;
+  line-height: 28px;
+  font-size: 12px;
+  padding-left: 60px;
+  width: 100%;
+  /* border: solid 1px; */
+`;
+
+const Switch = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  /* border: solid 2px rgba(0,0,0,0.2); */
+  margin-left: 12px;
+  width: 32px;
+  height: 18px;
+  background-color: ${(props) => { return props.isAllDay ? 'rgba(6,214,160,0.5)' : 'rgba(0,0,0,0.2)'; }};
+  transition: 0.2s;
+  border-radius: 12px;
+`;
+
+const SwitchOption = styled.div`
+  position: absolute;
+  left: ${(props) => { return props.isAllDay ? '16px' : '4px'; }};
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgb(255,255,255);
+  transition: 0.2s;
+`;
+
+const ColorSet = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 28px;
+  /* border: solid 1px; */
+`;
+
+
+const ColorOption = styled.div`
+  cursor: pointer;
+  width: 12px;
+  height: 16px;
+  border: solid 2px ${(props) => { return props.item.colorId === props.tempEvent.colorId ? props.item.colorId : 'rgba(255,255,255,1)'; }};
+  border-radius: 4px;
+  background-color: ${(props) => { return props.item.code; }};
+  opacity: ${(props) => { return props.item.colorId === props.tempEvent.colorId ? 1 : 0.3; }};;
+`;
+
+const PublicOptionSet = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 24px;
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 12px;
+`;
+
+const PublicOption = styled.div`
+  font-size: 12px;
+  width: 50%;
+  text-align: center;
+  font-weight: ${(props) => { return props.isPublic ? 'bold' : 'normal'; }};
+  color: ${(props) => { return props.isPublic ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.2)'; }};
+  transition: 0.2s;
+`;
+
+const PublicOptionBg = styled.div`
+  position: absolute;
+  left: ${(props) => { return props.isPublic ? '4px' : '124px'; }};
+  transition: 0.2s;
+  width: 120px;
+  height: 18px;
+  border-radius: 10px;
+  background-color: #fff;
+`;
+
+const AddEventBtn = styled.div`
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 0 16px;
+  margin-top: 16px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 24px;
+  height: 28px;
+  border-radius: 4px;
+  color: rgba(80,80,80,1);
+  background-color: rgba(80,80,80,0);
+  border: solid 2px rgba(80,80,80,1);
+  transition: 0.1s;
+  :hover{
+    color: rgba(255,255,255,1);
+    background-color: rgba(80,80,80,1);
+  }
 `;
 
 const CalendarContainer = styled.div`
@@ -51,71 +204,19 @@ const CalendarContainer = styled.div`
   }
 `;
 
-const CalendarBackgroundContainer = styled.div`
-  position: relative;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 432px;
-`;
 
-const TimeLine = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  height: 32px;
-`;
-
-const TimeValue = styled.div`
-  font-size: 0.75rem;
-  padding-right: 8px;
-  color: rgba(255,255,255,0.8);
-`;
-
-const TimeHr = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: rgba(255,255,255,0.3);
-`;
-
-
-type role = {
-  email: string, displayName: string, self: boolean;
-};
-
-type timeNode = { dateTime: string, timeZone: string; };
-type timeDay = { date: string; };
-
-interface calendarItem {
-  colorId?: string;
-  created?: string;
-  creator?: role;
-  end: timeNode | timeDay;
-  etag?: string;
-  evenType: string;
-  htmlLink?: string;
-  iCalUID: string;
-  id?: string;
-  kind?: string;
-  organizer?: role;
-  reminders?: { useDefault: boolean; };
-  sequence?: 0;
-  start: timeNode | timeDay;
-  status?: string;
-  summary: string;
-  updated?: string;
-}
-// export const CalendarEditPanel: React.FC<{ userInfo: { email: string, id: string; }; authToken: string; }> = (props) => {
 export const CalendarEditPanel: React.FC<{}> = (props) => {
-  const [tempEvent, setTempEvent] = useState({
+  const dispatch = useDispatch();
+  const userInfo = useSelector(getUserInfo);
+  const [tempEvent, setTempEvent] = useState<tempEvent>({
     summary: "",
-    date: "",
+    isAllDay: false,
+    startDate: "",
+    endDate: "",
     startTime: "",
     endTime: "",
-    timeZone: "",
-    iCalUID: "",
     visibility: "public",
-    colorId: "",
+    colorId: "7",
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -123,106 +224,82 @@ export const CalendarEditPanel: React.FC<{}> = (props) => {
     setTempEvent({ ...tempEvent, [e.target.name]: e.target.value });
   }
 
-  function handleSelectChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    console.log({ ...tempEvent, [e.target.name]: e.target.value });
-    setTempEvent({ ...tempEvent, [e.target.name]: e.target.value });
-  }
-
   function postEvent() {
-    const current = new Date(`${tempEvent.date} ${tempEvent.startTime}`);
-    console.log({
-      iCalUID: uuidv4(),
-      start: {
-        // date: '2022-09-22'
-        dateTime: `${tempEvent.date} ${tempEvent.startTime}`,
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
-      },
-      end: {
-        // date: '2022-09-23'
-        dateTime: `${tempEvent.date} ${tempEvent.endTime}`,
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
-      },
-      summary: tempEvent.summary
+    postNewEvent(userInfo, tempEvent).then((res) => {
+      console.log(res);
+      setTempEvent({
+        summary: "",
+        isAllDay: false,
+        startDate: "",
+        endDate: "",
+        startTime: "",
+        endTime: "",
+        visibility: "public",
+        colorId: "7",
+      });
+      dispatch(setEditPanel({ name: '', data: '' }));
+      const cd = new Date();
+      const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
+      const dayStart = new Date(timeStampStart);
+      const dayEnd = new Date(timeStampStart + 86400000);
+      fetchCalendarData(userInfo.email, dayStart, dayEnd, userInfo.authToken).then((res) => dispatch(loadEvents(res.items)));
     });
-    // fetch(`https://www.googleapis.com/calendar/v3/calendars/${props.userInfo.email}/events/import`, {
-    //   headers: new Headers({
-    //     'Authorization': 'Bearer ' + props.authToken,
-    //     'Content-Type': 'application/json'
-    //   }),
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     iCalUID: uuidv4(),
-    //     start: {
-    //       // date: '2022-09-22'
-    //       dateTime: (new Date(`${tempEvent.date} ${tempEvent.startTime}`)).toISOString(),
-    //       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
-    //     },
-    //     end: {
-    //       // date: '2022-09-23'
-    //       dateTime: (new Date(`${tempEvent.date} ${tempEvent.endTime}`)).toISOString(),
-    //       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
-    //     },
-    //     summary: tempEvent.summary
-    //   })
-    // }).then((res) => { return res.json(); }).then((res) => { console.log(res); }).catch((err) => { console.log(err.message); });
   }
 
   return (
     <CalendarWrapper onClick={(e) => { e.stopPropagation(); }}>
-      <label htmlFor="">
-        標題
-        <input name="summary" type="text" value={tempEvent.summary} onChange={handleChange} />
-      </label>
-      <label htmlFor="">
-        日期
-        <input type="date" name="date" value={tempEvent.date} onChange={handleChange} />
-      </label>
-      <label htmlFor="">
-        開始時間
-        <input name="startTime" type="time" value={tempEvent.startTime} onChange={handleChange} />
-      </label>
-      <label htmlFor="">
-        結束時間
-        <input name="endTime" type="time" value={tempEvent.endTime} onChange={handleChange} />
-      </label>
-      <label htmlFor="">顏色
-        <select name="colorId" id="" value={tempEvent.colorId} onChange={handleSelectChange} >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="11">11</option>
-        </select>
-      </label>
-      <fieldset name="visibility">
-        <legend>公開</legend>
-        <div>
-          <label htmlFor="public">Public
-            <input type="radio" id="public" name="visibility" value="public" checked={"public" === tempEvent.visibility} onChange={handleChange} />
-          </label>
-        </div>
-
-        <div>
-          <label htmlFor="privacy">Privacy
-            <input type="radio" id="dewey" name="visibility" value="privacy" checked={"privacy" === tempEvent.visibility} onChange={handleChange} />
-          </label>
-        </div>
-      </fieldset>
-
-      <button onClick={postEvent}>Confirm</button>
-      {/* <button onClick={() => props.setIsCreateOn(false)}>Cancel</button> */}
+      <EditPanelTitle>
+        <EditPanelTitleText>
+          Add event
+          {/* {editPanelState.name === 'ShortcutEdit' && 'Edit shortcut'}
+          {editPanelState.name === 'ShortcutAdd' && 'Add shortcut'} */}
+        </EditPanelTitleText>
+        <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
+      </EditPanelTitle>
+      <FormSet>
+        <InputTitle>Title</InputTitle>
+        <InputValue name="summary" type="text" value={tempEvent.summary} onChange={handleChange} width={100}></InputValue>
+      </FormSet>
+      <SwitchContainer>
+        All day <Switch onClick={() => { setTempEvent({ ...tempEvent, isAllDay: !tempEvent.isAllDay }); }} isAllDay={tempEvent.isAllDay}><SwitchOption isAllDay={tempEvent.isAllDay} /></Switch>
+      </SwitchContainer>
+      <FormSet>
+        <InputTitle>Start at</InputTitle>
+        <InputValue name="startDate" value={tempEvent.startDate} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Date" width={tempEvent.isAllDay ? 100 : 55}></InputValue>
+        {!tempEvent.isAllDay && <InputValue name="startTime" value={tempEvent.startTime} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Time" width={45}></InputValue>}
+      </FormSet>
+      <FormSet>
+        <InputTitle>End at</InputTitle>
+        <InputValue name="endDate" value={tempEvent.endDate} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Date" width={tempEvent.isAllDay ? 100 : 55}></InputValue>
+        {!tempEvent.isAllDay && <InputValue name="endTime" value={tempEvent.endTime} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Time" width={45}></InputValue>}
+      </FormSet>
+      <FormSet>
+        <InputTitle>Color</InputTitle>
+        <ColorSet>
+          {calendarColorList &&
+            calendarColorList.map((item) => {
+              return <ColorOption
+                key={item.colorId}
+                item={item}
+                onClick={() => setTempEvent({ ...tempEvent, colorId: item.colorId })}
+                tempEvent={tempEvent}
+              />;
+            })}
+        </ColorSet>
+      </FormSet>
+      <FormSet>
+        <InputTitle></InputTitle>
+        <PublicOptionSet onClick={() => setTempEvent({ ...tempEvent, visibility: tempEvent.visibility === 'public' ? 'private' : 'public' })}>
+          <PublicOptionBg isPublic={tempEvent.visibility === 'public'}></PublicOptionBg>
+          <PublicOption isPublic={tempEvent.visibility === 'public'}>Public</PublicOption>
+          <PublicOption isPublic={tempEvent.visibility === 'private'}>Private</PublicOption>
+        </PublicOptionSet>
+      </FormSet>
+      <ButtonContainer>
+        <PanelButton width={120} name='Add an Event' onClick={postEvent} />
+        <PanelButton width={120} name='Cancel' onClick={() => dispatch(setEditPanel({ name: '', data: '' }))} />
+      </ButtonContainer>
     </CalendarWrapper>
   );
 };
 
-const CalendarEditModule: React.FC<{ editItem: calendarItem; setIsEditOn: (boo: boolean) => void; }> = (props) => {
-  return (
-    <CalendarWrapper>{JSON.stringify(props.editItem)}<button onClick={() => props.setIsEditOn(false)}>Cancel</button></CalendarWrapper>
-  );
-};

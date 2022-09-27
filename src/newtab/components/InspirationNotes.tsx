@@ -36,7 +36,7 @@ const NoteLinkIcon = styled.img`
 
 const TempLinks = styled.ul`
   /* border: solid 1px; */
-  display: flex;
+  display: ${(props) => { return props.length === 0 ? 'none' : 'flex'; }};
   flex-direction: column;
   border: solid 1px rgba(255,255,255,0);
   border-radius: 4px;
@@ -57,7 +57,7 @@ const CategoryTitle = styled.div`
 const CategoryHr = styled.div`
   width: 100%;
   margin: 8px 0;
-  background-color: lightgray;
+  background-color: rgba(180,180,180,0.5);
   height: 1px;
 `;
 
@@ -330,8 +330,9 @@ export const InspirationNotePanel: React.FC<{}> = () => {
       <PanelTitle>Inspiration Notes</PanelTitle>
       <ScrollContainer ShortcutNumber={ShortcutNumber.length}>
         {inspirationNotes && "no category" in inspirationNotes &&
-          <TempLinks>
+          <TempLinks length={inspirationNotes["no category"].length}>
             {inspirationNotes["no category"] && inspirationNotes["no category"].map((note: note) => {
+
               return (
                 <TempLinkElement key={note.id} note={note} tempNote={tempNote} setTempNote={setTempNote} delNote={delNote} changeNote={changeNote}></TempLinkElement>
               );
@@ -340,7 +341,7 @@ export const InspirationNotePanel: React.FC<{}> = () => {
         }
         {noteCategories && inspirationNotes && noteCategories.map((category, index) => {
           return (
-            <TempLinks key={category + index}>
+            <TempLinks key={category + index} length={inspirationNotes[category].length}>
               <CategoryTitle>{inspirationNotes[category] && !!inspirationNotes[category].length && category}</CategoryTitle>
               <CategoryHr></CategoryHr>
               {inspirationNotes[category] && inspirationNotes[category].map((note: note) => {
@@ -352,7 +353,7 @@ export const InspirationNotePanel: React.FC<{}> = () => {
           );
         })}
       </ScrollContainer>
-    </TempLinksPanel>
+    </TempLinksPanel >
   );
 };
 
