@@ -1,20 +1,20 @@
 import React from 'react';
 import styled from "styled-components";
 
-import { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useState } from "react";
+import { useSelector } from 'react-redux';
 
 import { getUserInfo } from '../../features/reducers/userInfoSlice';
-import { postNewEvent } from '../../../utils/api';
+import { setEditPanel } from '../../features/reducers/editSlice';
+import { loadEvents } from '../../features/reducers/calendarSlice';
+import { postNewEvent, fetchCalendarData } from '../../../utils/api';
 
-import { PanelBasicSetting } from '../../styleSetting';
-import { getEditPanelState, setEditPanel } from '../../features/reducers/editSlice';
-import { editShortcut } from '../../features/reducers/shortcutsSlice';
 import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../styleSetting';
-import { InputComponent, PanelButton } from '../../../static/components';
 import { handleInputChange } from '../../../utils/inputHandler';
 import { calendarColorList } from '../../../static/optionList';
 import { tempEvent } from '../../../static/types';
+import { PanelButton, ButtonContainer } from '../../../static/components';
+import { useDispatch } from 'react-redux';
 
 
 const CalendarWrapper = styled(EditPanelWrapper)`
@@ -157,18 +157,17 @@ const PublicOptionBg = styled.div`
 const AddEventBtn = styled.div`
   cursor: pointer;
   box-sizing: border-box;
-  padding: 0;
+  padding: 0 16px;
   margin-top: 16px;
   text-align: center;
   font-size: 14px;
   line-height: 24px;
-  width: 120px;
   height: 28px;
   border-radius: 4px;
   color: rgba(80,80,80,1);
   background-color: rgba(80,80,80,0);
   border: solid 2px rgba(80,80,80,1);
-  transition: 0.2s;
+  transition: 0.1s;
   :hover{
     color: rgba(255,255,255,1);
     background-color: rgba(80,80,80,1);
@@ -207,6 +206,7 @@ const CalendarContainer = styled.div`
 
 
 export const CalendarEditPanel: React.FC<{}> = (props) => {
+  const dispatch = useDispatch();
   const userInfo = useSelector(getUserInfo);
   const [tempEvent, setTempEvent] = useState<tempEvent>({
     summary: "",
@@ -225,8 +225,25 @@ export const CalendarEditPanel: React.FC<{}> = (props) => {
   }
 
   function postEvent() {
-    postNewEvent(userInfo, tempEvent);
-    console.log('edit post');
+    postNewEvent(userInfo, tempEvent).then((res) => {
+      console.log(res);
+      setTempEvent({
+        summary: "",
+        isAllDay: false,
+        startDate: "",
+        endDate: "",
+        startTime: "",
+        endTime: "",
+        visibility: "public",
+        colorId: "7",
+      });
+      dispatch(setEditPanel({ name: '', data: '' }));
+      const cd = new Date();
+      const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
+      const dayStart = new Date(timeStampStart);
+      const dayEnd = new Date(timeStampStart + 86400000);
+      fetchCalendarData(userInfo.email, dayStart, dayEnd, userInfo.authToken).then((res) => dispatch(loadEvents(res.items)));
+    });
   }
 
   return (
@@ -278,7 +295,10 @@ export const CalendarEditPanel: React.FC<{}> = (props) => {
           <PublicOption isPublic={tempEvent.visibility === 'private'}>Private</PublicOption>
         </PublicOptionSet>
       </FormSet>
-      <AddEventBtn onClick={postEvent}>Add an Event</AddEventBtn>
+      <ButtonContainer>
+        <PanelButton width={120} name='Add an Event' onClick={postEvent} />
+        <PanelButton width={120} name='Cancel' onClick={() => dispatch(setEditPanel({ name: '', data: '' }))} />
+      </ButtonContainer>
     </CalendarWrapper>
   );
 };

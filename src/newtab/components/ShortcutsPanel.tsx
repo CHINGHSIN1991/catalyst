@@ -240,7 +240,7 @@ export const ShortcutsPanel: React.FC<{}> = () => {
 
   useEffect(() => {
     chrome.storage.sync.get(['shortcuts'], function (res) {
-      console.log(res.shortcut);
+      // console.log(res.shortcut);
       if (res.shortcuts) {
         dispatch(loadShortcuts(res.shortcuts));
       } else {

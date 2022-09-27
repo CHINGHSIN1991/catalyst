@@ -3,6 +3,7 @@ import shortcutsReducer from './reducers/shortcutsSlice'
 import editPanelStateReducer from "./reducers/editSlice";
 import calendarReducer from './reducers/calendarSlice'
 import userInfoReducer from "./reducers/userInfoSlice";
+import backgroundReducer from "./reducers/backgroundSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     editPanelState: editPanelStateReducer,
     events: calendarReducer,
     userInfo: userInfoReducer,
+    backgrounds: backgroundReducer,
   }
 })
 

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { handleInputChange, handleTextAreaChange } from '../../utils/inputHandler';
 
 const Wrapper = styled.div`
+  color: rgba(40,40,40,0);
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: flex;
   flex-direction: column;
@@ -23,6 +24,7 @@ const InputContainer = styled.div`
 `;
 
 const TagInput = styled.input`
+  color: rgba(40,40,40,1);
   box-sizing: border-box !important;
   margin: 0;
   height: 24px;
@@ -36,10 +38,12 @@ const TagInput = styled.input`
   background-color: rgb(224,224,224);
   :focus{
     outline: none;
+    background-color: rgb(200,200,200) !important;
   }
 `;
 
 const SelectOption = styled.option`
+  color: rgba(40,40,40,1);
   height: 24px; 
   line-height: 24px;
   padding: 4px;
@@ -49,6 +53,7 @@ const SelectOption = styled.option`
 `;
 
 const SelectBlock = styled.select`
+  color: rgba(40,40,40,1);
   height: 24px;
   border-radius: 4px;
   border: none;
@@ -110,6 +115,7 @@ const AddBtn = styled.div`
 `;
 
 const TitleInput = styled.input`
+  color: rgba(40,40,40,1);
   box-sizing: border-box;
   border: none !important;
   width: 200px !important;
@@ -125,6 +131,7 @@ const TitleInput = styled.input`
 `;
 
 const NoteArea = styled.textarea`
+  color: rgba(40,40,40,1);
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   box-sizing: border-box;
   width: 200px !important;

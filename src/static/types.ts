@@ -1,3 +1,5 @@
+import backgroundSlice from "../newtab/features/reducers/backgroundSlice";
+
 type PersonalSettings = {
   userName: string
   mode: "LIGHT_MODE"|"DARK_MODE"|"CYBERPUNK",
@@ -59,4 +61,29 @@ export type tempEvent = {
   endTime: string,
   visibility: 'public' | 'private',
   colorId: string,
+}
+
+export interface shortcut {
+  id: number,
+  logo: string,
+  name: string,
+  url: string,
+};
+
+export type background = {
+  id: string,
+  url: string,
+  smallUrl: string,
+  user: string,
+  profile: string,
+  downloadLink: string,
+} 
+
+export type backgroundSetting = {
+  lastUpdate: string,
+  current: {
+    setting: number,
+    slice: number,
+  },
+  backgroundList: background[][]
 }

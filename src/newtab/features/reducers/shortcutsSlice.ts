@@ -1,11 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-
-interface shortcut {
-  id: number,
-  logo: string,
-  name: string,
-  url: string,
-};
+import { shortcut } from '../../../static/types'
 
 const initialState = {
   shortcuts:[{id:1234567, logo:"	https://icon.horse/icon/www.google.com.tw", name:"Google", url:"https://www.google.com"}]

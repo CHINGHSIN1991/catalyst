@@ -36,8 +36,9 @@ const ToggleButton = styled.div`
   /* border: solid 1px; */
   cursor: pointer;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
-  background-color: rgba(0,0,0,0.3);
-  backdrop-filter: blur(8px);
+  border: solid 0.5px rgba(120,120,120,0.4);
+  background-color: rgba(0,0,0,0.4);
+  backdrop-filter: blur(16px);
   :hover{
     ${ToggleTitle} {
       opacity: 1;

@@ -17,8 +17,9 @@ const Wrapper = styled.div`
   margin: 0 auto;
   border-radius: 4px;
   /* border: solid 1px; */
-  background-color: rgba(0,0,0,0.3);
-  backdrop-filter: blur(8px);
+  border: solid 0.5px rgba(120,120,120,0.4);
+  background-color: rgba(0,0,0,0.4);
+  backdrop-filter: blur(16px);
   height: ${(props) => props.centralPanel === "Pomodoro" ? "128px" : "0px"};
   width: ${(props) => props.centralPanel === "Pomodoro" ? "400px" : "0px"};
   transition: 0.1s;

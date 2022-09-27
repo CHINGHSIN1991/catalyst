@@ -119,6 +119,16 @@ const EventValue = styled.div`
   width: 100%;
 `;
 
+const InfoCard = styled.div`
+  position: fixed;
+  left: ${(props) => { return `-${props.position.x / 10}px`; }};
+  top: ${(props) => { return `-${props.position.y / 10}px`; }};
+  width: 120px;
+  height: 40px;
+  background-color: #fff;
+  border: solid 1px;
+`;
+
 const TimeLine = styled.div`
   width: 100%;
   display: flex;
@@ -234,18 +244,12 @@ export const CalendarPanel: React.FC<{}> = () => {
   return (
     <CalendarWrapper>
       <PanelTitle>Calendar</PanelTitle>
-      {/* {isCreateOn && <CalendarModule setIsCreateOn={setIsCreateOn} userInfo={userInfo} authToken={authToken}></CalendarModule>}
-      {isEditOn && <CalendarEditModule editItem={editItem} setIsEditOn={setIsEditOn}></CalendarEditModule>} */}
       <CalendarContainer>
         <CalendarBackground></CalendarBackground>
         <CalendarBars calendarItems={calendarItems} getTimeStamp={getTimeStamp} dateStart={dateStart}></CalendarBars>
         <TimeLineDisplay timeLineInfo={timeLineInfo}></TimeLineDisplay>
       </CalendarContainer>
-      {/* <button onClick={() => setIsCreateOn(true)}>Create</button> */}
-      {/* {calendarItems && !!calendarItems.length && calendarItems.map((item) => {
-        return <div key={item.id}>{getTime(item.start.dateTime)}-{getTime(item.end.dateTime)}<br />{item.summary}<button onClick={() => { editEvent(item); }}>edit</button><button onClick={() => { delEvent(item); }}>x</button></div>;
-      })} */}
-      <CreateButton onClick={() => { dispatch(setEditPanel({ name: 'EventEdit' })); }}>+</CreateButton>
+      <CreateButton onClick={() => { dispatch(setEditPanel({ name: 'EventAdd' })); }}>+</CreateButton>
     </CalendarWrapper >
   );
 };
@@ -267,18 +271,27 @@ const CalendarBackground: React.FC<{}> = () => {
 };
 
 const CalendarBars: React.FC<{ calendarItems: calendarItem[][]; dateStart: number; getTimeStamp: (data: {}, key: string) => number; }> = (props) => {
+  const [infoCard, setInfoCard] = useState({
+    position: { x: 0, y: 0 },
+    info: {
+      summary: '',
+      start: '',
+      end: '',
+    }
+  });
+
   function getTimeString(data, key) {
     if ('date' in data) {
       if (key === 'start') {
         const time = new Date(`${data.date} 00:00`);
-        return `00:00 - ${time.getMonth() + 1}/${time.getDate()}`;
+        return `${time.getMonth() + 1}/${time.getDate()} 00:00`;
       } else {
         const time = new Date(`${data.date} 23:59`);
-        return `23:59 - ${time.getMonth() + 1}/${time.getDate()}`;
+        return ` ${time.getMonth() + 1}/${time.getDate()} 23:59`;
       }
     } else {
       const time = new Date(data.dateTime);
-      return `${`${time.getHours()}`.padStart(2, "0")}:${`${time.getMinutes()}`.padStart(2, "0")} ${time.getMonth() + 1}/${time.getDate()}`;
+      return `${time.getMonth() + 1}/${time.getDate()} ${`${time.getHours()}`.padStart(2, "0")}:${`${time.getMinutes()}`.padStart(2, "0")}`;
     }
   }
 
@@ -300,6 +313,7 @@ const CalendarBars: React.FC<{ calendarItems: calendarItem[][]; dateStart: numbe
       {props.calendarItems.map((bars) => {
         return <BarColumn key={bars[0].iCalUID}>{bars.map((item) => {
           return <EventItem
+            title={`${item.summary} ( ${getTimeString(item.start, 'start')} to ${getTimeString(item.end, 'end')} )`}
             key={item.iCalUID}
             base={props.dateStart / 3600000}
             start={props.getTimeStamp(item.start, 'start') / 3600000}
