@@ -79,12 +79,6 @@ const ServiceTitle = styled.div`
   font-size: 0.75rem;
 `;
 
-const UnderLine = styled.div`
-  background-color: #fff;
-  width: 0%;
-  height: 2px;
-`;
-
 const UserName = styled.a`
   color: white;
   display: flex;
@@ -94,13 +88,12 @@ const UserName = styled.a`
   padding-left: 8px;
   font-weight: bold;
   font-size: 1.5rem;
+  line-height: 1.3rem;
   transition: 0.2s;
-  :hover{
+  margin: 0;
+  /* :hover{
     color: lightgray
-    ${UnderLine} {
-      width: 100%;
-    }
-  }
+  } */
 `;
 
 export const PersonalServicePanel: React.FC<{}> = () => {
@@ -120,7 +113,6 @@ export const PersonalServicePanel: React.FC<{}> = () => {
     const current = (new Date()).getHours();
     setWelcomeMsg(current);
 
-    chrome.storage.sync.get();
     chrome.storage.sync.get(['userName'], function (res) {
       if ('userName' in res) {
         setUserName(res.userName);
@@ -133,7 +125,6 @@ export const PersonalServicePanel: React.FC<{}> = () => {
       <WelcomeMessage>{welcomeMessage}
         <UserName href="https://myaccount.google.com/" target="_blank">
           <div>{userName}</div>
-          <UnderLine></UnderLine>
         </UserName>
       </WelcomeMessage>
       <ServiceLinks>

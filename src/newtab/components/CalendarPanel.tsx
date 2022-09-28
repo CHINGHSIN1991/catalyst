@@ -203,10 +203,36 @@ export const CalendarPanel: React.FC<{}> = () => {
     return timeStamp;
   }
 
+  function checkOauthData() {
+    console.log(userInfo);
+    if (!userInfo.authToken) {
+      // @ts-ignore
+      chrome.identity.getProfileUserInfo({ 'accountStatus': 'ANY' },
+        (res) => {
+          console.log(res);
+          chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+            console.log(token);
+            dispatch(loadUserInfo({ email: res.email, id: res.id, authToken: token }));
+            const cd = new Date();
+            const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
+            setDateStart(timeStampStart);
+            const dayStart = new Date(timeStampStart);
+            const dayEnd = new Date(timeStampStart + 86400000);
+            fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => dispatch(loadEvents(res.items)));
+          });
+        }
+      );
+    } else {
+      dispatch(setEditPanel({ name: 'EventAdd' }));
+    }
+  }
+
   useEffect(() => {
     chrome.identity.getProfileUserInfo(
       (res) => {
-        chrome.identity.getAuthToken({ 'interactive': false }, function (token) {
+        console.log('data');
+        console.log(res);
+        chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
           dispatch(loadUserInfo({ email: res.email, id: res.id, authToken: token }));
           const cd = new Date();
           const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
@@ -240,7 +266,6 @@ export const CalendarPanel: React.FC<{}> = () => {
     setCalendarItems(tempDisplayEvent);
   }, [events]);
 
-
   return (
     <CalendarWrapper>
       <PanelTitle>Calendar</PanelTitle>
@@ -249,7 +274,7 @@ export const CalendarPanel: React.FC<{}> = () => {
         <CalendarBars calendarItems={calendarItems} getTimeStamp={getTimeStamp} dateStart={dateStart}></CalendarBars>
         <TimeLineDisplay timeLineInfo={timeLineInfo}></TimeLineDisplay>
       </CalendarContainer>
-      <CreateButton onClick={() => { dispatch(setEditPanel({ name: 'EventAdd' })); }}>+</CreateButton>
+      <CreateButton onClick={checkOauthData}>+</CreateButton>
     </CalendarWrapper >
   );
 };

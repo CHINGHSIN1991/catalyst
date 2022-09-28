@@ -76,6 +76,7 @@ const PositionPanel = styled.div`
 `;
 
 const TogglePanel = styled.div`
+  box-sizing: border-box;
   position: relative;
   width: 200px;
   height: 32px;
@@ -111,6 +112,7 @@ const OptionTitle = styled.div`
   width: ${(props) => { return props.isMemo ? '132px' : '0px'; }};
   transition: 0.4s;
   overflow: hidden;
+  white-space: nowrap;
   text-align: center;
 `;
 
