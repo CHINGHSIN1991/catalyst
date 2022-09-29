@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
-
+import { useSelector } from 'react-redux';
 import { fetchWeatherData, getLocationKey, fetchAccuWeatherData } from '../../utils/api';
 
-import { FocusPanelTitle } from '../styleSetting';
+import { FocusPanelTitle } from '../../static/styleSetting';
+import { getPersonalization } from '../features/reducers/optionsSlice';
 
 const Wrapper = styled.div`
   /* border: solid 1px; */
@@ -187,6 +188,7 @@ interface accuWeatherDataSet {
 }
 
 export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
+  const personalization = useSelector(getPersonalization);
   const [weatherData, setWeatherData] = useState<openWeatherData>(null);
 
   function getWeatherData(currentTime: number) {
@@ -223,18 +225,6 @@ export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
         getWeatherData(currentTime);
       }
     });
-    // chrome.storage.local.get(["weatherData"], (res) => {
-    //   const currentTime = Date.now();
-    //   if (res.weatherData) {
-    //     if ((currentTime - res.weatherDate.updateTime) < 8640000) {
-    //       setWeatherData(res.weatherData);
-    //     } else {
-    //       getWeatherData(currentTime);
-    //     }
-    //   } else {
-    //     getWeatherData(currentTime);
-    //   }
-    // });
   }, []);
 
   return (
@@ -246,14 +236,22 @@ export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
           <City>{weatherData.weather[0].main}</City>
         </MainInfo>
         <MainInfo>
-          {/* <MainDegree>{`${standerToMetric(weatherData.main.temp)}℃`}{`${standerToFahrenheit(weatherData.main.temp)}℉`} </MainDegree> */}
-          <MainDegree>{`${standerToMetric(weatherData.main.temp)} ℃`}</MainDegree>
+          {!personalization.isCelsius && <MainDegree>{`${standerToFahrenheit(weatherData.main.temp)} ℉`}</MainDegree>}
+          {personalization.isCelsius && <MainDegree>{`${standerToMetric(weatherData.main.temp)} ℃`}</MainDegree>}
           <City>{weatherData.name}</City>
         </MainInfo>
         <MainInfo>
           <Info><InfoTitle>Humidity</InfoTitle>{`${weatherData.main.humidity} %`}</Info>
-          <Info><InfoTitle>Feel like</InfoTitle>{`${standerToMetric(weatherData.main.feels_like)} ℃`}</Info>
-          <Info><InfoTitle>Range</InfoTitle>{`${standerToMetric(weatherData.main.temp_min)} - ${standerToMetric(weatherData.main.temp_max)} ℃`}</Info>
+          <Info>
+            <InfoTitle>Feel like</InfoTitle>
+            {!personalization.isCelsius && `${standerToFahrenheit(weatherData.main.feels_like)} ℉`}
+            {personalization.isCelsius && `${standerToMetric(weatherData.main.feels_like)} ℃`}
+          </Info>
+          <Info>
+            <InfoTitle>Range</InfoTitle>
+            {!personalization.isCelsius && `${standerToFahrenheit(weatherData.main.temp_min)} - ${standerToFahrenheit(weatherData.main.temp_max)} ℉`}
+            {personalization.isCelsius && `${standerToMetric(weatherData.main.temp_min)} - ${standerToMetric(weatherData.main.temp_max)} ℃`}
+          </Info>
         </MainInfo>
       </WeatherInfoContainer>}
       {/* <DailyDataContainer>

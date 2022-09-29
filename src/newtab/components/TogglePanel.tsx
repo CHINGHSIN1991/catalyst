@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+
+import { loadPersonalization } from '../features/reducers/optionsSlice';
+
 
 const Wrapper = styled.div`
   position: absolute;
@@ -55,6 +60,7 @@ export const TogglePanel: React.FC<{
   centralPanel: string;
   setCentralPanel: (crp: string) => void;
 }> = (props) => {
+  const dispatch = useDispatch();
 
   function toggleCentralPanel(target: string) {
     if (props.centralPanel === target) {
@@ -63,6 +69,15 @@ export const TogglePanel: React.FC<{
       props.setCentralPanel(target);
     }
   }
+
+  useEffect(() => {
+    chrome.storage.sync.get(['personalization'], (res) => {
+      if (res.personalization) {
+        dispatch(loadPersonalization(res.personalization));
+        props.setIsMenuOn(res.personalization.isMenuShow);
+      }
+    });
+  }, []);
 
   return (
     <Wrapper>

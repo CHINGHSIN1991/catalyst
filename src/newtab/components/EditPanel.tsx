@@ -8,6 +8,8 @@ import { getEditPanelState, setEditPanel } from '../features/reducers/editSlice'
 import { ShortcutEditPanel } from './Edit/ShortcutEdit';
 import { CalendarEditPanel } from './Edit/CalendarEdit';
 import { BackgroundEditPanel } from './Edit/BackGroundEdit';
+import { UserInfoEditPanel } from './Edit/UserInfoEdit';
+import { PronounceToolEditPanel } from './Edit/PronounceToolEdit';
 
 const PanelOpenBackground = styled.div`
   width: 100vw;
@@ -48,6 +50,8 @@ export const EditPanel: React.FC<{}> = () => {
         {(editPanelState.name === 'ShortcutEdit' || editPanelState.name === 'ShortcutAdd') && <ShortcutEditPanel></ShortcutEditPanel>}
         {(editPanelState.name === 'EventEdit' || editPanelState.name === 'EventAdd') && <CalendarEditPanel></CalendarEditPanel>}
         {(editPanelState.name === 'BackgroundEdit') && <BackgroundEditPanel></BackgroundEditPanel>}
+        {(editPanelState.name === 'UserInfoEdit') && <UserInfoEditPanel></UserInfoEditPanel>}
+        {(editPanelState.name === 'PronounceToolEdit') && <PronounceToolEditPanel></PronounceToolEditPanel>}
       </PanelContainer>
     </PanelOpenBackground>
   );

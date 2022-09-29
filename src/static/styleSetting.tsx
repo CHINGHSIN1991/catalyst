@@ -4,11 +4,14 @@ export const PanelBasicSetting = styled.div`
   display: flex;
   flex-direction: column;  
   padding: 12px;
-  border-radius: 4px;
-  margin: 8px;
+  border-radius: 6px;
+  margin: 8px 8px 0;
   border: solid 0.5px rgba(120,120,120,0.4);
   background-color: rgba(0,0,0,0.4);
   backdrop-filter: blur(16px);
+  :last-child {
+    margin: 8px
+  }
 `;
 
 export const PanelOpenBackground = styled.div`

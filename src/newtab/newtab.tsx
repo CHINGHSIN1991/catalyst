@@ -102,6 +102,7 @@ const HeightLimiter = styled.div`
   flex-direction: column;
   width: 100%;
   height: calc(100vh - 96px);
+  margin-bottom: -8px;
 `;
 
 const Container = styled.div`
@@ -164,7 +165,7 @@ type bgOption = {
 };
 
 const App: React.FC<{}> = () => {
-  const [isMenuOn, setIsMenuOn] = useState(true);
+  const [isMenuOn, setIsMenuOn] = useState(false);
   const [isBoardOn, setIsBoardOn] = useState(false);
   const [centralPanel, setCentralPanel] = useState("");
 

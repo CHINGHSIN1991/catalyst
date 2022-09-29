@@ -2,8 +2,10 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PanelBasicSetting } from '../styleSetting';
+import { PanelBasicSetting } from '../../static/styleSetting';
 import { serviceList } from '../../static/optionList';
+import { getUserInfo, loadUserInfo } from '../features/reducers/userInfoSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 const PersonalPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */
@@ -12,8 +14,9 @@ const PersonalPanel = styled(PanelBasicSetting)`
 const WelcomeMessage = styled.div`
   display: flex;
   align-items: flex-end;
+  font-weight: bold;
   font-size: 1rem;
-  padding: 4px 16px 16px 16px;
+  padding: 0px 16px 16px 0px;
 `;
 
 const ServiceLinks = styled.div`
@@ -74,31 +77,40 @@ const ServiceIcon = styled.img`
   object-fit: contain;
 `;
 
-const ServiceTitle = styled.div`
+const ServiceTitle = styled.div`  
   padding-top: 8px;
   font-size: 0.75rem;
+`;
+const WelcomeSentence = styled.div`
+  font-weight: bold;
+  display: flex;
+  flex-shrink: 0;
 `;
 
 const UserName = styled.a`
   color: white;
   display: flex;
-  flex-direction: column;
+  flex-shrink: 1;
   align-items: center;
   cursor: pointer;
   padding-left: 8px;
   font-weight: bold;
-  font-size: 1.5rem;
-  line-height: 1.3rem;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
   transition: 0.2s;
   margin: 0;
+  overflow: hidden;  
+  white-space: nowrap;
+  text-overflow: ellipsis;
   /* :hover{
     color: lightgray
   } */
 `;
 
 export const PersonalServicePanel: React.FC<{}> = () => {
+  const dispatch = useDispatch();
+  const userInfo = useSelector(getUserInfo);
   const [welcomeMessage, setWelcomeMessage] = useState("Have a nice day !");
-  const [userName, setUserName] = useState("New User");
 
   function setWelcomeMsg(current: number) {
     if (current < 12) {
@@ -115,16 +127,19 @@ export const PersonalServicePanel: React.FC<{}> = () => {
 
     chrome.storage.sync.get(['userName'], function (res) {
       if ('userName' in res) {
-        setUserName(res.userName);
+        dispatch(loadUserInfo({ ...userInfo, name: res.userName }));
       }
     });
   }, []);
 
+  console.log(userInfo);
+
   return (
     <PersonalPanel>
-      <WelcomeMessage>{welcomeMessage}
+      <WelcomeMessage>
+        <WelcomeSentence>{welcomeMessage}</WelcomeSentence>
         <UserName href="https://myaccount.google.com/" target="_blank">
-          <div>{userName}</div>
+          {userInfo.name}
         </UserName>
       </WelcomeMessage>
       <ServiceLinks>

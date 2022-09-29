@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PanelBasicSetting, PanelTitle, CreateButton } from '../styleSetting';
+import { PanelBasicSetting, PanelTitle, CreateButton } from '../../static/styleSetting';
 import { fetchCalendarData } from '../../utils/api';
 
 import { calendarColorList } from '../../static/optionList';
@@ -205,14 +205,14 @@ export const CalendarPanel: React.FC<{}> = () => {
 
   function checkOauthData() {
     console.log(userInfo);
-    if (!userInfo.authToken) {
+    if (!userInfo.email || !userInfo.authToken) {
       // @ts-ignore
       chrome.identity.getProfileUserInfo({ 'accountStatus': 'ANY' },
         (res) => {
           console.log(res);
           chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
             console.log(token);
-            dispatch(loadUserInfo({ email: res.email, id: res.id, authToken: token }));
+            dispatch(loadUserInfo({ ...userInfo, email: res.email, id: res.id, authToken: token }));
             const cd = new Date();
             const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
             setDateStart(timeStampStart);
@@ -229,17 +229,18 @@ export const CalendarPanel: React.FC<{}> = () => {
 
   useEffect(() => {
     chrome.identity.getProfileUserInfo(
-      (res) => {
-        console.log('data');
-        console.log(res);
-        chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
-          dispatch(loadUserInfo({ email: res.email, id: res.id, authToken: token }));
-          const cd = new Date();
-          const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
-          setDateStart(timeStampStart);
-          const dayStart = new Date(timeStampStart);
-          const dayEnd = new Date(timeStampStart + 86400000);
-          fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => dispatch(loadEvents(res.items)));
+      (userInfo) => {
+        chrome.storage.sync.get(['userName'], function (userName) {
+          const tempName = 'userName' in userName ? userName.userName : 'New User';
+          chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+            dispatch(loadUserInfo({ name: tempName, email: userInfo.email, id: userInfo.id, authToken: token }));
+            const cd = new Date();
+            const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
+            setDateStart(timeStampStart);
+            const dayStart = new Date(timeStampStart);
+            const dayEnd = new Date(timeStampStart + 86400000);
+            fetchCalendarData(userInfo.email, dayStart, dayEnd, token).then((res) => dispatch(loadEvents(res.items)));
+          });
         });
       }
     );
@@ -296,14 +297,6 @@ const CalendarBackground: React.FC<{}> = () => {
 };
 
 const CalendarBars: React.FC<{ calendarItems: calendarItem[][]; dateStart: number; getTimeStamp: (data: {}, key: string) => number; }> = (props) => {
-  const [infoCard, setInfoCard] = useState({
-    position: { x: 0, y: 0 },
-    info: {
-      summary: '',
-      start: '',
-      end: '',
-    }
-  });
 
   function getTimeString(data, key) {
     if ('date' in data) {

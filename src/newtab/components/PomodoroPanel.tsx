@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 
-import { FocusPanelTitle } from '../styleSetting';
+import { FocusPanelTitle } from '../../static/styleSetting';
 import { handleInputChange } from '../../utils/inputHandler';
 
 const Wrapper = styled.div`

@@ -9,7 +9,7 @@ import { setEditPanel } from '../../features/reducers/editSlice';
 import { loadEvents } from '../../features/reducers/calendarSlice';
 import { postNewEvent, fetchCalendarData } from '../../../utils/api';
 
-import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../styleSetting';
+import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
 import { handleInputChange } from '../../../utils/inputHandler';
 import { calendarColorList } from '../../../static/optionList';
 import { tempEvent } from '../../../static/types';
@@ -117,8 +117,8 @@ const ColorSet = styled.div`
 
 const ColorOption = styled.div`
   cursor: pointer;
-  width: 12px;
-  height: 16px;
+  width: 14px;
+  height: 20px;
   border: solid 2px ${(props) => { return props.item.colorId === props.tempEvent.colorId ? props.item.colorId : 'rgba(255,255,255,1)'; }};
   border-radius: 4px;
   background-color: ${(props) => { return props.item.code; }};
@@ -265,13 +265,13 @@ export const CalendarEditPanel: React.FC<{}> = (props) => {
       </SwitchContainer>
       <FormSet>
         <InputTitle>Start at</InputTitle>
-        <InputValue name="startDate" value={tempEvent.startDate} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Date" width={tempEvent.isAllDay ? 100 : 55}></InputValue>
-        {!tempEvent.isAllDay && <InputValue name="startTime" value={tempEvent.startTime} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Time" width={45}></InputValue>}
+        <InputValue name="startDate" value={tempEvent.startDate} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Date" width={tempEvent.isAllDay ? 100 : 52}></InputValue>
+        {!tempEvent.isAllDay && <InputValue name="startTime" value={tempEvent.startTime} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Time" width={48}></InputValue>}
       </FormSet>
       <FormSet>
         <InputTitle>End at</InputTitle>
-        <InputValue name="endDate" value={tempEvent.endDate} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Date" width={tempEvent.isAllDay ? 100 : 55}></InputValue>
-        {!tempEvent.isAllDay && <InputValue name="endTime" value={tempEvent.endTime} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Time" width={45}></InputValue>}
+        <InputValue name="endDate" value={tempEvent.endDate} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Date" width={tempEvent.isAllDay ? 100 : 52}></InputValue>
+        {!tempEvent.isAllDay && <InputValue name="endTime" value={tempEvent.endTime} onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)} type="Time" width={48}></InputValue>}
       </FormSet>
       <FormSet>
         <InputTitle>Color</InputTitle>

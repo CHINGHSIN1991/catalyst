@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PanelBasicSetting } from '../styleSetting';
+import { PanelBasicSetting } from '../../static/styleSetting';
 import { handleInputChange } from '../../utils/inputHandler';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -224,6 +224,7 @@ export const ShortcutsPanel: React.FC<{}> = () => {
   const shortcuts = useSelector(getShortcuts);
   const [searchQuery, setSearchQuery] = useState({ text: "" });
 
+
   function delShortcut(id: number) {
     let tempLinks = shortcuts.filter((link) => link.id !== id);
     chrome.storage.sync.set({ shortcuts: tempLinks }, function () {
@@ -237,6 +238,13 @@ export const ShortcutsPanel: React.FC<{}> = () => {
       text: searchQuery.text
     }, () => { });
   }
+
+  function searchByEnter(e: KeyboardEvent) {
+    var code = e.keyCode || e.which;
+    if (code === 13) {
+      search();
+    }
+  };
 
   useEffect(() => {
     chrome.storage.sync.get(['shortcuts'], function (res) {
@@ -252,7 +260,7 @@ export const ShortcutsPanel: React.FC<{}> = () => {
   return (
     <OrgFunctionPanel>
       <SearchPanel>
-        <SearchInput type="text" name="text" onChange={(e) => handleInputChange(e, searchQuery, setSearchQuery)} />
+        <SearchInput type="text" name="text" onKeyPress={(e: KeyboardEvent) => searchByEnter(e)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, searchQuery, setSearchQuery)} />
         <SearchIcon searchQuery={searchQuery.text} onClick={search}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />

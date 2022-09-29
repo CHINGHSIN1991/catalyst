@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PanelBasicSetting, PanelTitle, CreateButton } from '../styleSetting';
+import { PanelBasicSetting, PanelTitle, CreateButton } from '../../static/styleSetting';
 
 import { handleInputChange } from '../../utils/inputHandler';
 

@@ -52,6 +52,26 @@ const MemoInput = styled.textarea`
   background-color: ${(props) => { return props.bgColor; }};
   opacity: 0.8;
   border: solid rgb(160,160,160) 2px;
+  z-index: 3;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+    /* background: transparent;
+    border-radius: 4px; */
+  }
+  &::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.1);
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: transparent;
+  }
   :focus{
     outline: solid 2px rgba(200,200,200,1);
   }
@@ -61,6 +81,7 @@ const OptionContainer = styled.div`
   display: flex;
   align-items: center;
   width: 360px;
+  z-index: 3;
 `;
 
 const ColorBorder = styled.div`
@@ -151,7 +172,26 @@ const MemoWrapper = styled.div`
 `;
 
 const MemoContent = styled.div`
-
+  max-height: 240px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+    /* background: transparent;
+    border-radius: 4px; */
+  }
+  &::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.15);
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: transparent;
+  }
 `;
 
 const MemoEditBtn = styled.div`
@@ -315,8 +355,8 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
         <MemoInput
           name="memo"
           value={tempMemo.memo}
-          onChange={(e) => handleTextAreaChange(e, tempMemo, setTempMemo)}
-          onKeyPress={(e) => addMemoByEnter(e)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleTextAreaChange(e, tempMemo, setTempMemo)}
+          onKeyPress={(e: Event) => addMemoByEnter(e)}
           bgColor={tempMemo.color}
         ></MemoInput>
         <OptionContainer>

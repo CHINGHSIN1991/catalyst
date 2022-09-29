@@ -3,6 +3,7 @@ import { userInfo } from '../../../static/types'
 
 const initialState = {
   userInfo: {
+    name: 'New User',
     email: '',
     id: '',
     authToken: '',

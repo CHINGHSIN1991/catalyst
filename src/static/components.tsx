@@ -13,7 +13,7 @@ const InputLabel = styled.label`
   height: 76px;
 `;
 
-const StyledInput = styled.input`
+export const StyledInput = styled.input`
   font-size: 1rem;
   height: 32px;
   line-height: 32px;

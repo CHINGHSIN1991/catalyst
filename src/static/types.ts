@@ -20,6 +20,7 @@ type PersonalSettings = {
 }
 
 export type userInfo = {
+  name: string,
   email: string,
   id: string,
   authToken: string,
@@ -86,4 +87,14 @@ export type backgroundSetting = {
     slice: number,
   },
   backgroundList: background[][]
+}
+
+export type optionSetting = {
+  isMilitary: boolean,
+  isCelsius: boolean,
+  isMenuShow: boolean,
+  idCalendarColorful: boolean,
+  isPrivateShow: boolean,
+  isDayMode: boolean,
+  pronounce: string,
 }

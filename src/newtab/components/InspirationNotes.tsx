@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PanelBasicSetting, PanelTitle } from '../styleSetting';
+import { PanelBasicSetting, PanelTitle } from '../../static/styleSetting';
 import { useSelector } from 'react-redux';
 
 import { getShortcuts } from '../features/reducers/shortcutsSlice';
