@@ -75,6 +75,16 @@ export const TogglePanel: React.FC<{
       if (res.personalization) {
         dispatch(loadPersonalization(res.personalization));
         props.setIsMenuOn(res.personalization.isMenuShow);
+      } else {
+        dispatch(loadPersonalization({
+          isMilitary: true,
+          isCelsius: true,
+          isMenuShow: true,
+          idCalendarColorful: true,
+          isPrivateShow: true,
+          isDarkMode: true,
+          pronounce: 'zh-TW',
+        }));
       }
     });
   }, []);

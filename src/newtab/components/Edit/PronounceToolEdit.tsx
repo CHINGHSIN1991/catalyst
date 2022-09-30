@@ -36,6 +36,10 @@ const SelectInput = styled.select`
   }
 `;
 
+const SelectOption = styled.option`
+  padding: 0 8px;
+`;
+
 export const PronounceToolEditPanel: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const personalization = useSelector(getPersonalization);
@@ -62,11 +66,11 @@ export const PronounceToolEditPanel: React.FC<{}> = () => {
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
       </EditPanelTitle>
       <SelectInput value={language} onChange={(e) => setLanguage(e.target.value)}>
-        {languageList.map((item) => { return <option value={item.LangCultureName}>{item.DisplayEN}</option>; })}
+        {languageList.map((item) => { return <SelectOption value={item.LangCultureName}>{item.DisplayEN}</SelectOption>; })}
       </SelectInput>
       <ButtonContainer>
-        <PanelButton width={80} name='Cancel' onClick={() => dispatch(setEditPanel({ name: '', data: '' }))} />
         <PanelButton width={80} name='Save' onClick={saveLanguageSetting} />
+        <PanelButton width={80} name='Cancel' onClick={() => dispatch(setEditPanel({ name: '', data: '' }))} />
       </ButtonContainer>
     </Wrapper>
   );

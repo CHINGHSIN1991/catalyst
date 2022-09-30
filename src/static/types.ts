@@ -51,6 +51,7 @@ export type calendarItem  = {
   status?: string;
   summary: string;
   updated?: string;
+  visibility?: 'public' | 'private',
 }
 
 export type tempEvent = {
@@ -95,6 +96,6 @@ export type optionSetting = {
   isMenuShow: boolean,
   idCalendarColorful: boolean,
   isPrivateShow: boolean,
-  isDayMode: boolean,
+  isDarkMode: boolean,
   pronounce: string,
 }

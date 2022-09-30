@@ -323,8 +323,8 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
         </BackgroundContainer>
       </BackgroundPanel>
       <ButtonContainer>
-        <PanelButton width={80} name='Cancel' onClick={() => dispatch(setEditPanel({ name: '', data: '' }))} />
         <PanelButton width={80} name='Save' onClick={() => { dispatch(loadBackgrounds(tempBackgroundSetting)); dispatch(setEditPanel({ name: '', data: '' })); }} />
+        <PanelButton width={80} name='Cancel' onClick={() => dispatch(setEditPanel({ name: '', data: '' }))} />
       </ButtonContainer>
     </Wrapper>
   );

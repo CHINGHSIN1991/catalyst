@@ -44,7 +44,7 @@ const BackgroundContainer = styled.div`
   padding: 16px;
   background-color: lightgray;
   border-radius: 0px 8px 8px 8px; 
-  min-height: 480;
+  min-height: 416px;
   height: auto;
   max-height: 600px;
   width: calc(100% - 120px);
@@ -76,7 +76,7 @@ const BackgroundContainer = styled.div`
     box-shadow: transparent;
   }
   @media (max-width:1580px) {
-    height: 480px;
+    min-height: 480px;
   } 
   @media (max-width:768px) {
     width: calc(100% - 100px);

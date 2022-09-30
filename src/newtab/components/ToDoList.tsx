@@ -358,15 +358,15 @@ export const ToDoListPanel: React.FC<{}> = () => {
       setWorkList(result.todoList);
     });
     const queryOptions = { active: true, lastFocusedWindow: true };
-    chrome.tabs.query(queryOptions).then((res) => {
-      toDoListPort.current = chrome.tabs.connect(res[0].id, { name: "todo" });
-      toDoListPort.current.onMessage.addListener(function (res: { msg: string; }) {
-        console.log(res);
-        if (res.msg === "update") {
-          console.log("todolist panel update");
-        }
-      });
-    });
+    // chrome.tabs.query(queryOptions).then((res) => {
+    //   toDoListPort.current = chrome.tabs.connect(res[0].id, { name: "todo" });
+    //   toDoListPort.current.onMessage.addListener(function (res: { msg: string; }) {
+    //     console.log(res);
+    //     if (res.msg === "update") {
+    //       console.log("todolist panel update");
+    //     }
+    //   });
+    // });
     // toDoListPort.current = chrome.runtime.connect({ name: "todo" });
     // toDoListPort.current.onMessage.addListener(function (res: { msg: string; }) {
     //   console.log(res);

@@ -8,7 +8,7 @@ const initialState = {
     isMenuShow: true,
     idCalendarColorful: true,
     isPrivateShow: true,
-    isDayMode: true,
+    isDarkMode: true,
     pronounce: 'en-US',
   }
 } 

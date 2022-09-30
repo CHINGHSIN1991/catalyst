@@ -60,6 +60,21 @@ interface todo {
   alertSend?: boolean;
 }
 
+chrome.runtime.onInstalled.addListener((details) => {
+  chrome.contextMenus.create({
+    title: "Read these text(s) en-US",
+    id: "contextMenu1",
+    contexts: ["page","selection","link"]
+  })
+  chrome.contextMenus.onClicked.addListener((e)=>{
+    if(e.menuItemId === "contextMenu1"){
+      chrome.tts.speak(e.selectionText,{lang:"en-US"});
+      console.log("speak en-US");
+    }
+  })
+  console.log(details);
+})
+
 chrome.alarms.create("TodoListReminder",{
   periodInMinutes: 1/12,
 })
@@ -68,10 +83,14 @@ chrome.alarms.create("PomoTimer",{
   periodInMinutes: 1/60,
 })
 
+function namedFunction () {
+  console.log('123')
+}
+
 chrome.alarms.onAlarm.addListener((alarm)=>{
   const now = Date.now();
   if(alarm.name==="PomoTimer") {
-    chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)=>{
+    chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],function(res){
       if (res.pomoIsRunning) {
         let passedSeconds = res.passedSeconds +1
         let pomoIsRunning = true
@@ -79,10 +98,10 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
           passedSeconds = 0;
           pomoIsRunning = false
           console.log(this);
-          // this.registration.showNotification("Pomodoro Timer",{
-          //   body: `${res.pomoAlertTime} minutes has padded!`,
-          //   icon: "CatalystLogo_128.png"
-          // })          
+          this.registration.showNotification("Pomodoro Timer",{
+            body: `${res.pomoAlertTime} minutes has padded!`,
+            icon: "CatalystLogo_128.png"
+          })          
         }
         chrome.storage.local.set({passedSeconds,pomoIsRunning})
       }
@@ -124,17 +143,4 @@ chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)
   })
 })
 
-chrome.runtime.onInstalled.addListener((details) => {
-  chrome.contextMenus.create({
-    title: "Read these text(s) en-US",
-    id: "contextMenu1",
-    contexts: ["page","selection","link"]
-  })
-  chrome.contextMenus.onClicked.addListener((e)=>{
-    if(e.menuItemId === "contextMenu1"){
-      chrome.tts.speak(e.selectionText,{lang:"en-US"});
-      console.log("speak en-US");
-    }
-  })
-  console.log(details);
-})
+

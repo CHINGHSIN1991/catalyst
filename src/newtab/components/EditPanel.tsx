@@ -10,6 +10,8 @@ import { CalendarEditPanel } from './Edit/CalendarEdit';
 import { BackgroundEditPanel } from './Edit/BackGroundEdit';
 import { UserInfoEditPanel } from './Edit/UserInfoEdit';
 import { PronounceToolEditPanel } from './Edit/PronounceToolEdit';
+import { MenuOptionPanel } from './Edit/MenuOptionPanel';
+import { DisplayModePanel } from './Edit/DisplayModeEdit';
 
 const PanelOpenBackground = styled.div`
   width: 100vw;
@@ -49,9 +51,11 @@ export const EditPanel: React.FC<{}> = () => {
       <PanelContainer editPanelState={editPanelState.name}>
         {(editPanelState.name === 'ShortcutEdit' || editPanelState.name === 'ShortcutAdd') && <ShortcutEditPanel></ShortcutEditPanel>}
         {(editPanelState.name === 'EventEdit' || editPanelState.name === 'EventAdd') && <CalendarEditPanel></CalendarEditPanel>}
-        {(editPanelState.name === 'BackgroundEdit') && <BackgroundEditPanel></BackgroundEditPanel>}
-        {(editPanelState.name === 'UserInfoEdit') && <UserInfoEditPanel></UserInfoEditPanel>}
-        {(editPanelState.name === 'PronounceToolEdit') && <PronounceToolEditPanel></PronounceToolEditPanel>}
+        {editPanelState.name === 'BackgroundEdit' && <BackgroundEditPanel></BackgroundEditPanel>}
+        {editPanelState.name === 'UserInfoEdit' && <UserInfoEditPanel></UserInfoEditPanel>}
+        {editPanelState.name === 'PronounceToolEdit' && <PronounceToolEditPanel></PronounceToolEditPanel>}
+        {editPanelState.name === 'MenuOptionEdit' && <MenuOptionPanel></MenuOptionPanel>}
+        {editPanelState.name === 'DisplayModeEdit' && <DisplayModePanel></DisplayModePanel>}
       </PanelContainer>
     </PanelOpenBackground>
   );

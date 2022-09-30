@@ -8,6 +8,7 @@ import { fetchCalendarData } from '../../utils/api';
 import { calendarColorList } from '../../static/optionList';
 import { getEvents, loadEvents } from '../features/reducers/calendarSlice';
 import { loadUserInfo, getUserInfo } from '../features/reducers/userInfoSlice';
+import { getPersonalization } from '../features/reducers/optionsSlice';
 import { setEditPanel } from '../features/reducers/editSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -93,7 +94,7 @@ const BarColumn = styled.div`
 // end = { props.getTimeStamp(item.end, 'end') / 3600000 };
 // color;
 const EventItem = styled.div`
-  /* border: solid 1px white; */
+  border: solid 0.5px rgba(120,120,120,0.4);
   border-radius: 4px;
   position: absolute;
   width: calc(100% - 8px);
@@ -104,7 +105,8 @@ const EventItem = styled.div`
 `;
 
 const EventContent = styled.div`
-  font-size: 10px;
+  font-size: 8px;
+  line-height: 12px;
   padding: 4px;
   width: 100%;
   height: 100%;
@@ -296,7 +298,12 @@ const CalendarBackground: React.FC<{}> = () => {
   );
 };
 
-const CalendarBars: React.FC<{ calendarItems: calendarItem[][]; dateStart: number; getTimeStamp: (data: {}, key: string) => number; }> = (props) => {
+const CalendarBars: React.FC<{
+  calendarItems: calendarItem[][];
+  dateStart: number;
+  getTimeStamp: (data: {}, key: string) => number;
+}> = (props) => {
+  const personalization = useSelector(getPersonalization);
 
   function getTimeString(data, key) {
     if ('date' in data) {
@@ -330,18 +337,20 @@ const CalendarBars: React.FC<{ calendarItems: calendarItem[][]; dateStart: numbe
     <CalendarBarsContainer>
       {props.calendarItems.map((bars) => {
         return <BarColumn key={bars[0].iCalUID}>{bars.map((item) => {
-          return <EventItem
-            title={`${item.summary} ( ${getTimeString(item.start, 'start')} to ${getTimeString(item.end, 'end')} )`}
-            key={item.iCalUID}
-            base={props.dateStart / 3600000}
-            start={props.getTimeStamp(item.start, 'start') / 3600000}
-            end={props.getTimeStamp(item.end, 'end') / 3600000}
-            color={(calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', colorId: '7' }).code}
-          ><EventContent>
-              <EventValue>{item.summary}</EventValue>
-              <EventValue>{getTime(item.start, 'start')} - {getTime(item.end, 'end')}</EventValue>
-            </EventContent>
-          </EventItem>;
+          return (
+            (item.visibility === 'public' || personalization.isPrivateShow) &&
+            <EventItem
+              title={`${item.summary} ( ${getTimeString(item.start, 'start')} to ${getTimeString(item.end, 'end')} )`}
+              key={item.iCalUID}
+              base={props.dateStart / 3600000}
+              start={props.getTimeStamp(item.start, 'start') / 3600000}
+              end={props.getTimeStamp(item.end, 'end') / 3600000}
+              color={personalization.idCalendarColorful ? ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', colorId: '7' }).code) : 'rgba(120,120,120,0.9)'}
+            ><EventContent>
+                <EventValue>{item.summary}</EventValue>
+                <EventValue>{getTime(item.start, 'start')} - {getTime(item.end, 'end')}</EventValue>
+              </EventContent>
+            </EventItem>);
         })
         }</BarColumn>;
       })}

@@ -114,10 +114,6 @@ const LanguageSelect = styled.select`
   }
 `;
 
-const LanguageOption = styled.option`
-  
-`;
-
 export const OptionPanel: React.FC<{}> = () => {
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -131,7 +127,7 @@ export const OptionPanel: React.FC<{}> = () => {
     isMenuShow: true,
     idCalendarColorful: true,
     isPrivateShow: true,
-    isDayMode: true,
+    isDarkMode: true,
     pronounce: 'en-US',
   });
 
@@ -185,7 +181,7 @@ export const OptionPanel: React.FC<{}> = () => {
         handleSettingChanged={handleSettingChanged}
       ></OptionElement>
       <OptionElement
-        title='Panel'
+        title='Side menu default'
         truthy='Show'
         falsy='Hidden'
         keyName='isMenuShow'
@@ -210,10 +206,10 @@ export const OptionPanel: React.FC<{}> = () => {
       ></OptionElement>
       <OptionElement
         title='Display mode'
-        truthy='Light mode'
-        falsy='Dark mode'
-        keyName='isDayMode'
-        bol={personalization.isDayMode}
+        truthy='Dark mode'
+        falsy='Light mode'
+        keyName='isDarkMode'
+        bol={personalization.isDarkMode}
         handleSettingChanged={handleSettingChanged}
       ></OptionElement>
       <InfoContainer>
