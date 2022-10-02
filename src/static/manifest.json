@@ -10,7 +10,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "React Extension1",
+    "default_title": "Catalyst",
     "default_icon": "CatalystLogo_128.png"
   },
   "options_page": "options.html",

@@ -76,7 +76,7 @@ export const TogglePanel: React.FC<{
         dispatch(loadPersonalization(res.personalization));
         props.setIsMenuOn(res.personalization.isMenuShow);
       } else {
-        dispatch(loadPersonalization({
+        const tempPersonalization = {
           isMilitary: true,
           isCelsius: true,
           isMenuShow: true,
@@ -84,7 +84,10 @@ export const TogglePanel: React.FC<{
           isPrivateShow: true,
           isDarkMode: true,
           pronounce: 'zh-TW',
-        }));
+        };
+        chrome.storage.sync.set({ personalization: tempPersonalization }, () => {
+          dispatch(loadPersonalization(tempPersonalization));
+        });
       }
     });
   }, []);

@@ -97,6 +97,16 @@ export const PomodoroPanel: React.FC<{}> = () => {
     });
   }
 
+  function checkInputTime(e) {
+    let tempNumber = parseInt(e.target.value, 10) % 100;
+    if (tempNumber > 60) {
+      tempNumber = 60;
+    } else if (tempNumber < 0) {
+      tempNumber = 1;
+    }
+    setPomoAlertTime({ value: tempNumber });
+  }
+
   useEffect(() => {
     chrome.storage.local.get(["pomoIsRunning", "pomoAlertTime"], (res) => {
       if (res.pomoIsRunning) {
@@ -130,7 +140,7 @@ export const PomodoroPanel: React.FC<{}> = () => {
             max='60'
             min='1'
             value={pomoAlertTime.value}
-            onChange={(e) => handleInputChange(e, pomoAlertTime, setPomoAlertTime)}
+            onChange={(e) => checkInputTime(e)}
           ></TimerInput>}
         {(isRunning || passedSeconds !== 0) && pomoTimer.minutes}:{pomoTimer.seconds}
       </Timer>

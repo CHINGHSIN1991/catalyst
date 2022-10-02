@@ -96,8 +96,9 @@ const UserName = styled.a`
   padding-left: 8px;
   font-weight: bold;
   font-size: 1.2rem;
-  line-height: 1.2rem;
+  line-height: 2rem;
   transition: 0.2s;
+  transform: translateY(0.4rem);
   margin: 0;
   overflow: hidden;  
   white-space: nowrap;
@@ -105,6 +106,48 @@ const UserName = styled.a`
   /* :hover{
     color: lightgray
   } */
+`;
+
+const MoreServiceButton = styled.a`
+  display: block;
+  color: white;
+  margin: 8px 16px;
+  width: 100%;
+  height: 24px;
+  font-size: 12px;
+  line-height: 24px;
+  cursor: pointer;
+  border: solid 1px rgba(255,255,255,0.2);
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  text-align: center;
+  transition: 0.2s;
+  :hover {
+    border: solid 1px rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.2);
+  }
+`;
+
+const CreateButton = styled.div`
+position: absolute;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  right: 8px;
+  top: 8px;
+  font-size: 1.5rem;
+  line-height: 20px;
+  width: 24px;
+  height: 24px;
+  /* border: solid 1px; */
+  background-color: rgba(200,200,200,0.1);
+  border-radius: 50%;
+  transition: 0.2s;
+  :hover{
+    background-color: rgba(200,200,200,0.5);
+  }
 `;
 
 export const PersonalServicePanel: React.FC<{}> = () => {
@@ -132,8 +175,6 @@ export const PersonalServicePanel: React.FC<{}> = () => {
     });
   }, []);
 
-  console.log(userInfo);
-
   return (
     <PersonalPanel>
       <WelcomeMessage>
@@ -145,11 +186,19 @@ export const PersonalServicePanel: React.FC<{}> = () => {
       <ServiceLinks>
         {serviceList.map((item) => {
           return <ServiceLink key={item.imgUrl.light} href={item.link} target="_blank">
-            <ServiceIcon src={item.imgUrl.light} />
+            <ServiceIcon src={item.imgUrl.light} onError='PlaceHolder_128.png' />
             <ServiceTitle>{item.name.english}</ServiceTitle>
           </ServiceLink>;
         })}
+        <MoreServiceButton href="https://about.google/products/" target="_blank">
+          See more services
+        </MoreServiceButton>
       </ServiceLinks>
+      <CreateButton onClick={() => { }}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+          <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+        </svg>
+      </CreateButton>
     </PersonalPanel>
   );
 }

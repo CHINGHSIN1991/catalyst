@@ -76,16 +76,12 @@ chrome.runtime.onInstalled.addListener((details) => {
 })
 
 chrome.alarms.create("TodoListReminder",{
-  periodInMinutes: 1/12,
+  periodInMinutes: 1/60,
 })
 
 chrome.alarms.create("PomoTimer",{
   periodInMinutes: 1/60,
 })
-
-function namedFunction () {
-  console.log('123')
-}
 
 chrome.alarms.onAlarm.addListener((alarm)=>{
   const now = Date.now();
@@ -94,21 +90,29 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
       if (res.pomoIsRunning) {
         let passedSeconds = res.passedSeconds +1
         let pomoIsRunning = true
+        if(res.pomoAlertTime * 60 - passedSeconds > 60){
+          chrome.action.setBadgeBackgroundColor({color: [124, 247, 216, 1]});
+        } else {
+          chrome.action.setBadgeBackgroundColor({color: '#fcaf9a'});
+        }        
+        chrome.action.setBadgeText({text:`${`${res.pomoAlertTime - Math.ceil(res.passedSeconds / 60)}`}:${`${res.passedSeconds % 60 && 60 - res.passedSeconds % 60}`.padStart(2, "0")}`})
         if (passedSeconds > res.pomoAlertTime * 60){
           passedSeconds = 0;
           pomoIsRunning = false
-          console.log(this);
+          chrome.action.setBadgeText({text:''});
           this.registration.showNotification("Pomodoro Timer",{
             body: `${res.pomoAlertTime} minutes has padded!`,
             icon: "CatalystLogo_128.png"
-          })          
+          })
         }
         chrome.storage.local.set({passedSeconds,pomoIsRunning})
+      } else {
+        chrome.action.setBadgeText({text:''});
       }
     })
   }
   if(alarm.name==="TodoListReminder"){
-    chrome.storage.sync.get(['todoList'], function (result) {
+    chrome.storage.local.get(['todoList'], function (result) {
       if(result.todoList){
         let tempList = [];
         result.todoList.forEach((todo: todo)=>{
@@ -126,7 +130,7 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
             tempList.push(todo);
           }        
         })
-        chrome.storage.sync.set({ todoList: tempList }, function () {
+        chrome.storage.local.set({ todoList: tempList }, function () {
           // console.log("set");
         });
       }

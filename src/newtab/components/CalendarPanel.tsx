@@ -345,7 +345,7 @@ const CalendarBars: React.FC<{
               base={props.dateStart / 3600000}
               start={props.getTimeStamp(item.start, 'start') / 3600000}
               end={props.getTimeStamp(item.end, 'end') / 3600000}
-              color={personalization.idCalendarColorful ? ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', colorId: '7' }).code) : 'rgba(120,120,120,0.9)'}
+              color={personalization.idCalendarColorful ? ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', monoCode: '#434343', colorId: '7' }).code) : ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', monoCode: '#434343', colorId: '7' }).monoCode)}
             ><EventContent>
                 <EventValue>{item.summary}</EventValue>
                 <EventValue>{getTime(item.start, 'start')} - {getTime(item.end, 'end')}</EventValue>

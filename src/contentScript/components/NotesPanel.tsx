@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 import { handleInputChange, handleTextAreaChange } from '../../utils/inputHandler';
+import { AlertComponent } from './AlertComponent';
 
 const Wrapper = styled.div`
+  position: relative;
   color: rgba(40,40,40,0);
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: flex;
@@ -174,6 +176,7 @@ export const NotesPanel = () => {
   const [tempCategory, setTempCategory] = useState({ category: "" });
   const [currentCategory, setCurrentCategory] = useState('no category');
   const [noteLink, setNoteLink] = useState({ title: '', note: '' });
+  const [processStatus, setProcessStatus] = useState(0);
 
 
   function handleCurrentCategory(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -195,6 +198,7 @@ export const NotesPanel = () => {
   }
 
   function addQuickNotes() {
+    setProcessStatus(1);
     const linkUrl = new URL(window.location.href);
     const inspirationNote = {
       id: Date.now(),
@@ -214,6 +218,7 @@ export const NotesPanel = () => {
       console.log(tempInspirationNotes);
       chrome.storage.sync.set({ inspirationNotes: tempInspirationNotes }, () => { console.log('done'); });
       setNoteLink({ title: '', note: '' });
+      setTimeout(() => setProcessStatus(2), 600);
     });
   }
 
@@ -226,6 +231,18 @@ export const NotesPanel = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (processStatus === 2) {
+      setTimeout(() => {
+        setProcessStatus(3);
+      }, 600);
+    } else if (processStatus === 3) {
+      setTimeout(() => {
+        setProcessStatus(0);
+      }, 600);
+    }
+  }, [processStatus]);
+
   return (
     <Wrapper>
       <TagsPanel onClick={(e) => e.stopPropagation()}>
@@ -236,7 +253,7 @@ export const NotesPanel = () => {
           </svg>
         </AddBtn>
         <SelectBlock isEditOn={isEditOn} value={currentCategory} onChange={handleCurrentCategory} name="" id="">
-          <SelectOption value="no category" selected style={{ color: "darkgray" }}>- Tag -</SelectOption>
+          <SelectOption value="no category" style={{ color: "darkgray" }}>- Tag -</SelectOption>
           {noteCategories.map((category, index) => { return <SelectOption key={category + index} value={category}>{category}</SelectOption>; })}
         </SelectBlock>
         <Btn isEditOn={isEditOn} onClick={(e) => { setIsEditOn(!isEditOn); }}>
@@ -262,6 +279,7 @@ export const NotesPanel = () => {
           id=""></NoteArea>
       </InputContainer>
       <AddNoteBtn onClick={(e) => { e.stopPropagation(); addQuickNotes(); }}>Add to Inspiration Notes</AddNoteBtn>
+      <AlertComponent processStatus={processStatus}></AlertComponent>
     </Wrapper >
   );
 };

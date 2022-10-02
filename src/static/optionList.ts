@@ -271,15 +271,15 @@ export const serviceList = [
 export const memoColorList = [ '#EAEAEA', '#FFDCF1', '#FFF4C0', '#DCFFCC', '#DEF9FF', '#EEDCFF']
 
 export const calendarColorList = [
-  {name:'Tomato',code:'#DD4440',colorId:'11'},
-  {name:'Tangerine',code:'#F16D44',colorId:'6'},
-  {name:'Banana',code:'#EEC04C',colorId:'5'},
-  {name:'Basil',code:'#3E9065',colorId:'10'},
-  {name:'Sage',code:'#47B382',colorId:'2'},
-  {name:'Peacock',code:'#30A7E3',colorId:'7'},
-  {name:'Blueberry',code:'#6470BD',colorId:'9'},
-  {name:'Lavender',code:'#7E89C9',colorId:'1'},
-  {name:'Grape',code:'#9F53B3',colorId:'3'},
-  {name:'Flamingo',code:'#DF857D',colorId:'4'},
-  {name:'Graphite',code:'#737373',colorId:'8'},
+  {name:'Tomato',code:'#DD4440',monoCode:'#7F7F7F',colorId:'11'},
+  {name:'Tangerine',code:'#F16D44',monoCode:'#929292',colorId:'6'},
+  {name:'Banana',code:'#EEC04C',monoCode:'#A4A4A4',colorId:'5'},
+  {name:'Basil',code:'#3E9065',monoCode:'#676767',colorId:'10'},
+  {name:'Sage',code:'#47B382',monoCode:'#7E7E7E',colorId:'2'},
+  {name:'Peacock',code:'#30A7E3',monoCode:'#838383',colorId:'7'},
+  {name:'Blueberry',code:'#6470BD',monoCode:'#7A7A7A',colorId:'9'},
+  {name:'Lavender',code:'#7E89C9',monoCode:'#919191',colorId:'1'},
+  {name:'Grape',code:'#9F53B3',monoCode:'#949494',colorId:'3'},
+  {name:'Flamingo',code:'#DF857D',monoCode:'#A6A6A6',colorId:'4'},
+  {name:'Graphite',code:'#737373',monoCode:'#737373',colorId:'8'},
 ]

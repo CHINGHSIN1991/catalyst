@@ -7,6 +7,9 @@ import { v4 as uuidv4 } from "uuid";
 import { handleInputChange, handleTextAreaChange } from "../../utils/inputHandler";
 import { BulletinTogglePanel } from "./BulletinTogglePanel";
 import { memoColorList } from "../../static/optionList";
+import { setAlertWindow } from '../features/reducers/alertSlice';
+import { useDispatch } from "react-redux";
+import { memo } from "../../static/types";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -259,30 +262,22 @@ const CreateAt = styled.a`
   }
 `;
 
-type memo = {
-  id: string,
-  memo: string,
-  color: string,
-  position: { x: number, y: number; },
-  createTime: number,
-  createAt?: { title: string, url: string; },
-};
-
 type tempMemo = {
   memo: string;
   color: string;
 };
 
 export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> = (props) => {
+  const dispatch = useDispatch();
   const [tempMemo, setTempMemo] = useState({ memo: "", color: memoColorList[0] });
   const [memos, setMemos] = useState<memo[]>([]);
 
-  function addMemoByEnter(e) {
-    var code = e.keyCode || e.which;
-    if (code === 13) {
-      addMemo();
-    }
-  };
+  // function addMemoByEnter(e) {
+  //   var code = e.keyCode || e.which;
+  //   if (code === 13) {
+  //     addMemo();
+  //   }
+  // };
 
   function sortByCreateTime() {
     let tempMemos = [...memos];
@@ -318,7 +313,8 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
       setMemos([...memos, newMemo]);
       setTempMemo({ ...tempMemo, memo: "" });
     } else {
-      alert("Key some memos");
+      dispatch(setAlertWindow({ name: 'Empty memo', message: 'Please key some content' }));
+      // alert("Key some memos");
       setTempMemo({ ...tempMemo, memo: "" });
     }
   }
@@ -356,7 +352,7 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
           name="memo"
           value={tempMemo.memo}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleTextAreaChange(e, tempMemo, setTempMemo)}
-          onKeyPress={(e: Event) => addMemoByEnter(e)}
+          // onKeyPress={(e: Event) => addMemoByEnter(e)}
           bgColor={tempMemo.color}
         ></MemoInput>
         <OptionContainer>
@@ -403,7 +399,7 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
           );
         })}
       </MemoContainer>
-      <BulletinTogglePanel sortByCreateTime={sortByCreateTime} sortByColor={sortByColor} setIsBoardOn={props.setIsBoardOn} clearAll={clearAll}></BulletinTogglePanel>
+      <BulletinTogglePanel sortByCreateTime={sortByCreateTime} sortByColor={sortByColor} setIsBoardOn={props.setIsBoardOn} clearAll={clearAll} memos={memos}></BulletinTogglePanel>
     </Wrapper>
   );
 };

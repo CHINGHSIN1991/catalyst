@@ -9,7 +9,6 @@ import { useState, useEffect } from "react";
 import { NotesPanel } from './components/NotesPanel';
 import { MemoPanel } from './components/MemoPanel';
 
-
 const Wrapper = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   box-sizing: border-box;

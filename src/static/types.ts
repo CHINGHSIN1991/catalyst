@@ -99,3 +99,12 @@ export type optionSetting = {
   isDarkMode: boolean,
   pronounce: string,
 }
+
+export type memo = {
+  id: string,
+  memo: string,
+  color: string,
+  position: { x: number, y: number; },
+  createTime: number,
+  createAt?: { title: string, url: string; },
+};

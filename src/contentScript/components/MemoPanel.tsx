@@ -5,8 +5,10 @@ import { v4 as uuidv4 } from "uuid";
 
 import { handleTextAreaChange } from '../../utils/inputHandler';
 import { memoColorList } from '../../static/optionList';
+import { AlertComponent } from './AlertComponent';
 
 const Wrapper = styled.div`
+  position: relative;
   color: rgba(40,40,40,0);
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: flex;
@@ -124,31 +126,48 @@ type memo = {
 export const MemoPanel = () => {
   const [currentColor, setCurrentColor] = useState('#EAEAEA');
   const [tempMemo, setTempMemo] = useState({ memo: '' });
+  const [processStatus, setProcessStatus] = useState(0);
 
   function addMemo() {
-    let tempMemoList = [];
-    const newMemo = {
-      id: uuidv4(),
-      memo: tempMemo.memo,
-      color: currentColor,
-      position: { x: 0, y: 0 },
-      createTime: Date.now(),
-      createAt: { title: window.document.title, url: window.location.href },
-    };
-    chrome.storage.local.get(['memos'], (res) => {
-      if (res.memos) {
-        tempMemoList = res.memos;
-      }
-      tempMemoList.push(newMemo);
-      chrome.storage.local.set({ memos: tempMemoList }, () => { console.log('done'); setTempMemo({ memo: '' }); });
-    });
+    if (tempMemo.memo.replace(/\s/g, "").length !== 0) {
+      setProcessStatus(1);
+      let tempMemoList = [];
+      const newMemo = {
+        id: uuidv4(),
+        memo: tempMemo.memo,
+        color: currentColor,
+        position: { x: 0, y: 0 },
+        createTime: Date.now(),
+        createAt: { title: window.document.title, url: window.location.href },
+      };
+      chrome.storage.local.get(['memos'], (res) => {
+        if (res.memos) {
+          tempMemoList = res.memos;
+        }
+        tempMemoList.push(newMemo);
+        chrome.storage.local.set({ memos: tempMemoList }, () => { console.log('done'); setTempMemo({ memo: '' }); setTimeout(() => setProcessStatus(2), 600); });
+      });
+    }
   }
+
+  useEffect(() => {
+    if (processStatus === 2) {
+      setTimeout(() => {
+        setProcessStatus(3);
+      }, 600);
+    } else if (processStatus === 3) {
+      setTimeout(() => {
+        setProcessStatus(0);
+      }, 600);
+    }
+  }, [processStatus]);
 
   return (
     <Wrapper>
       <ColorPanel onClick={(e) => e.stopPropagation()}>
         {memoColorList && memoColorList.map((code) => {
           return (<ColorContainer
+            key={'memo' + code}
             code={code}
             onClick={() => setCurrentColor(code)}
             currentColor={currentColor}
@@ -167,6 +186,7 @@ export const MemoPanel = () => {
           bgColor={currentColor}></NoteArea>
       </InputContainer>
       <AddNoteBtn onClick={(e) => { e.stopPropagation(); addMemo(); }}>Add to Bulletin Board</AddNoteBtn>
+      <AlertComponent processStatus={processStatus}></AlertComponent>
     </Wrapper >
   );
 };

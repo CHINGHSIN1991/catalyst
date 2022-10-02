@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 
 import { getShortcuts } from '../features/reducers/shortcutsSlice';
 import { handleInputChange, handleTextAreaChange } from '../../utils/inputHandler';
+import { useDispatch } from 'react-redux';
+import { setAlertWindow } from '../features/reducers/alertSlice';
 
 const TempLinksPanel = styled(PanelBasicSetting)`
   display: flex;
@@ -52,6 +54,10 @@ const TempLinks = styled.ul`
 
 const CategoryTitle = styled.div`
   font-size: 0.875rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-right:  64px;
 `;
 
 const CategoryHr = styled.div`
@@ -229,6 +235,32 @@ const Btn = styled.div`
   }
 `;
 
+const DeleteTagButton = styled.div`
+  padding: 0 3px;
+  color: rgba(255,255,255,0.3);
+  background-color: rgba(0,0,0,0.1);
+  text-align: end;
+  font-size: 12px;
+  line-height: 16px;
+  position: absolute;
+  overflow: hidden;
+  right: 8px;
+  top: 8px;
+  border: solid 1px rgba(255,255,255,0.0);
+  border-radius: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+  text-align: center;
+  :hover {
+    width: 64px;
+    border: solid 1px rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.8);
+  }
+`;
+
 const EditOption = styled.div`
   padding: 6px;
   margin: 8px 24px;
@@ -264,6 +296,7 @@ interface note {
 }
 
 export const InspirationNotePanel: React.FC<{}> = () => {
+  const dispatch = useDispatch();
   const ShortcutNumber = useSelector(getShortcuts);
   const [noteCategories, setNoteCategories] = useState([]);
   const [inspirationNotes, setInspirationNotes] = useState(null);
@@ -313,9 +346,26 @@ export const InspirationNotePanel: React.FC<{}> = () => {
 
   function setChromeSyncNotes(notes: { [key: string]: note[]; }) {
     chrome.storage.sync.set({ inspirationNotes: notes }, function () {
-      console.log(notes);
       setInspirationNotes(notes);
     });
+  }
+
+  function deleteTag(deletedTag: string) {
+    const tempNoteCategories = [...noteCategories].filter((item) => item !== deletedTag);
+    const tempInspirationNotes = JSON.parse(JSON.stringify(inspirationNotes));
+    delete tempInspirationNotes[deletedTag];
+    chrome.storage.sync.set({ noteCategories: tempNoteCategories, inspirationNotes: tempInspirationNotes }, function () {
+      setNoteCategories(tempNoteCategories);
+      setInspirationNotes(tempInspirationNotes);
+    });
+  }
+
+  function checkToDeleteTag(deletedTag: string) {
+    dispatch(setAlertWindow({
+      name: 'All notes with this tag will be deleted',
+      message: 'Are you sure you want to delete this tag?',
+      function: () => deleteTag(deletedTag)
+    }));
   }
 
   useEffect(() => {
@@ -332,7 +382,6 @@ export const InspirationNotePanel: React.FC<{}> = () => {
         {inspirationNotes && "no category" in inspirationNotes &&
           <TempLinks length={inspirationNotes["no category"].length}>
             {inspirationNotes["no category"] && inspirationNotes["no category"].map((note: note) => {
-
               return (
                 <TempLinkElement key={note.id} note={note} tempNote={tempNote} setTempNote={setTempNote} delNote={delNote} changeNote={changeNote}></TempLinkElement>
               );
@@ -342,6 +391,9 @@ export const InspirationNotePanel: React.FC<{}> = () => {
         {noteCategories && inspirationNotes && noteCategories.map((category, index) => {
           return (
             <TempLinks key={category + index} length={inspirationNotes[category].length}>
+              <DeleteTagButton onClick={() => checkToDeleteTag(category)}>
+                ╳ Delete
+              </DeleteTagButton>
               <CategoryTitle>{inspirationNotes[category] && !!inspirationNotes[category].length && category}</CategoryTitle>
               <CategoryHr></CategoryHr>
               {inspirationNotes[category] && inspirationNotes[category].map((note: note) => {

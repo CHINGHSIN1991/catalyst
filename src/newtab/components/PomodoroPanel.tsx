@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 
 import { FocusPanelTitle } from '../../static/styleSetting';
 import { handleInputChange } from '../../utils/inputHandler';
+import { useDispatch } from 'react-redux';
+import { setAlertWindow } from '../features/reducers/alertSlice';
 
 const Wrapper = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
@@ -71,10 +73,11 @@ const Btn = styled.div`
 `;
 
 export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
+  const dispatch = useDispatch();
   const [passedSeconds, setPassedSeconds] = useState(0);
   const [pomoTimer, setPomoTimer] = useState({ minutes: '00', seconds: '00' });
   const [isRunning, setIsRunning] = useState(false);
-  const [pomoAlertTime, setPomoAlertTime] = useState({ value: 45 });
+  const [pomoAlertTime, setPomoAlertTime] = useState({ value: 25 });
   const pomoTimeId = useRef(null);
 
 
@@ -93,6 +96,17 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
         setPomoAlertTime({ value: res.pomoAlertTime });
       }
     });
+  }
+
+  function checkInputTime(e) {
+    let tempNumber = parseInt(e.target.value, 10) % 100;
+    if (tempNumber > 60) {
+      tempNumber = 60;
+      dispatch(setAlertWindow({ name: 'Pomodoro has a time limit of 60 minutes', message: 'Please enter an integer less than 60' }));
+    } else if (tempNumber < 0) {
+      tempNumber = 1;
+    }
+    setPomoAlertTime({ value: tempNumber });
   }
 
   function updateTime() {
@@ -135,10 +149,10 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
             <TimerInput
               type="number"
               name="value"
-              max='60'
-              min='1'
+              max={60}
+              min={1}
               value={pomoAlertTime.value}
-              onChange={(e) => handleInputChange(e, pomoAlertTime, setPomoAlertTime)}
+              onChange={(e) => checkInputTime(e)}
             ></TimerInput>}
           {(isRunning || passedSeconds !== 0) && pomoTimer.minutes}:{pomoTimer.seconds}
         </Timer>

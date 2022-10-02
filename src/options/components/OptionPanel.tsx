@@ -215,7 +215,7 @@ export const OptionPanel: React.FC<{}> = () => {
       <InfoContainer>
         <Title>Pronounce tool</Title>
         <LanguageSelect value={personalization.pronounce} onChange={(e) => setPersonalization({ ...personalization, pronounce: e.target.value })}>
-          {languageList.map((item) => { return <SelectOption value={item.LangCultureName}>{item.DisplayEN}</SelectOption>; })}
+          {languageList.map((item) => { return <SelectOption key={item.LangCultureName} value={item.LangCultureName}>{item.DisplayEN}</SelectOption>; })}
         </LanguageSelect>
       </InfoContainer>
     </Wrapper >

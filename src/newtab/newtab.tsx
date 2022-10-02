@@ -19,6 +19,7 @@ import { BulletinBoard } from './components/BulletinBoard';
 import { CurrentFocusPanel } from './components/CurrentFocusPanel';
 import { EditPanel } from './components/EditPanel';
 import { TogglePanel } from './components/TogglePanel';
+import { AlertWindow } from './components/AlertWindow';
 
 import { getBackgroundImg } from '../utils/api';
 
@@ -208,6 +209,7 @@ const App: React.FC<{}> = () => {
         </Container>
       </Wrapper>
       <EditPanel></EditPanel>
+      <AlertWindow></AlertWindow>
     </Provider>
   );
 };
@@ -241,8 +243,6 @@ const BackgroundComponent: React.FC<{}> = () => {
       if (res.backgroundSetting) {
         if (res.backgroundSetting.lastUpdate !== today) {
           getBackgroundImg("nature").then((images) => {
-            console.log('new');
-            console.log([...res.backgroundSetting.backgroundList]);
             let newBackgroundList = [...res.backgroundSetting.backgroundList];
             newBackgroundList[0] = processBackgroundData(images);
             const tempBackgrounds = {
@@ -257,7 +257,6 @@ const BackgroundComponent: React.FC<{}> = () => {
         }
       } else {
         getBackgroundImg("nature").then((res) => {
-          console.log(res);
           const tempBackgrounds = {
             lastUpdate: today,
             current: {
@@ -273,16 +272,12 @@ const BackgroundComponent: React.FC<{}> = () => {
 
     timeIntervalId.current = setInterval(() => {
       dispatch(changeBackgroundRandomly());
-    }, 300000);
+    }, 10000);
   }, []);
 
   useEffect(() => {
     chrome.storage.local.set({ backgroundSetting: backgroundSetting });
   }, [backgroundSetting]);
-
-  console.log('BgSetting');
-  console.log(backgroundSetting);
-  console.log(backgroundSetting.backgroundList);
 
   return (
     <BackgroundContainer>

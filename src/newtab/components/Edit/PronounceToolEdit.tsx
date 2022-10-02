@@ -66,7 +66,7 @@ export const PronounceToolEditPanel: React.FC<{}> = () => {
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
       </EditPanelTitle>
       <SelectInput value={language} onChange={(e) => setLanguage(e.target.value)}>
-        {languageList.map((item) => { return <SelectOption value={item.LangCultureName}>{item.DisplayEN}</SelectOption>; })}
+        {languageList.map((item) => { return <SelectOption key={item.LangCultureName} value={item.LangCultureName}>{item.DisplayEN}</SelectOption>; })}
       </SelectInput>
       <ButtonContainer>
         <PanelButton width={80} name='Save' onClick={saveLanguageSetting} />

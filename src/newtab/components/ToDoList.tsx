@@ -318,7 +318,7 @@ export const ToDoListPanel: React.FC<{}> = () => {
         tempWorkList.push(tempTodoToAdd);
       }
     }
-    chrome.storage.sync.set({ todoList: tempWorkList }, function () {
+    chrome.storage.local.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList);
       setTempTodo({ workContent: "", id: 0, isDone: false, isSetAlert: false });
       setIsEditOn(false);
@@ -340,21 +340,21 @@ export const ToDoListPanel: React.FC<{}> = () => {
         tempWorkList.push(todo);
       }
     });
-    chrome.storage.sync.set({ todoList: tempWorkList }, function () {
+    chrome.storage.local.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList);
     });
   }
 
   function delTodo(id: number) {
     const tempWorkList = workList.filter((todo) => todo.id !== id);
-    chrome.storage.sync.set({ todoList: tempWorkList }, function () {
+    chrome.storage.local.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList);
     });
     // toDoListPort.current.postMessage({ msg: "update" });
   }
 
   useEffect(() => {
-    chrome.storage.sync.get(['todoList'], function (result) {
+    chrome.storage.local.get(['todoList'], function (result) {
       setWorkList(result.todoList);
     });
     const queryOptions = { active: true, lastFocusedWindow: true };

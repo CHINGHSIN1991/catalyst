@@ -91,6 +91,28 @@ const PanelBtn = styled.div`
   }
 `;
 
+const AlertBtn = styled.div`
+  white-space: nowrap;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 0 16px;
+  margin-top: 16px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 24px;
+  height: 28px;
+  width: ${(props: { width: number; }) => { return `${props.width}px`; }};
+  border-radius: 4px;
+  margin: 8px;
+  color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgb(204, 109, 102,1)"; }};
+  background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(204, 109, 102,0)"; }};
+  border: solid 2px ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgba(204, 109, 102,1)"; }};;
+  transition: 0.1s;
+  :hover{
+    color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgb(255,255,255,1)"; }};
+    background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(204, 109, 102,1)"; }};
+  }
+`;
 // export const PanelButton: React.FC<{ name: string; disabled?: boolean; onClick?: () => void; }> = (props) => {
 //   return (
 //     <ButtonContainer disabled={props.disabled} onClick={props.onClick}>
@@ -104,5 +126,13 @@ export const PanelButton: React.FC<{ name: string; disabled?: boolean; onClick?:
     <PanelBtn disabled={props.disabled} onClick={props.onClick} width={props.width}>
       {props.name}
     </PanelBtn>
+  );
+};
+
+export const AlertButton: React.FC<{ name: string; disabled?: boolean; onClick?: () => void; width: number; }> = (props) => {
+  return (
+    <AlertBtn disabled={props.disabled} onClick={props.onClick} width={props.width}>
+      {props.name}
+    </AlertBtn>
   );
 };
