@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
 
-import { handleInputChange, handleTextAreaChange } from "../../utils/inputHandler";
+import { handleInputChange, handleTextAreaChange } from "../../utils/functions";
 import { BulletinTogglePanel } from "./BulletinTogglePanel";
 import { memoColorList } from "../../static/optionList";
 import { setAlertWindow } from '../features/reducers/alertSlice';

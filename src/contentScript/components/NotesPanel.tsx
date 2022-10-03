@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { handleInputChange, handleTextAreaChange } from '../../utils/inputHandler';
+import { handleInputChange, handleTextAreaChange } from '../../utils/functions';
 import { AlertComponent } from './AlertComponent';
 
 const Wrapper = styled.div`

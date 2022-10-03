@@ -6,9 +6,11 @@ import { PanelBasicSetting, PanelTitle } from '../../static/styleSetting';
 import { useSelector } from 'react-redux';
 
 import { getShortcuts } from '../features/reducers/shortcutsSlice';
-import { handleInputChange, handleTextAreaChange } from '../../utils/inputHandler';
+import { handleInputChange, handleTextAreaChange, handleErrorImage } from '../../utils/functions';
 import { useDispatch } from 'react-redux';
 import { setAlertWindow } from '../features/reducers/alertSlice';
+
+import { colorScheme } from '../../static/optionList';
 
 const TempLinksPanel = styled(PanelBasicSetting)`
   display: flex;
@@ -376,7 +378,10 @@ export const InspirationNotePanel: React.FC<{}> = () => {
   }, []);
 
   return (
-    <TempLinksPanel>
+    <TempLinksPanel
+      panelBackground={colorScheme.light.panelBackground}
+      panelBorder={colorScheme.light.panelBorder}
+    >
       <PanelTitle>Inspiration Notes</PanelTitle>
       <ScrollContainer ShortcutNumber={ShortcutNumber.length}>
         {inspirationNotes && "no category" in inspirationNotes &&
@@ -416,7 +421,7 @@ const TempLinkElement: React.FC<{ note: note, tempNote: note, setTempNote: (note
     <TempLink key={props.note.id} onMouseLeave={() => { setIsEditOn(false); }}>
       <LinkContent>
         <IconContainer>
-          <NoteLinkIcon src={props.note.logo}></NoteLinkIcon>
+          <NoteLinkIcon src={props.note.logo} onError={(e) => handleErrorImage(e)}></NoteLinkIcon>
         </IconContainer>
         {props.tempNote.id !== props.note.id && <TextContent href={props.note.url} target="_blank">
           <TextTitle>{props.note.title}</TextTitle>

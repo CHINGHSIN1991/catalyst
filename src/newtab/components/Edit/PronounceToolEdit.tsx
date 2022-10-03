@@ -7,7 +7,7 @@ import { getEditPanelState, setEditPanel } from '../../features/reducers/editSli
 import { editShortcut } from '../../features/reducers/shortcutsSlice';
 import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
 import { InputComponent, PanelButton, ButtonContainer } from '../../../static/components';
-import { handleInputChange } from '../../../utils/inputHandler';
+import { handleInputChange } from '../../../utils/functions';
 import { getPersonalization, loadPersonalization } from '../../features/reducers/optionsSlice';
 import { languageList } from '../../../static/optionList';
 

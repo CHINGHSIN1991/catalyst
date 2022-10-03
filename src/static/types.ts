@@ -1,5 +1,3 @@
-import backgroundSlice from "../newtab/features/reducers/backgroundSlice";
-
 type PersonalSettings = {
   userName: string
   mode: "LIGHT_MODE"|"DARK_MODE"|"CYBERPUNK",

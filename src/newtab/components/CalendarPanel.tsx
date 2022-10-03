@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { PanelBasicSetting, PanelTitle, CreateButton } from '../../static/styleSetting';
 import { fetchCalendarData } from '../../utils/api';
 
-import { calendarColorList } from '../../static/optionList';
+import { calendarColorList, colorScheme } from '../../static/optionList';
 import { getEvents, loadEvents } from '../features/reducers/calendarSlice';
 import { loadUserInfo, getUserInfo } from '../features/reducers/userInfoSlice';
 import { getPersonalization } from '../features/reducers/optionsSlice';
@@ -17,18 +17,6 @@ import { calendarItem } from '../../static/types';
 const CalendarWrapper = styled(PanelBasicSetting)`
   display: flex;
   flex-grow:0;
-`;
-
-const CalendarModuleWrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0,0,0,0.5);
-  position: fixed;
-  left: 0;
-  top: 0;
 `;
 
 const CalendarContainer = styled.div`
@@ -89,10 +77,7 @@ const BarColumn = styled.div`
   width: 100%;
   height: 100%;
 `;
-// base = { props.dateStart / 3600000 };
-// start = { props.getTimeStamp(item.start, 'start') / 3600000 };
-// end = { props.getTimeStamp(item.end, 'end') / 3600000 };
-// color;
+
 const EventItem = styled.div`
   border: solid 0.5px rgba(120,120,120,0.4);
   border-radius: 4px;
@@ -119,16 +104,6 @@ const EventValue = styled.div`
   /* border: solid 1px; */
   padding-bottom: 4px;
   width: 100%;
-`;
-
-const InfoCard = styled.div`
-  position: fixed;
-  left: ${(props) => { return `-${props.position.x / 10}px`; }};
-  top: ${(props) => { return `-${props.position.y / 10}px`; }};
-  width: 120px;
-  height: 40px;
-  background-color: #fff;
-  border: solid 1px;
 `;
 
 const TimeLine = styled.div`
@@ -270,7 +245,10 @@ export const CalendarPanel: React.FC<{}> = () => {
   }, [events]);
 
   return (
-    <CalendarWrapper>
+    <CalendarWrapper
+      panelBackground={colorScheme.light.panelBackground}
+      panelBorder={colorScheme.light.panelBorder}
+    >
       <PanelTitle>Calendar</PanelTitle>
       <CalendarContainer>
         <CalendarBackground></CalendarBackground>

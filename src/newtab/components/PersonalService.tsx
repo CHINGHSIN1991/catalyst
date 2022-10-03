@@ -7,6 +7,9 @@ import { serviceList } from '../../static/optionList';
 import { getUserInfo, loadUserInfo } from '../features/reducers/userInfoSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { colorScheme } from '../../static/optionList';
+import { handleErrorImage } from '../../utils/functions';
+
 const PersonalPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */
 `;
@@ -176,7 +179,10 @@ export const PersonalServicePanel: React.FC<{}> = () => {
   }, []);
 
   return (
-    <PersonalPanel>
+    <PersonalPanel
+      panelBackground={colorScheme.light.panelBackground}
+      panelBorder={colorScheme.light.panelBorder}
+    >
       <WelcomeMessage>
         <WelcomeSentence>{welcomeMessage}</WelcomeSentence>
         <UserName href="https://myaccount.google.com/" target="_blank">
@@ -186,7 +192,7 @@ export const PersonalServicePanel: React.FC<{}> = () => {
       <ServiceLinks>
         {serviceList.map((item) => {
           return <ServiceLink key={item.imgUrl.light} href={item.link} target="_blank">
-            <ServiceIcon src={item.imgUrl.light} onError='PlaceHolder_128.png' />
+            <ServiceIcon src={item.imgUrl.light} onError={(e) => handleErrorImage(e)} />
             <ServiceTitle>{item.name.english}</ServiceTitle>
           </ServiceLink>;
         })}

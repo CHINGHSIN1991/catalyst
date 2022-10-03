@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 
 import { FocusPanelTitle } from '../../static/styleSetting';
-import { handleInputChange } from '../../utils/inputHandler';
+import { handleInputChange } from '../../utils/functions';
 import { useDispatch } from 'react-redux';
 import { setAlertWindow } from '../features/reducers/alertSlice';
 

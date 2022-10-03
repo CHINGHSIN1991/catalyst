@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 
 import { PanelBasicSetting, PanelTitle, CreateButton } from '../../static/styleSetting';
 
-import { handleInputChange } from '../../utils/inputHandler';
+import { handleInputChange } from '../../utils/functions';
+
+import { colorScheme } from '../../static/optionList';
 
 const WorksPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */
@@ -281,7 +283,6 @@ export const ToDoListPanel: React.FC<{}> = () => {
     isSetAlert: false,
   } as todo);
   const [isEditOn, setIsEditOn] = useState(false);
-  const toDoListPort = useRef(null);
 
   function editTodo() {
     let tempWorkList = [];
@@ -350,34 +351,19 @@ export const ToDoListPanel: React.FC<{}> = () => {
     chrome.storage.local.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList);
     });
-    // toDoListPort.current.postMessage({ msg: "update" });
   }
 
   useEffect(() => {
     chrome.storage.local.get(['todoList'], function (result) {
       setWorkList(result.todoList);
     });
-    const queryOptions = { active: true, lastFocusedWindow: true };
-    // chrome.tabs.query(queryOptions).then((res) => {
-    //   toDoListPort.current = chrome.tabs.connect(res[0].id, { name: "todo" });
-    //   toDoListPort.current.onMessage.addListener(function (res: { msg: string; }) {
-    //     console.log(res);
-    //     if (res.msg === "update") {
-    //       console.log("todolist panel update");
-    //     }
-    //   });
-    // });
-    // toDoListPort.current = chrome.runtime.connect({ name: "todo" });
-    // toDoListPort.current.onMessage.addListener(function (res: { msg: string; }) {
-    //   console.log(res);
-    //   if (res.msg === "update") {
-    //     console.log("todolist panel update");
-    //   }
-    // });
   }, []);
 
   return (
-    <WorksPanel>
+    <WorksPanel
+      panelBackground={colorScheme.light.panelBackground}
+      panelBorder={colorScheme.light.panelBorder}
+    >
       <PanelTitle>To do list</PanelTitle>
       {!!!tempTodo.id && <AddToDoPanel isEditOn={isEditOn} setIsEditOn={setIsEditOn} tempTodo={tempTodo} setTempTodo={setTempTodo} editTodo={editTodo} handleIsSetAlert={handleIsSetAlert}></AddToDoPanel>}
       <ToDoElements>

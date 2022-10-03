@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { handleTextAreaChange } from '../../utils/inputHandler';
+import { handleTextAreaChange } from '../../utils/functions';
 import { memoColorList } from '../../static/optionList';
 import { AlertComponent } from './AlertComponent';
 

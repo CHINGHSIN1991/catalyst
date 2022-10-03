@@ -5,10 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { getEditPanelState, setEditPanel } from '../../features/reducers/editSlice';
 import { loadBackgrounds } from '../../features/reducers/backgroundSlice';
-import { editShortcut } from '../../features/reducers/shortcutsSlice';
 import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
-import { handleInputChange } from '../../../utils/inputHandler';
-import { getBackgrounds } from '../../features/reducers/backgroundSlice';
 import { background, backgroundSetting } from '../../../static/types';
 import { PanelButton, ButtonContainer } from '../../../static/components';
 

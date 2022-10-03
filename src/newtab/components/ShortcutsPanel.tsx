@@ -1,13 +1,16 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-
-import { PanelBasicSetting } from '../../static/styleSetting';
-import { handleInputChange } from '../../utils/inputHandler';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getShortcuts, deleteShortcut, loadShortcuts } from '../features/reducers/shortcutsSlice';
 import { setEditPanel } from '../features/reducers/editSlice';
+
+import { PanelBasicSetting } from '../../static/styleSetting';
+import { handleErrorImage, handleInputChange } from '../../utils/functions';
+import { colorScheme } from '../../static/optionList';
+
+
 
 const OrgFunctionPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */
@@ -258,7 +261,10 @@ export const ShortcutsPanel: React.FC<{}> = () => {
   }, []);
 
   return (
-    <OrgFunctionPanel>
+    <OrgFunctionPanel
+      panelBackground={colorScheme.light.panelBackground}
+      panelBorder={colorScheme.light.panelBorder}
+    >
       <SearchPanel>
         <SearchInput type="text" name="text" onKeyPress={(e: KeyboardEvent) => searchByEnter(e)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, searchQuery, setSearchQuery)} />
         <SearchIcon searchQuery={searchQuery.text} onClick={search}>
@@ -292,7 +298,8 @@ const LinkElement: React.FC<{ shortcut: shortcut; delShortcut: (id: number) => v
     <Shortcut key={props.shortcut.id} onMouseLeave={() => setIsOptionOn(false)}>
       <LinkUrl href={props.shortcut.url} target="_blank">
         <ShortcutIconContainer>
-          <ShortcutIcon src={props.shortcut.logo} onError='PlaceHolder_128.png'></ShortcutIcon>
+          {/* @ts-ignore */}
+          <ShortcutIcon src={props.shortcut.logo} onError={(e) => handleErrorImage(e)}></ShortcutIcon>
         </ShortcutIconContainer>
         <LinkTitle>{props.shortcut.name}</LinkTitle>
       </LinkUrl>

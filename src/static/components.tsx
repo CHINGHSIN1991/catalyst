@@ -40,27 +40,6 @@ export const InputComponent: React.FC<{ name: string; value: string, title: stri
   );
 };
 
-// const ButtonContainer = styled.div`
-//   font-family: 'Noto Sans', 'Microsoft JhengHei';
-//   font-size: 0.875rem;
-//   text-align: center;
-//   border-radius: 4px;
-//   line-height: 24px;
-//   background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgb(240,240,240)" : "rgb(224,224,224)"; }};
-//   color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgb(184,184,184)" : "rgb(0,0,0)"; }};
-//   height: 32px;
-//   margin: 8px;
-//   width: 80px;
-//   padding: 4px 16px;
-//   cursor: pointer;
-//   transition: 0.2s;
-
-//   :hover {
-//     background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgb(240,240,240)" : "rgb(120,120,120)"; }};
-//     color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgb(184,184,184)" : "rgb(255,255,255)"; }};
-//   }
-// `;
-
 export const ButtonContainer = styled.div`
   width: 100%;
   padding-top: 16px;
@@ -113,13 +92,6 @@ const AlertBtn = styled.div`
     background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(204, 109, 102,1)"; }};
   }
 `;
-// export const PanelButton: React.FC<{ name: string; disabled?: boolean; onClick?: () => void; }> = (props) => {
-//   return (
-//     <ButtonContainer disabled={props.disabled} onClick={props.onClick}>
-//       {props.name}
-//     </ButtonContainer>
-//   );
-// };
 
 export const PanelButton: React.FC<{ name: string; disabled?: boolean; onClick?: () => void; width: number; }> = (props) => {
   return (

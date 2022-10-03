@@ -8,7 +8,7 @@ import { editShortcut } from '../../features/reducers/shortcutsSlice';
 import { getUserInfo, loadUserInfo } from '../../features/reducers/userInfoSlice';
 import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
 import { StyledInput, PanelButton, ButtonContainer } from '../../../static/components';
-import { handleInputChange } from '../../../utils/inputHandler';
+import { handleInputChange } from '../../../utils/functions';
 
 const Wrapper = styled(EditPanelWrapper)`
   width: 360px;

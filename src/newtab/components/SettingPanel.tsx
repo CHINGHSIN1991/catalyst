@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect } from "react";
 
 import { PanelBasicSetting, PanelTitle } from '../../static/styleSetting';
 
 import { setEditPanel } from '../features/reducers/editSlice';
 import { getBackgrounds } from '../features/reducers/backgroundSlice';
 import { useSelector, useDispatch } from 'react-redux';
+
+import { colorScheme } from '../../static/optionList';
 
 const SettingPanelWrapper = styled(PanelBasicSetting)`
   /* border: solid 1px; */
@@ -42,27 +43,6 @@ const ButtonArea = styled.div`
   }
 `;
 
-const ButtonLink = styled.a`
-  width: 32px;
-  height: 32px;
-  color: white;
-  background-color: rgba(0,0,0,0.2);
-  /* border: solid 1px; */
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: 0.1s;
-  margin-right: 20px;
-  :last-child{
-    margin-right: 0px;
-  }
-  :hover {
-    background-color: rgba(255,255,255,0.2);
-  }
-`;
-
 type backgroundInfo = {
   url: string,
   user: string,
@@ -73,51 +53,12 @@ type backgroundInfo = {
 export const SettingPanel: React.FC<{}> = (props) => {
   const dispatch = useDispatch();
   const backgroundSetting = useSelector(getBackgrounds);
-  // const [isPanelOpen, setIsPanelOpen] = useState(false);
-
-  // function addCustomBackgrounds() {
-  //   if (props.bgOption.current !== 0) {
-  //     const tempBgList = [...props.personalBgSet];
-  //     tempBgList[props.bgOption.current].push(props.currentBackground);
-  //     props.setPersonalBgSet(tempBgList);
-  //   }
-  // }
-
-  // function delCustomBackground(index: number) {
-  //   let tempBgList = [...props.personalBgSet];
-  //   tempBgList[props.bgOption.current].splice(index, 1);
-  //   props.setPersonalBgSet(tempBgList);
-  // }
-
-  // function addBgSet() {
-  //   if (props.personalBgSet) {
-  //     props.setPersonalBgSet([...props.personalBgSet, []]);
-  //   } else {
-  //     props.setPersonalBgSet([[]]);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   chrome.storage.sync.get(['personalBgSet', 'bgOption'], function (result) {
-  //     props.setPersonalBgSet(result.personalBgSet);
-  //     props.setBgOption(result.bgOption);
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   chrome.storage.sync.set({ personalBgSet: props.personalBgSet }, function () {
-  //     // console.log(props.personalBgSet);
-  //   });
-  // }, [props.personalBgSet]);
-
-  // useEffect(() => {
-  //   chrome.storage.sync.set({ bgOption: props.bgOption }, function () {
-  //     // console.log(props.bgOption);
-  //   });
-  // }, [props.bgOption]);
 
   return (
-    <SettingPanelWrapper>
+    <SettingPanelWrapper
+      panelBackground={colorScheme.light.panelBackground}
+      panelBorder={colorScheme.light.panelBorder}
+    >
       <PanelTitle>Setting Panel</PanelTitle>
       <ButtonContainer>
         {/* <ButtonLink title="Option page" href="chrome-extension://opmdballdlnagflnfggilifbiogbklkc/options.html">

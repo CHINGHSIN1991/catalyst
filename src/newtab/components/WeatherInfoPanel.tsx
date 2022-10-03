@@ -254,18 +254,6 @@ export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
           </Info>
         </MainInfo>
       </WeatherInfoContainer>}
-      {/* <DailyDataContainer>
-        {weatherData && weatherData.DailyForecasts.map((item: any) => {
-          console.log(item);
-          return (
-            <DailyData key={item.Date}>
-              <WeatherIcon icon={item.Day.Icon}></WeatherIcon>
-            </DailyData>);
-        })}
-      </DailyDataContainer> */}
-      {/* {weatherData && weatherData.DailyForecasts.map((item) => {
-        return (<div key={item.Date} style={{ color: "white" }}><div>{item.Date}</div><div>{JSON.stringify(item.Temperature)}</div></div>);
-      })} */}
     </Wrapper>
   );
 };

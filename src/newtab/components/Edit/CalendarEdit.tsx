@@ -10,7 +10,7 @@ import { loadEvents } from '../../features/reducers/calendarSlice';
 import { postNewEvent, fetchCalendarData } from '../../../utils/api';
 
 import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
-import { handleInputChange } from '../../../utils/inputHandler';
+import { handleInputChange } from '../../../utils/functions';
 import { calendarColorList } from '../../../static/optionList';
 import { tempEvent } from '../../../static/types';
 import { PanelButton, ButtonContainer } from '../../../static/components';

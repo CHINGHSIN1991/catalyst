@@ -6,8 +6,8 @@ export const PanelBasicSetting = styled.div`
   padding: 12px;
   border-radius: 6px;
   margin: 8px 8px 0;
-  border: solid 0.5px rgba(120,120,120,0.4);
-  background-color: rgba(0,0,0,0.4);
+  border: ${(props) => { return props.panelBorder; }};
+  background-color: ${(props) => { return props.panelBackground; }};
   backdrop-filter: blur(16px);
   :last-child {
     margin: 8px
@@ -68,6 +68,7 @@ export const CreateButton = styled.div`
   }
 `;
 
+//
 export const EditPanelTitle = styled.div`
   margin-bottom: 12px;
   font-weight: bold;
@@ -84,4 +85,38 @@ export const EditPanelTitleUnderLine = styled.div`
   height: 1px;
   margin-top: 8px;
   background-color: darkgrey;
+`;
+
+//
+export const ToggleTitle = styled.div`
+  /* border: solid 1px; */
+  opacity: 0;
+  transform: translateY(30px);
+  position: absolute;
+  text-align: center;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
+  width: 120px;
+  transition: 0.2s;
+`;
+
+export const ToggleButton = styled.div`
+  width: 48px;
+  height: 48px;
+  margin: 0 24px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: solid 1px; */
+  cursor: pointer;
+  box-shadow: 0px 5px 5px ${(props) => { return props.panelBackground; }};
+  border: ${(props) => { return props.panelBorder; }};
+  background-color: ${(props) => { return props.panelBackground; }};
+  backdrop-filter: blur(16px);
+  :hover{
+    ${ToggleTitle} {
+      opacity: 1;
+      transform: translateY(40px);
+    }
+  }
 `;

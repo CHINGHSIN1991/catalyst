@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getEditPanelState, setEditPanel } from '../../features/reducers/editSlice';
-import { editShortcut } from '../../features/reducers/shortcutsSlice';
-import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
-import { InputComponent, PanelButton, ButtonContainer } from '../../../static/components';
-import { handleInputChange } from '../../../utils/inputHandler';
+import { setEditPanel } from '../../features/reducers/editSlice';
 import { getPersonalization, loadPersonalization } from '../../features/reducers/optionsSlice';
+
+import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
+import { PanelButton, ButtonContainer } from '../../../static/components';
+
 
 const Wrapper = styled(EditPanelWrapper)`
   width: 320px;

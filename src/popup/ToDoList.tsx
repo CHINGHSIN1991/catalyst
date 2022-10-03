@@ -62,7 +62,7 @@ export const ToDoList: React.FC<{}> = () => {
 
   function changeIsDone(id: number) {
     let tempWorkList = [];
-    workList.forEach((todo) => {
+    workList.forEach((todo: todo) => {
       if (todo.id === id) {
         todo.isDone = !todo.isDone;
         tempWorkList.push(todo);
@@ -70,13 +70,13 @@ export const ToDoList: React.FC<{}> = () => {
         tempWorkList.push(todo);
       }
     });
-    chrome.storage.sync.set({ todoList: tempWorkList }, function () {
+    chrome.storage.local.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList);
     });
   }
 
   useEffect(() => {
-    chrome.storage.sync.get(['todoList'], function (result) {
+    chrome.storage.local.get(['todoList'], function (result) {
       setWorkList(result.todoList);
     });
   }, []);

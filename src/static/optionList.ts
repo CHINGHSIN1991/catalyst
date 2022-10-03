@@ -283,3 +283,16 @@ export const calendarColorList = [
   {name:'Flamingo',code:'#DF857D',monoCode:'#A6A6A6',colorId:'4'},
   {name:'Graphite',code:'#737373',monoCode:'#737373',colorId:'8'},
 ]
+
+export const colorScheme = {
+  light:{
+    primary: 'rgba(255,255,255,1)',
+    secondary: 'rgba(200,200,200,1)',
+    tertiary: 'rgba(160,160,160,1)',
+    panelBackground: 'rgba(0,0,0,0.4)',
+    panelBorder: 'solid 0.5px rgba(120,120,120,0.4)',
+  },
+  dark:{
+
+  },
+}

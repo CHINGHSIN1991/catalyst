@@ -272,7 +272,7 @@ const BackgroundComponent: React.FC<{}> = () => {
 
     timeIntervalId.current = setInterval(() => {
       dispatch(changeBackgroundRandomly());
-    }, 10000);
+    }, 30000);
   }, []);
 
   useEffect(() => {

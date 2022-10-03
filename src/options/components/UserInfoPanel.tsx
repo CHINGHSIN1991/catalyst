@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 import { EditPanelTitleUnderLine } from '../../static/styleSetting';
-import { handleInputChange } from '../../utils/inputHandler';
+import { handleInputChange } from '../../utils/functions';
 
 
 const Wrapper = styled.div`
@@ -118,9 +118,6 @@ export const UserInfoPanel: React.FC<{}> = () => {
         setIsEditOn(false);
       });
     }
-  }
-
-  function cancelProcess() {
   }
 
   useEffect(() => {

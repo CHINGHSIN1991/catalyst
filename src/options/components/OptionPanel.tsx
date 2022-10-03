@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 import { languageList } from '../../static/optionList';
-import { handleInputChange } from '../../utils/inputHandler';
+import { handleInputChange } from '../../utils/functions';
 
 
 const Wrapper = styled.div`
