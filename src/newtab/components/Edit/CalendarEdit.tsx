@@ -1,21 +1,18 @@
 import React from 'react';
 import styled from "styled-components";
-
 import { useState } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { getUserInfo } from '../../features/reducers/userInfoSlice';
 import { setEditPanel } from '../../features/reducers/editSlice';
 import { loadEvents } from '../../features/reducers/calendarSlice';
-import { postNewEvent, fetchCalendarData } from '../../../utils/api';
 
+import { postNewEvent, fetchCalendarData } from '../../../utils/api';
 import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
 import { handleInputChange } from '../../../utils/functions';
 import { calendarColorList } from '../../../static/optionList';
 import { tempEvent } from '../../../static/types';
 import { PanelButton, ButtonContainer } from '../../../static/components';
-import { useDispatch } from 'react-redux';
-
 
 const CalendarWrapper = styled(EditPanelWrapper)`
   width: 360px;
@@ -43,7 +40,7 @@ const FormSet = styled.div`
 // const DateSet = styled(formSet)`
 //   /* border: solid 1px; */
 //   height: ${(props) => { return props.isAllDay ? '36px' : '0px'; }};
-//   padding-bottom: ${(props) => { return props.isAllDay ? '6px' : '0px'; }};;
+//   padding-bottom: ${(props) => { return props.isAllDay ? '6px' : '0px'; }};
 // `;
 
 const InputTitle = styled.div`
@@ -122,7 +119,7 @@ const ColorOption = styled.div`
   border: solid 2px ${(props) => { return props.item.colorId === props.tempEvent.colorId ? props.item.colorId : 'rgba(255,255,255,1)'; }};
   border-radius: 4px;
   background-color: ${(props) => { return props.item.code; }};
-  opacity: ${(props) => { return props.item.colorId === props.tempEvent.colorId ? 1 : 0.3; }};;
+  opacity: ${(props) => { return props.item.colorId === props.tempEvent.colorId ? 1 : 0.3; }};
 `;
 
 const PublicOptionSet = styled.div`

@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
-
-import { PanelBasicSetting, PanelTitle } from '../../static/styleSetting';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { setEditPanel } from '../features/reducers/editSlice';
 import { getBackgrounds } from '../features/reducers/backgroundSlice';
-import { useSelector, useDispatch } from 'react-redux';
 
-import { colorScheme } from '../../static/optionList';
+import { PanelBasicSetting, PanelTitle } from '../../static/styleSetting';
 
 const SettingPanelWrapper = styled(PanelBasicSetting)`
   /* border: solid 1px; */
@@ -26,7 +24,7 @@ const ButtonContainer = styled.div`
 const ButtonArea = styled.div`
   width: 32px;
   height: 32px;
-  background-color: rgba(0,0,0,0.2);
+  background-color: ${props => props.theme.primarySemiopaque};
   /* border: solid 1px; */
   border-radius: 50%;
   display: flex;
@@ -39,7 +37,7 @@ const ButtonArea = styled.div`
     margin-right: 0px;
   }
   :hover {
-    background-color: rgba(255,255,255,0.2);
+    background-color: ${props => props.theme.primaryHover};
   }
 `;
 
@@ -55,10 +53,7 @@ export const SettingPanel: React.FC<{}> = (props) => {
   const backgroundSetting = useSelector(getBackgrounds);
 
   return (
-    <SettingPanelWrapper
-      panelBackground={colorScheme.light.panelBackground}
-      panelBorder={colorScheme.light.panelBorder}
-    >
+    <SettingPanelWrapper>
       <PanelTitle>Setting Panel</PanelTitle>
       <ButtonContainer>
         {/* <ButtonLink title="Option page" href="chrome-extension://opmdballdlnagflnfggilifbiogbklkc/options.html">

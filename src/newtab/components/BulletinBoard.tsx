@@ -1,15 +1,16 @@
 import React from "react";
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Draggable from "react-draggable";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-import { handleInputChange, handleTextAreaChange } from "../../utils/functions";
-import { BulletinTogglePanel } from "./BulletinTogglePanel";
-import { memoColorList } from "../../static/optionList";
-import { setAlertWindow } from '../features/reducers/alertSlice';
 import { useDispatch } from "react-redux";
+
+import { setAlertWindow } from '../features/reducers/alertSlice';
+
+import { handleTextAreaChange } from "../../utils/functions";
+import { BulletinTogglePanel } from "./BulletinTogglePanel";
 import { memo } from "../../static/types";
+import { memoColorList, colorScheme } from "../../static/optionList";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -37,9 +38,15 @@ const Wrapper = styled.div`
 `;
 
 const CreatePanel = styled.div`
-  /* border: solid 1px; */
-  padding-top: 24px;
-  width: 100%;
+  border-radius: 8px;
+  border: ${props => props.theme.panelBorder};
+  background-color: ${props => props.theme.panelBackground};
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 0px 0px;
+  width: 344px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -47,14 +54,14 @@ const CreatePanel = styled.div`
 `;
 
 const MemoInput = styled.textarea`
-  border-radius: 4px;
-  resize: none;
+  border-radius: 6px;
   padding: 8px;
-  width: 360px;
+  resize: none;
+  width: 332px;
   height: 64px;
   background-color: ${(props) => { return props.bgColor; }};
   opacity: 0.8;
-  border: solid rgb(160,160,160) 2px;
+  border: solid rgb(160,160,160) 1px;
   z-index: 3;
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -76,14 +83,15 @@ const MemoInput = styled.textarea`
     box-shadow: transparent;
   }
   :focus{
-    outline: solid 2px rgba(200,200,200,1);
+    outline: solid 1px rgba(200,200,200,1);
   }
 `;
 
 const OptionContainer = styled.div`
   display: flex;
   align-items: center;
-  width: 360px;
+  margin-top: 2px;
+  width: 338px;
   z-index: 3;
 `;
 
@@ -94,8 +102,8 @@ const ColorBorder = styled.div`
   align-items: center;
   width: 16px;
   height: 24px;
-  margin: 8px 8px 8px 4px;
-  border-radius: 6px;
+  margin: 4px 12px 4px 4px;
+  border-radius: 7px;
   border: solid 2px ${(props) => { return props.color === props.tempColor ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0)'; }};
   box-shadow: ${(props) => { return props.color === props.tempColor ? '2px 2px 2px 1px rgba(0, 0, 0, 0.2)' : 'none'; }};
 `;
@@ -131,7 +139,7 @@ const CreateBtn = styled.div`
   line-height: 22px;
   border-radius: 6px;
   padding: 0 8px;
-  margin: 8px 4px;
+  margin: 4px 4px;
   margin-left: auto;
   /* box-shadow: 0px 5px 5px rgba(0,0,0,0.4); */
   background-color: rgba(255,255,255,0.8);
@@ -146,6 +154,7 @@ const CreateBtn = styled.div`
 
 const MemoContainer = styled.div`
   width: 100%;
+  margin-top: 160px;
   height: auto;
   display: flex;
   align-items: flex-start;
@@ -232,7 +241,7 @@ const MemoEditOption = styled.div`
   width: 100%;
   height: 20px;
   background-color: rgb(120,120,120);
-  color: white;
+  color: ${props => props.theme.primary};
   transition: 0.1s;
   cursor: pointer;
   :hover{
@@ -272,12 +281,14 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
   const [tempMemo, setTempMemo] = useState({ memo: "", color: memoColorList[0] });
   const [memos, setMemos] = useState<memo[]>([]);
 
-  // function addMemoByEnter(e) {
-  //   var code = e.keyCode || e.which;
-  //   if (code === 13) {
-  //     addMemo();
-  //   }
-  // };
+  function addMemoByEnter(e) {
+    if (tempMemo.memo) {
+      var code = e.keyCode || e.which;
+      if (code === 13) {
+        addMemo();
+      }
+    }
+  };
 
   function sortByCreateTime() {
     let tempMemos = [...memos];
@@ -314,7 +325,6 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
       setTempMemo({ ...tempMemo, memo: "" });
     } else {
       dispatch(setAlertWindow({ name: 'Empty memo', message: 'Please key some content' }));
-      // alert("Key some memos");
       setTempMemo({ ...tempMemo, memo: "" });
     }
   }
@@ -347,20 +357,6 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
 
   return (
     <Wrapper>
-      <CreatePanel>
-        <MemoInput
-          name="memo"
-          value={tempMemo.memo}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleTextAreaChange(e, tempMemo, setTempMemo)}
-          // onKeyPress={(e: Event) => addMemoByEnter(e)}
-          bgColor={tempMemo.color}
-        ></MemoInput>
-        <OptionContainer>
-          {memoColorList && memoColorList.map((item) => { return <ColorElement key={item} color={item} tempMemo={tempMemo} setTempMemo={setTempMemo}></ColorElement>; })}
-          {/* <ColorPick type="color"></ColorPick> */}
-          <CreateBtn onClick={addMemo}>Create a memo</CreateBtn>
-        </OptionContainer>
-      </CreatePanel>
       <MemoContainer>
         {memos.map((item, index: number) => {
           return (
@@ -399,6 +395,23 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
           );
         })}
       </MemoContainer>
+      <CreatePanel
+        panelBackground={colorScheme.light.panelBackground}
+        panelBorder={colorScheme.light.panelBorder}
+      >
+        <MemoInput
+          name="memo"
+          value={tempMemo.memo}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleTextAreaChange(e, tempMemo, setTempMemo)}
+          onKeyPress={(e: Event) => addMemoByEnter(e)}
+          bgColor={tempMemo.color}
+        ></MemoInput>
+        <OptionContainer>
+          {memoColorList && memoColorList.map((item) => { return <ColorElement key={item} color={item} tempMemo={tempMemo} setTempMemo={setTempMemo}></ColorElement>; })}
+          {/* <ColorPick type="color"></ColorPick> */}
+          <CreateBtn onClick={addMemo}>Create</CreateBtn>
+        </OptionContainer>
+      </CreatePanel>
       <BulletinTogglePanel sortByCreateTime={sortByCreateTime} sortByColor={sortByColor} setIsBoardOn={props.setIsBoardOn} clearAll={clearAll} memos={memos}></BulletinTogglePanel>
     </Wrapper>
   );

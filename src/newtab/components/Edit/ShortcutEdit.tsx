@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getEditPanelState, setEditPanel } from '../../features/reducers/editSlice';

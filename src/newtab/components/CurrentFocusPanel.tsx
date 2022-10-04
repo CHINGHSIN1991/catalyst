@@ -17,9 +17,9 @@ const Wrapper = styled.div`
 const FocusBlock = styled.div`
   font-size: 1.75rem;
   text-align: center;
-  font-weight: normal;
-  color: white;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
+  font-weight: bold;
+  color: ${props => props.theme.primary};
+  text-shadow: 0 0 10px ${props => props.theme.inversePrimary},  0 0 20px ${props => props.theme.primaryOpacity};
   transform: translateY(-80px);
   /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
 `;

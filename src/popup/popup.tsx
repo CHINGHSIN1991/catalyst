@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { ResetStyle, GlobalStyle } from "../static/globalStyle";
 // import { useState, useEffect } from "react";
 
-import { PomodoroPanel } from './PomodoroPanel';
-import { ToDoList } from './ToDoList';
+import { PomodoroPanel } from './components/PomodoroPanel';
+import { ToDoList } from './components/ToDoList';
 
 const Wrapper = styled.div`
   padding: 8px;

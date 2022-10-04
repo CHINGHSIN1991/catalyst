@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 import { handleInputChange, handleTextAreaChange } from '../../utils/functions';
+
 import { AlertComponent } from './AlertComponent';
 
 const Wrapper = styled.div`
@@ -86,7 +87,7 @@ const Btn = styled.div`
   justify-content: center;
   text-align: center;
   background-color: rgb(160,160,160);
-  color: white;
+  color: rgba(255,255,255,1);
   font-size: 12px;
   line-height: 28px;
   border-radius: 4px;
@@ -109,7 +110,7 @@ const AddBtn = styled.div`
   margin-left: ${(props) => { return props.isEditOn ? '4px' : '0'; }};
   transition: 0.3s;
   height: 24px;
-  color: white;
+  color: rgba(255,255,255,1);
   background-color: ${(props) => { return props.isEditOn ? 'rgb(144,144,144)' : 'rgb(224,224,224)'; }};
   :hover{
     background-color: rgb(96,96,96);

@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+
+import { getUserInfo, loadUserInfo } from '../features/reducers/userInfoSlice';
 
 import { PanelBasicSetting } from '../../static/styleSetting';
 import { serviceList } from '../../static/optionList';
-import { getUserInfo, loadUserInfo } from '../features/reducers/userInfoSlice';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { colorScheme } from '../../static/optionList';
 import { handleErrorImage } from '../../utils/functions';
 
 const PersonalPanel = styled(PanelBasicSetting)`
@@ -56,7 +55,7 @@ const ServiceLinks = styled.div`
 `;
 
 const ServiceLink = styled.a`
-  color: white;
+  color: ${props => props.theme.primary};
   padding: 8px;
   border-radius: 4px;
   margin: 0 8px;
@@ -91,7 +90,7 @@ const WelcomeSentence = styled.div`
 `;
 
 const UserName = styled.a`
-  color: white;
+  color: ${props => props.theme.primary};
   display: flex;
   flex-shrink: 1;
   align-items: center;
@@ -113,7 +112,7 @@ const UserName = styled.a`
 
 const MoreServiceButton = styled.a`
   display: block;
-  color: white;
+  color: ${props => props.theme.primary};
   margin: 8px 16px;
   width: 100%;
   height: 24px;
@@ -179,10 +178,7 @@ export const PersonalServicePanel: React.FC<{}> = () => {
   }, []);
 
   return (
-    <PersonalPanel
-      panelBackground={colorScheme.light.panelBackground}
-      panelBorder={colorScheme.light.panelBorder}
-    >
+    <PersonalPanel>
       <WelcomeMessage>
         <WelcomeSentence>{welcomeMessage}</WelcomeSentence>
         <UserName href="https://myaccount.google.com/" target="_blank">

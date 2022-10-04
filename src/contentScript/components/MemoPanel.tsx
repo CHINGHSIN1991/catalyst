@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { handleTextAreaChange } from '../../utils/functions';
 import { memoColorList } from '../../static/optionList';
+
 import { AlertComponent } from './AlertComponent';
 
 const Wrapper = styled.div`

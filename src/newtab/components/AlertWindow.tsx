@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getAlertWindowState, setAlertWindow } from '../features/reducers/alertSlice';
@@ -28,8 +27,8 @@ const PanelContainer = styled.div`
   /* border: solid 1px; */
   width: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? '0vh' : '100vw'; }};
   height: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? '0vh' : '100vh'; }};
-  transform: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? 'translateY(30%)' : 'translateY(0%)'; }};;
-  opacity: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? '0' : '1'; }};;
+  transform: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? 'translateY(30%)' : 'translateY(0%)'; }};
+  opacity: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? '0' : '1'; }};
   overflow: hidden;
   display: flex;
   align-items: center;

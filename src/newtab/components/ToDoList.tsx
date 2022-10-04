@@ -1,12 +1,10 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 import { PanelBasicSetting, PanelTitle, CreateButton } from '../../static/styleSetting';
-
 import { handleInputChange } from '../../utils/functions';
 
-import { colorScheme } from '../../static/optionList';
 
 const WorksPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */
@@ -48,7 +46,7 @@ const TextNote = styled.div`
   padding-top: 0px;
   font-size: 0.75rem;
   line-height: 1rem;
-  color: rgb(200,200,200);
+  color: ${props => props.theme.fourthly};
   text-overflow: ellipsis;
   word-break: break-all;
   overflow: hidden;
@@ -85,12 +83,12 @@ const ToDoContent = styled.div`
   /* border: solid 1px; */
   display: flex;
   align-items: flex-start;
-  color: white;
+  color: ${props => props.theme.primary};
 `;
 
 const TextContent = styled.div`
   /* border: solid 1px; */
-  color: white;
+  color: ${props => props.theme.primary};
   flex-grow: 1;
   width: auto;
   overflow: hidden;
@@ -100,7 +98,7 @@ const TextTitle = styled.div`
   font-size: 0.875rem;
   line-height: 1rem;
   /* width: 80px; */
-  color: ${(props) => { return props.isDone ? "lightgray" : "white"; }};
+  color: ${(props) => { return props.isDone ? props.theme.tertiary : props.theme.primary; }};
   text-decoration: ${(props) => { return props.isDone ? "line-through" : "none"; }};
   padding: 4px 0;
   text-overflow: ellipsis;
@@ -115,7 +113,7 @@ const TitleEdit = styled.input`
   padding: 4px 8px;
   border: solid 1px darkgrey;
   outline: none;
-  color: white;
+  color: ${props => props.theme.primary};
   border-radius: 4px;
   transition: 0.3s;
   :focus{
@@ -225,7 +223,7 @@ const ToDoTitle = styled.div`
 const ToDoInput = styled.input`
   height: 24px;
   padding: 0 4px;
-  color: white;
+  color: ${props => props.theme.primary};
   border: solid 1px gray;
   border-radius: 4px;
   background-color: rgba(0,0,0,0.1);
@@ -263,6 +261,35 @@ const EditButton = styled.div`
   :hover{
     background-color: rgba(200,200,200,0.5);
   }
+`;
+
+const ToDoContainer = styled.div`
+  width: 100%;
+  transition: 0.2s;
+  height: ${(props) => { return props.isEditOn ? 'calc(100vh - 836px)' : 'calc(100vh - 750px)'; }};
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+    /* background: transparent;
+    border-radius: 4px; */
+  }
+  &::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.4);
+    border: 1px solid slategrey
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: transparent;
+  }
+  @media (max-width:1580px) {
+    height: ${(props) => { return props.isEditOn ? 'calc(100vh - 614px)' : 'calc(100vh - 528px)'; }};
+  } 
 `;
 
 interface todo {
@@ -360,19 +387,18 @@ export const ToDoListPanel: React.FC<{}> = () => {
   }, []);
 
   return (
-    <WorksPanel
-      panelBackground={colorScheme.light.panelBackground}
-      panelBorder={colorScheme.light.panelBorder}
-    >
+    <WorksPanel>
       <PanelTitle>To do list</PanelTitle>
       {!!!tempTodo.id && <AddToDoPanel isEditOn={isEditOn} setIsEditOn={setIsEditOn} tempTodo={tempTodo} setTempTodo={setTempTodo} editTodo={editTodo} handleIsSetAlert={handleIsSetAlert}></AddToDoPanel>}
-      <ToDoElements>
-        {workList && workList.map((item: todo) => {
-          return <ToDoElement key={item.id} editTodo={editTodo} changeIsDone={changeIsDone} delTodo={delTodo} setTempTodo={setTempTodo} item={item as todo} setIsEditOn={setIsEditOn} tempTodo={tempTodo}></ToDoElement>;
-        })
-        }
-      </ToDoElements>
-      <CreateButton onClick={() => { setIsEditOn(!isEditOn); }}>+</CreateButton>
+      <ToDoContainer isEditOn={isEditOn}>
+        <ToDoElements>
+          {workList && workList.map((item: todo) => {
+            return <ToDoElement key={item.id} editTodo={editTodo} changeIsDone={changeIsDone} delTodo={delTodo} setTempTodo={setTempTodo} item={item as todo} setIsEditOn={setIsEditOn} tempTodo={tempTodo}></ToDoElement>;
+          })
+          }
+        </ToDoElements>
+      </ToDoContainer>
+      <CreateButton onClick={() => { setIsEditOn(!isEditOn); }}>{!isEditOn && '+'}{isEditOn && '-'}</CreateButton>
     </WorksPanel >
   );
 };
@@ -398,7 +424,7 @@ const ToDoElement: React.FC<{
             </svg>
           }
           {props.item.isDone &&
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="lightgray" className="bi bi-check-square-fill" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="gray" className="bi bi-check-square-fill" viewBox="0 0 16 16">
               <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z" />
             </svg>
           }

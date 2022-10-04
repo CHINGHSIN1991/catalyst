@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
-import { fetchWeatherData, getLocationKey, fetchAccuWeatherData } from '../../utils/api';
 
-import { FocusPanelTitle } from '../../static/styleSetting';
 import { getPersonalization } from '../features/reducers/optionsSlice';
+
+import { fetchWeatherData } from '../../utils/api';
+import { FocusPanelTitle } from '../../static/styleSetting';
+
+
 
 const Wrapper = styled.div`
   /* border: solid 1px; */
@@ -20,8 +23,8 @@ const Wrapper = styled.div`
   margin: 0 auto;
   border-radius: 4px;
   /* border: solid 1px; */
-  border: solid 0.5px rgba(120,120,120,0.4);
-  background-color: rgba(0,0,0,0.4);
+  border: ${props => props.theme.panelBorder};
+  background-color: ${props => props.theme.panelBackground};
   backdrop-filter: blur(16px);
   height: ${(props) => props.centralPanel === "Weather" ? "128px" : "0px"};
   width: ${(props) => props.centralPanel === "Weather" ? "480px" : "0px"};

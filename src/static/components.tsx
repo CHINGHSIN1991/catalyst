@@ -62,7 +62,7 @@ const PanelBtn = styled.div`
   margin: 8px;
   color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgb(80,80,80,1)"; }};
   background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(80,80,80,0)"; }};
-  border: solid 2px ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgba(80,80,80,1)"; }};;
+  border: solid 2px ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgba(80,80,80,1)"; }};
   transition: 0.1s;
   :hover{
     color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgb(255,255,255,1)"; }};
@@ -85,7 +85,7 @@ const AlertBtn = styled.div`
   margin: 8px;
   color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgb(204, 109, 102,1)"; }};
   background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(204, 109, 102,0)"; }};
-  border: solid 2px ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgba(204, 109, 102,1)"; }};;
+  border: solid 2px ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgba(204, 109, 102,1)"; }};
   transition: 0.1s;
   :hover{
     color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgb(255,255,255,1)"; }};

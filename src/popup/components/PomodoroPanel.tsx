@@ -2,8 +2,6 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 
-import { handleInputChange } from '../utils/functions';
-
 const PomodoroContainer = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: flex;

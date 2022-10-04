@@ -96,7 +96,7 @@ const EditBtn = styled.div`
   border-radius: 4px;
   background-color: rgb(160,160,160);
   transition: 0.2s;
-  color: white;
+  color: rgba(255,255,255,1);
   :hover {
     background-color: rgb(104,104,104);
   }

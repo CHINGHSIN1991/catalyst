@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import shortcutsReducer from './reducers/shortcutsSlice'
 import editPanelStateReducer from './reducers/editSlice';
 import calendarReducer from './reducers/calendarSlice'

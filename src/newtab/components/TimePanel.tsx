@@ -18,11 +18,11 @@ const Wrapper = styled.div`
 const DateBlock = styled.div`
   font-size: 2rem;
   text-align: center;
-  font-weight: normal;
-  color: white;
+  font-weight: bold;
+  color: ${props => props.theme.primary};
   padding-bottom: 32px;
   transform: translateY(-80px);
-  text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 5px ${props => props.theme.inversePrimary},  0 0 8px ${props => props.theme.primaryOpacity};
   /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
 `;
 
@@ -33,9 +33,9 @@ const TimeBlock = styled.div`
   text-align: center;
   font-weight: normal;
   padding-bottom: 32px;
-  color: white;
+  color: ${props => props.theme.primary};
   transform: translateY(-80px);
-  text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
+  text-shadow: 0 0 16px ${props => props.theme.inversePrimary},  0 0 20px ${props => props.theme.primaryOpacity};
   /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
 `;
 

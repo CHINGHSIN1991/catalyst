@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 import { languageList } from '../../static/optionList';
-import { handleInputChange } from '../../utils/functions';
 
 
 const Wrapper = styled.div`
@@ -24,7 +23,7 @@ const Wrapper = styled.div`
 
 const EditPanelTitle = styled.div`
   /* border: solid 1px; */
-  color: white;
+  color: rgba(255,255,255,1);
   width: 100%;
   padding: 16px 0;
 `;
@@ -104,7 +103,7 @@ const LanguageSelect = styled.select`
   height: 28px;
   font-weight: bold;
   border: solid 4px rgba(0,0,0,0.3);
-  background-color: white;
+  background-color: rgba(255,255,255,1);
   border-radius: 14px;
   padding: 0 16px;
   :focus {
@@ -115,12 +114,6 @@ const LanguageSelect = styled.select`
 `;
 
 export const OptionPanel: React.FC<{}> = () => {
-  const [userInfo, setUserInfo] = useState({
-    name: '',
-    email: '',
-    id: '',
-  });
-  const [userName, setUserName] = useState({ name: '' });
   const [personalization, setPersonalization] = useState({
     isMilitary: true,
     isCelsius: true,
@@ -134,23 +127,6 @@ export const OptionPanel: React.FC<{}> = () => {
   function handleSettingChanged(key: string) {
     setPersonalization({ ...personalization, [key]: !personalization[key] });
   }
-
-  useEffect(() => {
-    chrome.identity.getProfileUserInfo(
-      (userInfo) => {
-        chrome.storage.sync.get(['userName'], function (userName) {
-          const tempName = 'userName' in userName ? userName.userName : 'New User';
-          setUserInfo({ name: tempName, email: userInfo.email, id: userInfo.id });
-          setUserName({ name: tempName });
-        });
-      }
-    );
-    chrome.storage.sync.get(['personalization'], (res) => {
-      if (res.personalization) {
-        setPersonalization(res.personalization);
-      }
-    });
-  }, []);
 
   useEffect(() => {
     chrome.storage.sync.set({ personalization });

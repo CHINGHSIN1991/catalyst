@@ -1,10 +1,7 @@
-console.log("contentScript running!");
-console.log(window.location.href);
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { NotesPanel } from './components/NotesPanel';
 import { MemoPanel } from './components/MemoPanel';
@@ -21,10 +18,10 @@ const Wrapper = styled.div`
   overflow: hidden;
   background-color: rgb(240,240,240);
   border: solid 1px rgb(232,232,232);
-  box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);;
+  box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
   color: black;
   z-index: 99999;
-  padding: ${(props) => { return props.isOpen ? "24px" : "8px"; }};;
+  padding: ${(props) => { return props.isOpen ? "24px" : "8px"; }};
   cursor: pointer;
   transition: 0.2s;
   display: flex;
@@ -107,6 +104,7 @@ const OptionIconContainer = styled.div`
 `;
 
 const OptionTitle = styled.div`
+  font-size: 16px;
   color: ${(props) => { return props.isMemo ? 'rgba(255,255,255,1)' : 'rgba(160,160,160,0)'; }};
   width: ${(props) => { return props.isMemo ? '132px' : '0px'; }};
   transition: 0.4s;

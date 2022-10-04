@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getEditPanelState, setEditPanel } from '../../features/reducers/editSlice';
 import { loadBackgrounds } from '../../features/reducers/backgroundSlice';
+
 import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
 import { background, backgroundSetting } from '../../../static/types';
 import { PanelButton, ButtonContainer } from '../../../static/components';

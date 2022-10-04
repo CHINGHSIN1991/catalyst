@@ -284,15 +284,36 @@ export const calendarColorList = [
   {name:'Graphite',code:'#737373',monoCode:'#737373',colorId:'8'},
 ]
 
+const basicScheme = {
+}
+
 export const colorScheme = {
   light:{
-    primary: 'rgba(255,255,255,1)',
-    secondary: 'rgba(200,200,200,1)',
-    tertiary: 'rgba(160,160,160,1)',
-    panelBackground: 'rgba(0,0,0,0.4)',
+    ...basicScheme,
+    primary: 'rgba(24,24,24,1)',
+    secondary: 'rgba(40,40,40,1)',
+    tertiary: 'rgba(96,96,96,1)',
+    fourthly: 'rgba(120,120,120,0.6)',
+    primaryOpacity: 'rgba(0,0,0,0)',
+    primarySemiopaque: 'rgba(255,255,255,0.2)',
+    primaryHover: 'rgba(255,255,255,0.4)',
+    inversePrimary: 'rgba(255,255,255,1)',
+    inverseSecondary: 'rgba(200,200,200,1)',
+    panelBackground: 'rgba(255,255,255,0.45)',    
     panelBorder: 'solid 0.5px rgba(120,120,120,0.4)',
   },
   dark:{
-
+    ...basicScheme,
+    primary: 'rgba(255,255,255,1)',
+    secondary: 'rgba(220,220,220,1)',
+    tertiary: 'rgba(184,184,184,1)',
+    fourthly: 'rgba(160,160,160,0.6)',
+    primaryOpacity: 'rgba(255,255,255,0)',
+    primarySemiopaque: 'rgba(255,255,255,0.2)',
+    primaryHover: 'rgba(255,255,255,0.4)',
+    inversePrimary: 'rgba(40,40,40,1)',
+    inverseSecondary: 'rgba(80,80,80,1)',
+    panelBackground: 'rgba(0,0,0,0.4)',
+    panelBorder: 'solid 0.5px rgba(120,120,120,0.4)',
   },
 }

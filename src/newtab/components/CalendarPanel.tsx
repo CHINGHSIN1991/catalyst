@@ -1,17 +1,16 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 
-import { PanelBasicSetting, PanelTitle, CreateButton } from '../../static/styleSetting';
-import { fetchCalendarData } from '../../utils/api';
-
-import { calendarColorList, colorScheme } from '../../static/optionList';
 import { getEvents, loadEvents } from '../features/reducers/calendarSlice';
 import { loadUserInfo, getUserInfo } from '../features/reducers/userInfoSlice';
 import { getPersonalization } from '../features/reducers/optionsSlice';
 import { setEditPanel } from '../features/reducers/editSlice';
-import { useSelector, useDispatch } from 'react-redux';
 
+import { PanelBasicSetting, PanelTitle, CreateButton } from '../../static/styleSetting';
+import { fetchCalendarData } from '../../utils/api';
+import { calendarColorList } from '../../static/optionList';
 import { calendarItem } from '../../static/types';
 
 const CalendarWrapper = styled(PanelBasicSetting)`
@@ -80,6 +79,7 @@ const BarColumn = styled.div`
 
 const EventItem = styled.div`
   border: solid 0.5px rgba(120,120,120,0.4);
+  color: rgba(255,255,255,1);
   border-radius: 4px;
   position: absolute;
   width: calc(100% - 8px);
@@ -116,13 +116,13 @@ const TimeLine = styled.div`
 const TimeValue = styled.div`
   font-size: 0.75rem;
   padding-right: 8px;
-  color: rgba(255,255,255,0.8);
+  color: ${props => props.theme.secondary};
 `;
 
 const TimeHr = styled.div`
   width: 100%;
   height: 1px;
-  background-color: rgba(255,255,255,0.3);
+  background-color: ${props => props.theme.fourthly};
 `;
 
 const TimeLineDisplay = styled.div`
@@ -245,10 +245,7 @@ export const CalendarPanel: React.FC<{}> = () => {
   }, [events]);
 
   return (
-    <CalendarWrapper
-      panelBackground={colorScheme.light.panelBackground}
-      panelBorder={colorScheme.light.panelBorder}
-    >
+    <CalendarWrapper>
       <PanelTitle>Calendar</PanelTitle>
       <CalendarContainer>
         <CalendarBackground></CalendarBackground>

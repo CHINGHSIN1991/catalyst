@@ -6,8 +6,8 @@ export const PanelBasicSetting = styled.div`
   padding: 12px;
   border-radius: 6px;
   margin: 8px 8px 0;
-  border: ${(props) => { return props.panelBorder; }};
-  background-color: ${(props) => { return props.panelBackground; }};
+  border: ${props => props.theme.panelBorder};
+  background-color: ${props => props.theme.panelBackground};
   backdrop-filter: blur(16px);
   :last-child {
     margin: 8px
@@ -92,6 +92,8 @@ export const ToggleTitle = styled.div`
   /* border: solid 1px; */
   opacity: 0;
   transform: translateY(30px);
+  color: rgba(255,255,255,1);
+  white-space: nowrap;
   position: absolute;
   text-align: center;
   text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
@@ -109,9 +111,9 @@ export const ToggleButton = styled.div`
   align-items: center;
   /* border: solid 1px; */
   cursor: pointer;
-  box-shadow: 0px 5px 5px ${(props) => { return props.panelBackground; }};
-  border: ${(props) => { return props.panelBorder; }};
-  background-color: ${(props) => { return props.panelBackground; }};
+  box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
+  border: ${props => props.theme.panelBorder};
+  background-color: ${props => props.theme.panelBackground};
   backdrop-filter: blur(16px);
   :hover{
     ${ToggleTitle} {

@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
+import { useDispatch } from 'react-redux';
+
+import { setAlertWindow } from '../features/reducers/alertSlice';
 
 import { FocusPanelTitle } from '../../static/styleSetting';
-import { handleInputChange } from '../../utils/functions';
-import { useDispatch } from 'react-redux';
-import { setAlertWindow } from '../features/reducers/alertSlice';
+
 
 const Wrapper = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
@@ -19,8 +20,8 @@ const Wrapper = styled.div`
   margin: 0 auto;
   border-radius: 4px;
   /* border: solid 1px; */
-  border: solid 0.5px rgba(120,120,120,0.4);
-  background-color: rgba(0,0,0,0.4);
+  border: ${props => props.theme.panelBorder};
+  background-color: ${props => props.theme.panelBackground};
   backdrop-filter: blur(16px);
   height: ${(props) => props.centralPanel === "Pomodoro" ? "128px" : "0px"};
   width: ${(props) => props.centralPanel === "Pomodoro" ? "400px" : "0px"};
@@ -41,9 +42,9 @@ const TimerInput = styled.input`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   background-color: rgba(255,255,255,0);
   border: none;
-  border-bottom: solid 2px white;
+  border-bottom: solid 2px ${props => props.theme.secondary};
   outline: none;
-  color: white;
+  color: ${props => props.theme.primary};
   text-align: end;
   font-size: 2.5rem;
   width: 48px;

@@ -1,7 +1,4 @@
-
-console.log("backgroundScript running!")
-
-interface todo {
+type todo = {
   workContent: string;
   isDone: boolean;
   id: number;

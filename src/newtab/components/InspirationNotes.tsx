@@ -1,16 +1,15 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-
-import { PanelBasicSetting, PanelTitle } from '../../static/styleSetting';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { getShortcuts } from '../features/reducers/shortcutsSlice';
-import { handleInputChange, handleTextAreaChange, handleErrorImage } from '../../utils/functions';
-import { useDispatch } from 'react-redux';
 import { setAlertWindow } from '../features/reducers/alertSlice';
 
-import { colorScheme } from '../../static/optionList';
+import { PanelBasicSetting, PanelTitle } from '../../static/styleSetting';
+import { handleInputChange, handleTextAreaChange, handleErrorImage } from '../../utils/functions';
+
+
 
 const TempLinksPanel = styled(PanelBasicSetting)`
   display: flex;
@@ -99,7 +98,7 @@ const TitleEdit = styled.input`
   padding: 4px 8px;
   border: solid 1px darkgrey;
   outline: none;
-  color: white;
+  color: ${props => props.theme.primary};
   border-radius: 4px;
   transition: 0.3s;
   :focus{
@@ -114,7 +113,7 @@ const NoteEdit = styled.textarea`
   background-color: rgba(0,0,0,0.2);
   border: solid 1px darkgrey;
   outline: none;
-  color: white;
+  color: ${props => props.theme.primary};
   border-radius: 4px;
   transition: 0.3s;
   padding: 4px 8px;
@@ -148,12 +147,12 @@ const LinkContent = styled.div`
   /* border: solid 1px; */
   display: flex;
   align-items: flex-start;
-  color: white;
+  color: ${props => props.theme.primary};
 `;
 
 const TextContent = styled.a`
   /* border: solid 1px; */
-  color: white;
+  color: ${props => props.theme.primary};
   flex-grow: 1;
   overflow: hidden;
 `;
@@ -378,10 +377,7 @@ export const InspirationNotePanel: React.FC<{}> = () => {
   }, []);
 
   return (
-    <TempLinksPanel
-      panelBackground={colorScheme.light.panelBackground}
-      panelBorder={colorScheme.light.panelBorder}
-    >
+    <TempLinksPanel>
       <PanelTitle>Inspiration Notes</PanelTitle>
       <ScrollContainer ShortcutNumber={ShortcutNumber.length}>
         {inspirationNotes && "no category" in inspirationNotes &&

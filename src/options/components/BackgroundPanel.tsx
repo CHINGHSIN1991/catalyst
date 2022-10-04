@@ -2,9 +2,6 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-
-
-
 import { background, backgroundSetting } from '../../static/types';
 
 
@@ -23,7 +20,7 @@ const Wrapper = styled.div`
 
 const EditPanelTitle = styled.div`
   /* border: solid 1px; */
-  color: white;
+  color: rgba(255,255,255,1);
   width: 100%;
   padding: 16px 0;
 `;
@@ -187,7 +184,7 @@ const DeleteBtn = styled.div`
 
 const AddToCollectionTitle = styled.div`
   width: 100%;
-  color: white;
+  color: rgba(255,255,255,1);
   font-size: 12px;
   text-align: center;
   opacity: 0;

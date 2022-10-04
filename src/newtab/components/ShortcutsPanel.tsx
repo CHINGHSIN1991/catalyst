@@ -23,14 +23,14 @@ const SearchPanel = styled.div`
 const SearchInput = styled.input`
   background-color: rgba(255,255,255,0);
   width: 100%;
-  color: white;
+  color: ${props => props.theme.primary};
   height: 36px;
   padding: 8px 34px 8px 8px;
   margin: 2px 2px 16px 2px;
   transition: 0.2s;
   display:block;
   border:none;
-  border-bottom:1px solid white;
+  border-bottom:1px solid ${props => props.theme.primary};
   :focus {
     background-color: rgba(255,255,255,0.2);
     outline: none;
@@ -51,7 +51,7 @@ const SearchIcon = styled.div`
   transition: 0.3s;
   
   :hover{
-    color: white;
+    color: ${props => props.theme.primary};
   }
 `;
 
@@ -178,7 +178,7 @@ const Shortcut = styled.li`
 `;
 
 const LinkUrl = styled.a`
-  color: white;
+  color: ${props => props.theme.primary};
   /* border: solid 1px; */
   display: flex;
   flex-direction: column;
@@ -261,10 +261,7 @@ export const ShortcutsPanel: React.FC<{}> = () => {
   }, []);
 
   return (
-    <OrgFunctionPanel
-      panelBackground={colorScheme.light.panelBackground}
-      panelBorder={colorScheme.light.panelBorder}
-    >
+    <OrgFunctionPanel>
       <SearchPanel>
         <SearchInput type="text" name="text" onKeyPress={(e: KeyboardEvent) => searchByEnter(e)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, searchQuery, setSearchQuery)} />
         <SearchIcon searchQuery={searchQuery.text} onClick={search}>
