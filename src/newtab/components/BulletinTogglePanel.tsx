@@ -1,60 +1,40 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useDispatch } from 'react-redux';
+
+import { setAlertWindow } from '../features/reducers/alertSlice';
+
+import { memo, scheme } from "../../static/types";
+import { ToggleTitle, ToggleButton } from '../../static/styleSetting';
 
 const Wrapper = styled.div`
-  color: white;
+  color: ${(props: scheme) => props.theme.primary};
   position: absolute;
   bottom: 40px;
-  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
-  /* border: solid 1px; */
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const ToggleTitle = styled.div`
-  /* border: solid 1px; */
-  opacity: 0;
-  transform: translateY(30px);
-  position: absolute;
-  text-align: center;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
-  width: 180px;
-  transition: 0.2s;
-`;
-
-const ToggleButton = styled.div`
-  width: 48px;
-  height: 48px;
-  margin: 0 24px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* border: solid 1px; */
-  cursor: pointer;
-  box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
-  border: solid 0.5px rgba(120,120,120,0.4);
-  background-color: rgba(0,0,0,0.4);
-  backdrop-filter: blur(16px);
-  :hover{
-    ${ToggleTitle} {
-      opacity: 1;
-      transform: translateY(40px);
-    }
-  }
-`;
-
-
-
 export const BulletinTogglePanel: React.FC<{
   setIsBoardOn: (boo: boolean) => void;
   sortByCreateTime: () => void;
   sortByColor: () => void;
   clearAll: () => void;
+  memos: memo[];
 }> = (props) => {
+  const dispatch = useDispatch();
+
+  function checkToClearAll() {
+    if (props.memos.length > 0) {
+      dispatch(setAlertWindow({
+        name: 'Data cannot be recovered after deletion',
+        message: 'Are you sure you want to clear all memos?',
+        function: props.clearAll
+      }));
+    }
+  }
 
   return (
     <Wrapper>
@@ -72,7 +52,7 @@ export const BulletinTogglePanel: React.FC<{
         </svg>
         <ToggleTitle>Sort by created time</ToggleTitle>
       </ToggleButton>
-      <ToggleButton onClick={props.clearAll}>
+      <ToggleButton onClick={checkToClearAll}>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16">
           <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
         </svg>

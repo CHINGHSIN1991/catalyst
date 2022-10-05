@@ -13,7 +13,7 @@ const InputLabel = styled.label`
   height: 76px;
 `;
 
-const StyledInput = styled.input`
+export const StyledInput = styled.input`
   font-size: 1rem;
   height: 32px;
   line-height: 32px;
@@ -40,27 +40,6 @@ export const InputComponent: React.FC<{ name: string; value: string, title: stri
   );
 };
 
-// const ButtonContainer = styled.div`
-//   font-family: 'Noto Sans', 'Microsoft JhengHei';
-//   font-size: 0.875rem;
-//   text-align: center;
-//   border-radius: 4px;
-//   line-height: 24px;
-//   background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgb(240,240,240)" : "rgb(224,224,224)"; }};
-//   color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgb(184,184,184)" : "rgb(0,0,0)"; }};
-//   height: 32px;
-//   margin: 8px;
-//   width: 80px;
-//   padding: 4px 16px;
-//   cursor: pointer;
-//   transition: 0.2s;
-
-//   :hover {
-//     background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgb(240,240,240)" : "rgb(120,120,120)"; }};
-//     color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgb(184,184,184)" : "rgb(255,255,255)"; }};
-//   }
-// `;
-
 export const ButtonContainer = styled.div`
   width: 100%;
   padding-top: 16px;
@@ -83,7 +62,7 @@ const PanelBtn = styled.div`
   margin: 8px;
   color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgb(80,80,80,1)"; }};
   background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(80,80,80,0)"; }};
-  border: solid 2px ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgba(80,80,80,1)"; }};;
+  border: solid 2px ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgba(80,80,80,1)"; }};
   transition: 0.1s;
   :hover{
     color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgb(255,255,255,1)"; }};
@@ -91,18 +70,41 @@ const PanelBtn = styled.div`
   }
 `;
 
-// export const PanelButton: React.FC<{ name: string; disabled?: boolean; onClick?: () => void; }> = (props) => {
-//   return (
-//     <ButtonContainer disabled={props.disabled} onClick={props.onClick}>
-//       {props.name}
-//     </ButtonContainer>
-//   );
-// };
+const AlertBtn = styled.div`
+  white-space: nowrap;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 0 16px;
+  margin-top: 16px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 24px;
+  height: 28px;
+  width: ${(props: { width: number; }) => { return `${props.width}px`; }};
+  border-radius: 4px;
+  margin: 8px;
+  color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgb(204, 109, 102,1)"; }};
+  background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(204, 109, 102,0)"; }};
+  border: solid 2px ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgba(204, 109, 102,1)"; }};
+  transition: 0.1s;
+  :hover{
+    color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgb(255,255,255,1)"; }};
+    background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(204, 109, 102,1)"; }};
+  }
+`;
 
 export const PanelButton: React.FC<{ name: string; disabled?: boolean; onClick?: () => void; width: number; }> = (props) => {
   return (
     <PanelBtn disabled={props.disabled} onClick={props.onClick} width={props.width}>
       {props.name}
     </PanelBtn>
+  );
+};
+
+export const AlertButton: React.FC<{ name: string; disabled?: boolean; onClick?: () => void; width: number; }> = (props) => {
+  return (
+    <AlertBtn disabled={props.disabled} onClick={props.onClick} width={props.width}>
+      {props.name}
+    </AlertBtn>
   );
 };

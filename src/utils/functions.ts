@@ -8,3 +8,7 @@ export function handleTextAreaChange(e: React.ChangeEvent<HTMLTextAreaElement>, 
   console.log({ ...state, [e.target.name]: e.target.value });
   setState({ ...state, [e.target.name]: e.target.value })
 }
+
+export function handleErrorImage(e) {
+  e.target.src = 'PlaceHolder_128.png';
+}

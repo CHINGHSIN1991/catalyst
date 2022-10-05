@@ -2,9 +2,14 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { handleInputChange, handleTextAreaChange } from '../../utils/inputHandler';
+import { handleInputChange, handleTextAreaChange } from '../../utils/functions';
+
+import { AlertComponent } from './AlertComponent';
+
+type isEditOn = { isEditOn: boolean; };
 
 const Wrapper = styled.div`
+  position: relative;
   color: rgba(40,40,40,0);
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: flex;
@@ -15,7 +20,6 @@ const TagsPanel = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  /* border: solid 1px; */
   width: 200px;
 `;
 
@@ -31,9 +35,9 @@ const TagInput = styled.input`
   overflow: hidden;
   border: none !important;
   border-radius: 4px;
-  padding: ${(props) => { return props.isEditOn ? '0 4px !important' : '0 !important'; }}; 
+  padding: ${(props: isEditOn) => props.isEditOn ? '0 4px !important' : '0 !important'}; 
   border: none;
-  width: ${(props) => { return props.isEditOn ? '120px !important' : '0px !important'; }};
+  width: ${(props: isEditOn) => props.isEditOn ? '120px !important' : '0px !important'};
   transition: 0.3s;
   background-color: rgb(224,224,224);
   :focus{
@@ -57,7 +61,7 @@ const SelectBlock = styled.select`
   height: 24px;
   border-radius: 4px;
   border: none;
-  width: ${(props) => { return props.isEditOn ? '0px' : '140px'; }};
+  width: ${(props: isEditOn) => props.isEditOn ? '0px' : '140px'};
   overflow: hidden;
   transition: 0.3s;
   margin: 0;
@@ -84,13 +88,13 @@ const Btn = styled.div`
   justify-content: center;
   text-align: center;
   background-color: rgb(160,160,160);
-  color: white;
+  color: rgba(255,255,255,1);
   font-size: 12px;
   line-height: 28px;
   border-radius: 4px;
   margin-left: 4px;
   transition: 0.3s;
-  width: ${(props) => { return props.isEditOn ? '48px' : '56px'; }};
+  width: ${props => props.isEditOn ? '48px' : '56px'};
   height: 24px;
   :hover{
     background-color: rgb(120,120,120);
@@ -101,14 +105,14 @@ const AddBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${(props) => { return props.isEditOn ? '24px' : '0'; }};
+  width: ${(props: isEditOn) => props.isEditOn ? '24px' : '0'};
   overflow: hidden;
   border-radius: 4px;
-  margin-left: ${(props) => { return props.isEditOn ? '4px' : '0'; }};
+  margin-left: ${(props: isEditOn) => props.isEditOn ? '4px' : '0'};
   transition: 0.3s;
   height: 24px;
-  color: white;
-  background-color: ${(props) => { return props.isEditOn ? 'rgb(144,144,144)' : 'rgb(224,224,224)'; }};
+  color: rgba(255,255,255,1);
+  background-color: ${(props: isEditOn) => props.isEditOn ? 'rgb(144,144,144)' : 'rgb(224,224,224)'};
   :hover{
     background-color: rgb(96,96,96);
   }
@@ -174,6 +178,7 @@ export const NotesPanel = () => {
   const [tempCategory, setTempCategory] = useState({ category: "" });
   const [currentCategory, setCurrentCategory] = useState('no category');
   const [noteLink, setNoteLink] = useState({ title: '', note: '' });
+  const [processStatus, setProcessStatus] = useState(0);
 
 
   function handleCurrentCategory(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -195,6 +200,7 @@ export const NotesPanel = () => {
   }
 
   function addQuickNotes() {
+    setProcessStatus(1);
     const linkUrl = new URL(window.location.href);
     const inspirationNote = {
       id: Date.now(),
@@ -214,6 +220,7 @@ export const NotesPanel = () => {
       console.log(tempInspirationNotes);
       chrome.storage.sync.set({ inspirationNotes: tempInspirationNotes }, () => { console.log('done'); });
       setNoteLink({ title: '', note: '' });
+      setTimeout(() => setProcessStatus(2), 600);
     });
   }
 
@@ -226,6 +233,18 @@ export const NotesPanel = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (processStatus === 2) {
+      setTimeout(() => {
+        setProcessStatus(3);
+      }, 600);
+    } else if (processStatus === 3) {
+      setTimeout(() => {
+        setProcessStatus(0);
+      }, 600);
+    }
+  }, [processStatus]);
+
   return (
     <Wrapper>
       <TagsPanel onClick={(e) => e.stopPropagation()}>
@@ -236,7 +255,7 @@ export const NotesPanel = () => {
           </svg>
         </AddBtn>
         <SelectBlock isEditOn={isEditOn} value={currentCategory} onChange={handleCurrentCategory} name="" id="">
-          <SelectOption value="no category" selected style={{ color: "darkgray" }}>- Tag -</SelectOption>
+          <SelectOption value="no category" style={{ color: "darkgray" }}>- Tag -</SelectOption>
           {noteCategories.map((category, index) => { return <SelectOption key={category + index} value={category}>{category}</SelectOption>; })}
         </SelectBlock>
         <Btn isEditOn={isEditOn} onClick={(e) => { setIsEditOn(!isEditOn); }}>
@@ -247,8 +266,8 @@ export const NotesPanel = () => {
         <Title>Title</Title>
         <TitleInput
           name="title"
-          onClick={(e) => { e.stopPropagation(); }}
-          onChange={(e) => { handleInputChange(e, noteLink, setNoteLink); }}
+          onClick={(e: Event) => { e.stopPropagation(); }}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleInputChange(e, noteLink, setNoteLink); }}
           value={noteLink.title}
           type="text" />
       </InputContainer>
@@ -256,12 +275,13 @@ export const NotesPanel = () => {
         <Title>Quick note</Title>
         <NoteArea
           name="note"
-          onClick={(e) => e.stopPropagation()}
-          onChange={(e) => { handleTextAreaChange(e, noteLink, setNoteLink); }}
+          onClick={(e: Event) => e.stopPropagation()}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handleTextAreaChange(e, noteLink, setNoteLink); }}
           value={noteLink.note}
           id=""></NoteArea>
       </InputContainer>
-      <AddNoteBtn onClick={(e) => { e.stopPropagation(); addQuickNotes(); }}>Add to Inspiration Notes</AddNoteBtn>
+      <AddNoteBtn onClick={(e: Event) => { e.stopPropagation(); addQuickNotes(); }}>Add to Inspiration Notes</AddNoteBtn>
+      <AlertComponent processStatus={processStatus}></AlertComponent>
     </Wrapper >
   );
 };

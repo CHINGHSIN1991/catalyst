@@ -1,9 +1,13 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
+import { useDispatch } from 'react-redux';
 
-import { FocusPanelTitle } from '../styleSetting';
-import { handleInputChange } from '../../utils/inputHandler';
+import { setAlertWindow } from '../features/reducers/alertSlice';
+
+import { FocusPanelTitle } from '../../static/styleSetting';
+import { scheme, centralPanel } from '../../static/types';
+
 
 const Wrapper = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
@@ -17,11 +21,11 @@ const Wrapper = styled.div`
   margin: 0 auto;
   border-radius: 4px;
   /* border: solid 1px; */
-  border: solid 0.5px rgba(120,120,120,0.4);
-  background-color: rgba(0,0,0,0.4);
+  border: ${(props: scheme) => props.theme.panelBorder};
+  background-color: ${(props: scheme) => props.theme.panelBackground};
   backdrop-filter: blur(16px);
-  height: ${(props) => props.centralPanel === "Pomodoro" ? "128px" : "0px"};
-  width: ${(props) => props.centralPanel === "Pomodoro" ? "400px" : "0px"};
+  height: ${(props: centralPanel) => props.centralPanel === "Pomodoro" ? "128px" : "0px"};
+  width: ${(props: centralPanel) => props.centralPanel === "Pomodoro" ? "400px" : "0px"};
   transition: 0.1s;
   overflow: hidden;
 `;
@@ -39,9 +43,9 @@ const TimerInput = styled.input`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   background-color: rgba(255,255,255,0);
   border: none;
-  border-bottom: solid 2px white;
+  border-bottom: solid 2px ${(props: scheme) => props.theme.secondary};
   outline: none;
-  color: white;
+  color: ${(props: scheme) => props.theme.primary};
   text-align: end;
   font-size: 2.5rem;
   width: 48px;
@@ -55,7 +59,6 @@ const Timer = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  /* border: solid 1px; */
 `;
 
 const Btn = styled.div`
@@ -71,10 +74,11 @@ const Btn = styled.div`
 `;
 
 export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
+  const dispatch = useDispatch();
   const [passedSeconds, setPassedSeconds] = useState(0);
   const [pomoTimer, setPomoTimer] = useState({ minutes: '00', seconds: '00' });
   const [isRunning, setIsRunning] = useState(false);
-  const [pomoAlertTime, setPomoAlertTime] = useState({ value: 45 });
+  const [pomoAlertTime, setPomoAlertTime] = useState({ value: 25 });
   const pomoTimeId = useRef(null);
 
 
@@ -93,6 +97,17 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
         setPomoAlertTime({ value: res.pomoAlertTime });
       }
     });
+  }
+
+  function checkInputTime(e: React.ChangeEvent<HTMLInputElement>) {
+    let tempNumber = parseInt(e.target.value, 10) % 100;
+    if (tempNumber > 60) {
+      tempNumber = 60;
+      dispatch(setAlertWindow({ name: 'Pomodoro has a time limit of 60 minutes', message: 'Please enter an integer less than 60' }));
+    } else if (tempNumber < 0) {
+      tempNumber = 1;
+    }
+    setPomoAlertTime({ value: tempNumber });
   }
 
   function updateTime() {
@@ -135,10 +150,10 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
             <TimerInput
               type="number"
               name="value"
-              max='60'
-              min='1'
+              max={60}
+              min={1}
               value={pomoAlertTime.value}
-              onChange={(e) => handleInputChange(e, pomoAlertTime, setPomoAlertTime)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => checkInputTime(e)}
             ></TimerInput>}
           {(isRunning || passedSeconds !== 0) && pomoTimer.minutes}:{pomoTimer.seconds}
         </Timer>

@@ -1,9 +1,13 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
+import { useSelector } from 'react-redux';
+
+import { getPersonalization } from '../features/reducers/optionsSlice';
+
+import { scheme } from '../../static/types';
 
 const Wrapper = styled.div`
-  /* border: solid 1px; */
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   width: 100%;
   display: flex;
@@ -15,39 +19,58 @@ const Wrapper = styled.div`
 const DateBlock = styled.div`
   font-size: 2rem;
   text-align: center;
-  font-weight: normal;
-  color: white;
+  font-weight: bold;
+  color: ${(props: scheme) => props.theme.primary};
   padding-bottom: 32px;
   transform: translateY(-80px);
-  text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
-  /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
+  text-shadow: 0 0 5px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${(props: scheme) => props.theme.primaryOpacity};
 `;
 
 const TimeBlock = styled.div`
+  display: flex;
+  align-items: flex-end;
   font-size: 7rem;
   text-align: center;
   font-weight: normal;
   padding-bottom: 32px;
-  color: white;
+  color: ${(props: scheme) => props.theme.primary};
   transform: translateY(-80px);
-  text-shadow: 0 0 20px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0);
-  /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
+  text-shadow: 0 0 16px ${(props: scheme) => props.theme.inversePrimary},  0 0 20px ${(props: scheme) => props.theme.primaryOpacity};
+`;
+
+const TimeBlockSmall = styled.div`
+  font-size: 3.5rem;
+  padding: 8px 20px;
 `;
 
 
 export const TimePanel: React.FC<{}> = () => {
   const week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  const personalization = useSelector(getPersonalization);
   const timerID: React.MutableRefObject<any> = useRef();
   const [currentClock, setCurrentClock] = useState({
-    time: "",
-    date: "",
+    hour24: '',
+    hour12: '',
+    hourTerm: '',
+    minutes: '',
+    seconds: '',
+    date: '',
   });
 
 
   function updateTime() {
     const cd = new Date();
     const tempClock = { ...currentClock };
-    tempClock.time = `${JSON.stringify(cd.getHours()).padStart(2, "0")} : ${JSON.stringify(cd.getMinutes()).padStart(2, "0")} : ${JSON.stringify(cd.getSeconds()).padStart(2, "0")}`;
+    tempClock.hour24 = JSON.stringify(cd.getHours()).padStart(2, "0");
+    if (cd.getHours() > 12) {
+      tempClock.hour12 = JSON.stringify(cd.getHours() - 12).padStart(2, "0");
+      tempClock.hourTerm = 'PM';
+    } else {
+      tempClock.hour12 = JSON.stringify(cd.getHours()).padStart(2, "0");
+      tempClock.hourTerm = 'AM';
+    }
+    tempClock.minutes = JSON.stringify(cd.getMinutes()).padStart(2, "0");
+    tempClock.seconds = JSON.stringify(cd.getSeconds()).padStart(2, "0");
     tempClock.date = `${JSON.stringify(cd.getFullYear()).padStart(4, "0")} - ${JSON.stringify(cd.getMonth() + 1).padStart(2, "0")} - ${JSON.stringify(cd.getDate()).padStart(2, "0")} ${week[cd.getDay()]}`;
     setCurrentClock(tempClock);
   }
@@ -60,7 +83,11 @@ export const TimePanel: React.FC<{}> = () => {
   return (
     <Wrapper>
       <DateBlock>{currentClock.date}</DateBlock>
-      <TimeBlock>{currentClock.time}</TimeBlock>
+      {personalization.isMilitary && <TimeBlock>{`${currentClock.hour24} : ${currentClock.minutes} : ${currentClock.seconds}`}</TimeBlock>}
+      {!personalization.isMilitary && <TimeBlock>
+        {`${currentClock.hour12} : ${currentClock.minutes} : ${currentClock.seconds}`}
+        {/* <TimeBlockSmall>{currentClock.hourTerm}</TimeBlockSmall> */}
+      </TimeBlock>}
     </Wrapper>
   );
 };

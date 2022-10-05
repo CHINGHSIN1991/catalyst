@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Catalyst",
-  "description": "Chrome Extension in React",
+  "description": "Browser Productivity Tools",
   "version": "1.0.0",
   "icons":{
     "16": "CatalystLogo_128.png",
@@ -10,7 +10,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "React Extension1",
+    "default_title": "Catalyst",
     "default_icon": "CatalystLogo_128.png"
   },
   "options_page": "options.html",
@@ -26,7 +26,7 @@
       "https://www.googleapis.com/auth/calendar"
     ]
   },
-  "permissions":["storage", "alarms", "notifications", "identity", "identity.email", "contextMenus", "bookmarks", "search", "tabs", "nativeMessaging","tts","history"],
+  "permissions":["storage", "alarms", "notifications", "identity", "identity.email", "contextMenus", "search", "tts", "nativeMessaging"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

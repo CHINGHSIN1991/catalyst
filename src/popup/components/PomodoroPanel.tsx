@@ -2,8 +2,6 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
 
-import { handleInputChange } from '../utils/inputHandler';
-
 const PomodoroContainer = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: flex;
@@ -43,7 +41,6 @@ const Timer = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  /* border: solid 1px; */
 `;
 
 const Btn = styled.div`
@@ -97,6 +94,16 @@ export const PomodoroPanel: React.FC<{}> = () => {
     });
   }
 
+  function checkInputTime(e: React.ChangeEvent<HTMLInputElement>) {
+    let tempNumber = parseInt(e.target.value, 10) % 100;
+    if (tempNumber > 60) {
+      tempNumber = 60;
+    } else if (tempNumber < 0) {
+      tempNumber = 1;
+    }
+    setPomoAlertTime({ value: tempNumber });
+  }
+
   useEffect(() => {
     chrome.storage.local.get(["pomoIsRunning", "pomoAlertTime"], (res) => {
       if (res.pomoIsRunning) {
@@ -130,7 +137,7 @@ export const PomodoroPanel: React.FC<{}> = () => {
             max='60'
             min='1'
             value={pomoAlertTime.value}
-            onChange={(e) => handleInputChange(e, pomoAlertTime, setPomoAlertTime)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => checkInputTime(e)}
           ></TimerInput>}
         {(isRunning || passedSeconds !== 0) && pomoTimer.minutes}:{pomoTimer.seconds}
       </Timer>

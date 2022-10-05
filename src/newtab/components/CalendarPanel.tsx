@@ -1,62 +1,38 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-
-import { PanelBasicSetting, PanelTitle, CreateButton } from '../styleSetting';
-import { fetchCalendarData } from '../../utils/api';
-
-import { calendarColorList } from '../../static/optionList';
-import { getEvents, loadEvents } from '../features/reducers/calendarSlice';
-import { loadUserInfo, getUserInfo } from '../features/reducers/userInfoSlice';
-import { setEditPanel } from '../features/reducers/editSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { calendarItem } from '../../static/types';
+import { getEvents, loadEvents } from '../features/reducers/calendarSlice';
+import { loadUserInfo, getUserInfo } from '../features/reducers/userInfoSlice';
+import { getPersonalization } from '../features/reducers/optionsSlice';
+import { setEditPanel } from '../features/reducers/editSlice';
+
+import { PanelBasicSetting, PanelTitle, CreateButton, ScrollbarContainer } from '../../static/styleSetting';
+import { fetchCalendarData } from '../../utils/api';
+import { calendarColorList } from '../../static/optionList';
+import { calendarItem, scheme, timeNode, timeDay } from '../../static/types';
+
+type period = {
+  base: number,
+  start: number,
+  end: number,
+  color: string,
+};
+
+type data = timeNode | timeDay;
+type key = 'start' | 'end';
 
 const CalendarWrapper = styled(PanelBasicSetting)`
   display: flex;
   flex-grow:0;
 `;
 
-const CalendarModuleWrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0,0,0,0.5);
-  position: fixed;
-  left: 0;
-  top: 0;
-`;
-
-const CalendarContainer = styled.div`
-  /* border: solid 1px; */
+const CalendarContainer = styled(ScrollbarContainer)`
   position: relative;
   max-height: 480px;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-    /* background: transparent;
-    border-radius: 4px; */
-  }
-  &::-webkit-scrollbar-track-piece {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0,0,0,0.4);
-    border: 1px solid slategrey
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
   
   @media (max-width:1580px) {
-  /* 銀幕寬度小於1200套用此區塊 */
     max-height: 240px;
   }
 `;
@@ -81,30 +57,28 @@ const CalendarBarsContainer = styled.div`
 `;
 
 const BarColumn = styled.div`
-  /* display: flex; */
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   height: 100%;
 `;
-// base = { props.dateStart / 3600000 };
-// start = { props.getTimeStamp(item.start, 'start') / 3600000 };
-// end = { props.getTimeStamp(item.end, 'end') / 3600000 };
-// color;
+
 const EventItem = styled.div`
-  /* border: solid 1px white; */
+  border: solid 0.5px rgba(120,120,120,0.4);
+  color: rgba(255,255,255,1);
   border-radius: 4px;
   position: absolute;
   width: calc(100% - 8px);
-  top: ${(props) => { return `${(props.start - props.base) * 32 + 16}px`; }};
-  height: ${(props) => { return `${(props.end - props.start) * 32}px`; }};
-  background-color: ${(props) => { return props.color; }};
+  top: ${(props: period) => `${(props.start - props.base) * 32 + 16}px`};
+  height: ${(props: period) => `${(props.end - props.start) * 32}px`};
+  background-color: ${(props: period) => props.color};
   opacity: 0.8;
 `;
 
 const EventContent = styled.div`
-  font-size: 10px;
+  font-size: 8px;
+  line-height: 12px;
   padding: 4px;
   width: 100%;
   height: 100%;
@@ -114,19 +88,8 @@ const EventContent = styled.div`
 `;
 
 const EventValue = styled.div`
-  /* border: solid 1px; */
   padding-bottom: 4px;
   width: 100%;
-`;
-
-const InfoCard = styled.div`
-  position: fixed;
-  left: ${(props) => { return `-${props.position.x / 10}px`; }};
-  top: ${(props) => { return `-${props.position.y / 10}px`; }};
-  width: 120px;
-  height: 40px;
-  background-color: #fff;
-  border: solid 1px;
 `;
 
 const TimeLine = styled.div`
@@ -139,13 +102,13 @@ const TimeLine = styled.div`
 const TimeValue = styled.div`
   font-size: 0.75rem;
   padding-right: 8px;
-  color: rgba(255,255,255,0.8);
+  color: ${(props: scheme) => props.theme.secondary};
 `;
 
 const TimeHr = styled.div`
   width: 100%;
   height: 1px;
-  background-color: rgba(255,255,255,0.3);
+  background-color: ${(props: scheme) => props.theme.fourthly};
 `;
 
 const TimeLineDisplay = styled.div`
@@ -177,11 +140,6 @@ export const CalendarPanel: React.FC<{}> = () => {
   //   }).then((res) => { console.log(res); }).catch((err) => { console.log(err.message); });
   // }
 
-  function getTime(timeString: string) {
-    const time = new Date(timeString);
-    return `${time.getMonth() + 1}/${time.getDate()} - ${time.getHours()}:${time.getMinutes()} `;
-  }
-
   function setTimeLine() {
     const current = Date.now();
     const cd = new Date();
@@ -189,7 +147,7 @@ export const CalendarPanel: React.FC<{}> = () => {
     setTimeLineInfo({ current, startTime });
   }
 
-  function getTimeStamp(data, key) {
+  function getTimeStamp(data: data, key: key) {
     let timeStamp = 0;
     if ('date' in data) {
       if (key === 'start') {
@@ -205,14 +163,14 @@ export const CalendarPanel: React.FC<{}> = () => {
 
   function checkOauthData() {
     console.log(userInfo);
-    if (!userInfo.authToken) {
+    if (!userInfo.email || !userInfo.authToken) {
       // @ts-ignore
       chrome.identity.getProfileUserInfo({ 'accountStatus': 'ANY' },
         (res) => {
           console.log(res);
           chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
             console.log(token);
-            dispatch(loadUserInfo({ email: res.email, id: res.id, authToken: token }));
+            dispatch(loadUserInfo({ ...userInfo, email: res.email, id: res.id, authToken: token }));
             const cd = new Date();
             const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
             setDateStart(timeStampStart);
@@ -229,17 +187,18 @@ export const CalendarPanel: React.FC<{}> = () => {
 
   useEffect(() => {
     chrome.identity.getProfileUserInfo(
-      (res) => {
-        console.log('data');
-        console.log(res);
-        chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
-          dispatch(loadUserInfo({ email: res.email, id: res.id, authToken: token }));
-          const cd = new Date();
-          const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
-          setDateStart(timeStampStart);
-          const dayStart = new Date(timeStampStart);
-          const dayEnd = new Date(timeStampStart + 86400000);
-          fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => dispatch(loadEvents(res.items)));
+      (userInfo) => {
+        chrome.storage.sync.get(['userName'], function (userName) {
+          const tempName = 'userName' in userName ? userName.userName : 'New User';
+          chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+            dispatch(loadUserInfo({ name: tempName, email: userInfo.email, id: userInfo.id, authToken: token }));
+            const cd = new Date();
+            const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
+            setDateStart(timeStampStart);
+            const dayStart = new Date(timeStampStart);
+            const dayEnd = new Date(timeStampStart + 86400000);
+            fetchCalendarData(userInfo.email, dayStart, dayEnd, token).then((res) => dispatch(loadEvents(res.items)));
+          });
         });
       }
     );
@@ -295,17 +254,14 @@ const CalendarBackground: React.FC<{}> = () => {
   );
 };
 
-const CalendarBars: React.FC<{ calendarItems: calendarItem[][]; dateStart: number; getTimeStamp: (data: {}, key: string) => number; }> = (props) => {
-  const [infoCard, setInfoCard] = useState({
-    position: { x: 0, y: 0 },
-    info: {
-      summary: '',
-      start: '',
-      end: '',
-    }
-  });
+const CalendarBars: React.FC<{
+  calendarItems: calendarItem[][];
+  dateStart: number;
+  getTimeStamp: (data: data, key: key) => number;
+}> = (props) => {
+  const personalization = useSelector(getPersonalization);
 
-  function getTimeString(data, key) {
+  function getTimeString(data: data, key: key) {
     if ('date' in data) {
       if (key === 'start') {
         const time = new Date(`${data.date} 00:00`);
@@ -320,7 +276,7 @@ const CalendarBars: React.FC<{ calendarItems: calendarItem[][]; dateStart: numbe
     }
   }
 
-  function getTime(data, key) {
+  function getTime(data: data, key: key) {
     if ('date' in data) {
       if (key === 'start') {
         return '00:00';
@@ -337,18 +293,20 @@ const CalendarBars: React.FC<{ calendarItems: calendarItem[][]; dateStart: numbe
     <CalendarBarsContainer>
       {props.calendarItems.map((bars) => {
         return <BarColumn key={bars[0].iCalUID}>{bars.map((item) => {
-          return <EventItem
-            title={`${item.summary} ( ${getTimeString(item.start, 'start')} to ${getTimeString(item.end, 'end')} )`}
-            key={item.iCalUID}
-            base={props.dateStart / 3600000}
-            start={props.getTimeStamp(item.start, 'start') / 3600000}
-            end={props.getTimeStamp(item.end, 'end') / 3600000}
-            color={(calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', colorId: '7' }).code}
-          ><EventContent>
-              <EventValue>{item.summary}</EventValue>
-              <EventValue>{getTime(item.start, 'start')} - {getTime(item.end, 'end')}</EventValue>
-            </EventContent>
-          </EventItem>;
+          return (
+            (item.visibility === 'public' || personalization.isPrivateShow) &&
+            <EventItem
+              title={`${item.summary} ( ${getTimeString(item.start, 'start')} to ${getTimeString(item.end, 'end')} )`}
+              key={item.iCalUID}
+              base={props.dateStart / 3600000}
+              start={props.getTimeStamp(item.start, 'start') / 3600000}
+              end={props.getTimeStamp(item.end, 'end') / 3600000}
+              color={personalization.idCalendarColorful ? ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', monoCode: '#434343', colorId: '7' }).code) : ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', monoCode: '#434343', colorId: '7' }).monoCode)}
+            ><EventContent>
+                <EventValue>{item.summary}</EventValue>
+                <EventValue>{getTime(item.start, 'start')} - {getTime(item.end, 'end')}</EventValue>
+              </EventContent>
+            </EventItem>);
         })
         }</BarColumn>;
       })}

@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getEditPanelState, setEditPanel } from '../../features/reducers/editSlice';
 import { editShortcut } from '../../features/reducers/shortcutsSlice';
-import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../styleSetting';
+
+import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
 import { InputComponent, PanelButton, ButtonContainer } from '../../../static/components';
-import { handleInputChange } from '../../../utils/inputHandler';
+import { handleInputChange } from '../../../utils/functions';
+import { shortcut } from '../../../static/types';
 
 const Wrapper = styled(EditPanelWrapper)`
   width: 480px;
@@ -16,13 +18,6 @@ const Wrapper = styled(EditPanelWrapper)`
   flex-direction: column;
   align-items: center;
 `;
-
-type shortcut = {
-  id?: Date,
-  name: string,
-  url: string,
-  logo?: string,
-};
 
 export const ShortcutEditPanel: React.FC<{}> = () => {
   const editPanelState = useSelector(getEditPanelState);
@@ -57,8 +52,8 @@ export const ShortcutEditPanel: React.FC<{}> = () => {
         </EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
       </EditPanelTitle>
-      <InputComponent name="name" title="Name" value={shortcut.name} onChange={(e) => handleInputChange(e, shortcut, setShortcut)}></InputComponent>
-      <InputComponent name="url" title="URL" value={shortcut.url} onChange={(e) => handleInputChange(e, shortcut, setShortcut)}></InputComponent>
+      <InputComponent name="name" title="Name" value={shortcut.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, shortcut, setShortcut)}></InputComponent>
+      <InputComponent name="url" title="URL" value={shortcut.url} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, shortcut, setShortcut)}></InputComponent>
       <ButtonContainer>
         <PanelButton name="Done" width={80} disabled={!(shortcut.name && shortcut.url)} onClick={() => editShortcutProcess(shortcut)}></PanelButton>
         <PanelButton name="Cancel" width={80} onClick={cancelProcess}></PanelButton>
