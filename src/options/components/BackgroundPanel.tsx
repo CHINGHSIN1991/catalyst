@@ -2,13 +2,13 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { background, backgroundSetting } from '../../static/types';
+import { background, backgroundSetting, currentComparison, appliedComparison } from '../../static/types';
+import { ScrollbarContainer } from '../../static/styleSetting';
 
 
 const Wrapper = styled.div`
   width: 100%;
   padding: 24px 0 0;
-  /* margin: 0 48px ; */
   height: auto;
   display: flex;
   flex-direction: column;
@@ -19,7 +19,6 @@ const Wrapper = styled.div`
 `;
 
 const EditPanelTitle = styled.div`
-  /* border: solid 1px; */
   color: rgba(255,255,255,1);
   width: 100%;
   padding: 16px 0;
@@ -36,8 +35,7 @@ const EditPanelTitleUnderLine = styled.div`
   background-color: grey;
 `;
 
-const BackgroundContainer = styled.div`
-  /* border: solid 1px; */
+const BackgroundContainer = styled(ScrollbarContainer)`
   padding: 16px;
   background-color: lightgray;
   border-radius: 0px 8px 8px 8px; 
@@ -50,28 +48,6 @@ const BackgroundContainer = styled.div`
   justify-content: start;
   align-content: flex-start;
   flex-wrap: wrap;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 6px;
-    margin-right: 6px;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-    background: transparent;
-    border-radius: 4px;
-  }
-  &::-webkit-scrollbar-track-piece {
-    outline: white;
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0,0,0,0.4);
-    border: 1px solid slategrey
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
   @media (max-width:1580px) {
     min-height: 480px;
   } 
@@ -97,19 +73,19 @@ const BackgroundListOption = styled.div`
   flex-direction: column;
   margin-bottom: 3px;
   line-height: 24px;  
-  width: ${(props) => { return props.index === props.currentSet ? '120px' : '104px'; }};
+  width: ${(props: currentComparison) => props.index === props.current ? '120px' : '104px'};
   height: 60px;
-  background-color: ${(props) => { return props.index === props.currentSet ? 'lightgray' : 'gray'; }};
+  background-color: ${(props: currentComparison) => props.index === props.current ? 'lightgray' : 'gray'};
   transition: 0.2s;
   :hover{
-    background-color: ${(props) => { return props.index === props.currentSet ? 'lightgray' : 'darkgray'; }};
+    background-color: ${(props: currentComparison) => props.index === props.current ? 'lightgray' : 'darkgray'};
   }
   :last-child{
     margin-bottom: 0px;
   }
 
   @media (max-width:768px) {
-    width: ${(props) => { return props.index === props.currentSet ? '100px' : '80px'; }};
+    width: ${(props: currentComparison) => props.index === props.current ? '100px' : '80px'};
   } 
 `;
 
@@ -246,18 +222,18 @@ const ApplyButton = styled.div`
   font-size: 12px;
   font-weight: bold;
   line-height: 20px;
-  width: ${(props) => { return props.applied === props.index ? '72px' : '56px'; }};
+  width: ${(props: appliedComparison) => props.applied === props.index ? '72px' : '56px'};
   margin: 2px 0 8px 16px;
   text-align: center;
-  color: ${(props) => { return props.applied === props.index ? 'rgb(80,80,80)' : 'rgb(80,80,80)'; }};
-  background-color: ${(props) => { return props.applied === props.index ? 'rgb(218, 240, 233)' : 'rgb(184,184,184)'; }};
+  color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(80,80,80)' : 'rgb(80,80,80)'};
+  background-color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(218, 240, 233)' : 'rgb(184,184,184)'};
   white-space: nowrap;
   overflow: hidden;
   transition: 0.2s;
   /* padding: 4px 0 0 16px; */
   :hover {
-    background-color: ${(props) => { return props.applied === props.index ? 'rgb(218, 240, 233)' : 'rgb(40,40,40)'; }};
-    color: ${(props) => { return props.applied === props.index ? 'rgb(80,80,80)' : 'rgb(240,240,240)'; }};
+    background-color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(218, 240, 233)' : 'rgb(40,40,40)'};
+    color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(80,80,80)' : 'rgb(240,240,240)'};
   }
   @media (max-width:768px) {
     margin: 2px 0 8px 8px;
@@ -266,7 +242,7 @@ const ApplyButton = styled.div`
 
 export const BackgroundEditPanel: React.FC<{}> = () => {
   const [tempBackgroundSetting, setTempBackgroundSetting] = useState<backgroundSetting>(null);
-  const [currentSet, setCurrentSet] = useState(0);
+  const [current, setCurrentSet] = useState(0);
 
 
   function addImgToCollection(image: background, collection: number) {
@@ -279,7 +255,7 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
 
   function delImgInCollection(image: background, collection: number) {
     let temp = JSON.parse(JSON.stringify(tempBackgroundSetting));
-    temp.backgroundList[collection] = temp.backgroundList[collection].filter((item) => item.id !== image.id);
+    temp.backgroundList[collection] = temp.backgroundList[collection].filter((item: background) => item.id !== image.id);
     setTempBackgroundSetting(temp);
   }
 
@@ -309,13 +285,13 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
         </EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
       </EditPanelTitle>
-      <Title>{(currentSet === 0 ? 'Get 10 random images everyday' : `You can add images from other collections`)}</Title>
+      <Title>{(current === 0 ? 'Get 10 random images everyday' : `You can add images from other collections`)}</Title>
       <BackgroundPanel>
         <BackgroundListPanel>
           {tempBackgroundSetting && [0, 1, 2, 3, 4, 5].map((item) => {
             return <BackgroundListOption
               key={'option' + item}
-              currentSet={currentSet}
+              current={current}
               index={item} onClick={() => setCurrentSet(item)}
               currentApplied={tempBackgroundSetting.current.setting}
             >
@@ -324,12 +300,12 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
                   <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146zm.122 2.112v-.002.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a4.507 4.507 0 0 0-.288-.076 4.922 4.922 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a4.924 4.924 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034.114 0 .23-.011.343-.04L9.927 2.028c-.029.113-.04.23-.04.343a1.779 1.779 0 0 0 .062.46z" />
                 </svg>} */}
               </BackgroundListOptionTitle>
-              {(item === tempBackgroundSetting.current.setting || item === currentSet) &&
+              {(item === tempBackgroundSetting.current.setting || item === current) &&
                 <ApplyButton
                   onClick={() => applyCollection(item)}
                   applied={tempBackgroundSetting.current.setting}
                   index={item}
-                  current={currentSet}>
+                  current={current}>
                   {tempBackgroundSetting.current.setting === item && 'Current'}
                   {tempBackgroundSetting.current.setting !== item && tempBackgroundSetting.backgroundList[item].length > 0 && 'Apply'}
                 </ApplyButton>}
@@ -337,14 +313,14 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
           })}
         </BackgroundListPanel>
         <BackgroundContainer>
-          {tempBackgroundSetting && tempBackgroundSetting.backgroundList[currentSet].map((bg, index) => {
+          {tempBackgroundSetting && tempBackgroundSetting.backgroundList[current].map((bg, index) => {
             return <BackgroundImage key={`${bg}+${index}`} bg={bg.smallUrl}>
               <AddToCollectionPanel>
                 <AddToCollectionTitle>Add to Collection</AddToCollectionTitle>
                 <AddToCollectionOptionList>
-                  {[1, 2, 3, 4, 5].map((item) => { return item === currentSet ? '' : <AddToCollectionOption key={bg.id + item} onClick={() => addImgToCollection(bg, item)}>{item}</AddToCollectionOption>; })}
+                  {[1, 2, 3, 4, 5].map((item) => { return item === current ? '' : <AddToCollectionOption key={bg.id + item} onClick={() => addImgToCollection(bg, item)}>{item}</AddToCollectionOption>; })}
                 </AddToCollectionOptionList>
-                {currentSet !== 0 && <DeleteBtn onClick={() => delImgInCollection(bg, currentSet)}>Delete</DeleteBtn>}
+                {current !== 0 && <DeleteBtn onClick={() => delImgInCollection(bg, current)}>Delete</DeleteBtn>}
               </AddToCollectionPanel>
             </BackgroundImage>;
           })}

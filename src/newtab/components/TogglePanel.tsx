@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import { ToggleTitle, ToggleButton } from '../../static/styleSetting';
 
-
 const Wrapper = styled.div`
   position: absolute;
   bottom: 40px;

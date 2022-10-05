@@ -1,12 +1,4 @@
-type todo = {
-  workContent: string;
-  isDone: boolean;
-  id: number;
-  isSetAlert: boolean;
-  alertDate?: string;
-  alertTime?: string;
-  alertSend?: boolean;
-}
+import { todo } from '../static/types' 
 
 chrome.runtime.onInstalled.addListener((details) => {
   chrome.contextMenus.create({

@@ -6,14 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getShortcuts, deleteShortcut, loadShortcuts } from '../features/reducers/shortcutsSlice';
 import { setEditPanel } from '../features/reducers/editSlice';
 
-import { PanelBasicSetting } from '../../static/styleSetting';
+import { PanelBasicSetting, ScrollbarList } from '../../static/styleSetting';
 import { handleErrorImage, handleInputChange } from '../../utils/functions';
-import { colorScheme } from '../../static/optionList';
+import { shortcut, scheme, isEditOn } from '../../static/types';
 
-
+interface query {
+  searchQuery: string,
+}
 
 const OrgFunctionPanel = styled(PanelBasicSetting)`
-  /* border: solid 1px;   */
 `;
 
 const SearchPanel = styled.div`
@@ -23,14 +24,14 @@ const SearchPanel = styled.div`
 const SearchInput = styled.input`
   background-color: rgba(255,255,255,0);
   width: 100%;
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   height: 36px;
   padding: 8px 34px 8px 8px;
   margin: 2px 2px 16px 2px;
   transition: 0.2s;
   display:block;
   border:none;
-  border-bottom:1px solid ${props => props.theme.primary};
+  border-bottom:1px solid ${(props: scheme) => props.theme.primary};
   :focus {
     background-color: rgba(255,255,255,0.2);
     outline: none;
@@ -40,9 +41,8 @@ const SearchInput = styled.input`
 `;
 
 const SearchIcon = styled.div`
-  /* border: solid 1px; */
   position: absolute;
-  color: ${(props) => { return props.searchQuery === '' ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.7)'; }};
+  color: ${(props: query) => { return props.searchQuery === '' ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.7)'; }};
   top: 10px;
   right: 12px;
   width: 16px;
@@ -51,38 +51,17 @@ const SearchIcon = styled.div`
   transition: 0.3s;
   
   :hover{
-    color: ${props => props.theme.primary};
+    color: ${(props: scheme) => props.theme.primary};
   }
 `;
 
-const ShortcutsList = styled.ul`
+const ShortcutsList = styled(ScrollbarList)`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   max-height: 280px;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-    /* background: transparent;
-    border-radius: 4px; */
-  }
-  &::-webkit-scrollbar-track-piece {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0,0,0,0.4);
-    border: 1px solid slategrey
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
-  /* border: solid 1px; */
+
   @media (max-width:1580px) {
-  /* 銀幕寬度小於1200套用此區塊 */
     max-height: 200px;
   }
 `;
@@ -96,9 +75,9 @@ const EditOptionContainer = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  padding: ${(props: { isOptionOn: boolean; }) => { return props.isOptionOn ? '8px' : '0px'; }};
+  padding: ${(props: isEditOn) => props.isEditOn ? '8px' : '0px'};
   width: 100%;
-  height: ${(props: { isOptionOn: boolean; }) => { return props.isOptionOn ? '100%' : '0%'; }};
+  height: ${(props: isEditOn) => props.isEditOn ? '100%' : '0%'};
   transition-delay: opacity 0.3s;
   transition: 0.05s;
   background-color: rgba(80,80,80,0.5);
@@ -107,10 +86,10 @@ const EditOptionContainer = styled.div`
 `;
 
 const EditOption = styled.div`
-  padding: ${(props) => { return props.isOptionOn ? '4px' : '0px'; }};
-  margin: ${(props) => { return props.isOptionOn ? '3px' : '0px'; }};
-  opacity: ${(props) => { return props.isOptionOn ? 1 : 0; }};
-  transform: ${(props) => { return props.isOptionOn ? 'translateY(30%)' : 'translateY(80%)'; }};  
+  padding: ${(props: isEditOn) => props.isEditOn ? '4px' : '0px'};
+  margin: ${(props: isEditOn) => props.isEditOn ? '3px' : '0px'};
+  opacity: ${(props: isEditOn) => props.isEditOn ? 1 : 0};
+  transform: ${(props: isEditOn) => props.isEditOn ? 'translateY(30%)' : 'translateY(80%)'};  
   transition: 0.2s;
   font-size: 0.75rem;
   color: black;
@@ -134,7 +113,6 @@ const EditOption2 = styled(EditOption)`
 
 const EditIcon = styled.div`
   position: absolute;
-  /* border: solid 1px; */
   right: 2px;
   top: 2px;
   width: 16px;
@@ -142,7 +120,6 @@ const EditIcon = styled.div`
   border-radius: 8px;
   transition: 0.1s;
   transition-delay: 0.9s;
-  /* background: rgba(255,255,255,0); */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -150,7 +127,6 @@ const EditIcon = styled.div`
 `;
 
 const Shortcut = styled.li`
-  /* border:solid 1px; */
   position: relative;
   margin: 2px;
   border-radius: 4px;
@@ -167,24 +143,16 @@ const Shortcut = styled.li`
     background-color: rgba(255,255,255,0.1);
     ${EditIcon}{
       opacity: 1;
-      /* background-color: rgba(255,255,255,0.3); */
     }
   }
-
-  /* :last-child {
-    margin-left: 5.6px;
-    margin-right: auto;
-  } */
 `;
 
 const LinkUrl = styled.a`
-  color: ${props => props.theme.primary};
-  /* border: solid 1px; */
+  color: ${(props: scheme) => props.theme.primary};
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 64px;
-  /* height: 80px; */
 `;
 
 const LinkTitle = styled.p`
@@ -215,13 +183,6 @@ const ShortcutIcon = styled.img`
   object-fit: cover;
 `;
 
-type shortcut = {
-  id: number,
-  logo: string,
-  name: string,
-  url: string,
-};
-
 export const ShortcutsPanel: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const shortcuts = useSelector(getShortcuts);
@@ -230,9 +191,7 @@ export const ShortcutsPanel: React.FC<{}> = () => {
 
   function delShortcut(id: number) {
     let tempLinks = shortcuts.filter((link) => link.id !== id);
-    chrome.storage.sync.set({ shortcuts: tempLinks }, function () {
-      // setShortcuts([...tempLinks]);
-    });
+    chrome.storage.sync.set({ shortcuts: tempLinks });
   }
 
   function search() {
@@ -243,15 +202,14 @@ export const ShortcutsPanel: React.FC<{}> = () => {
   }
 
   function searchByEnter(e: KeyboardEvent) {
-    var code = e.keyCode || e.which;
-    if (code === 13) {
+    const code = e.code || e.key;
+    if (code === 'Enter') {
       search();
     }
   };
 
   useEffect(() => {
     chrome.storage.sync.get(['shortcuts'], function (res) {
-      // console.log(res.shortcut);
       if (res.shortcuts) {
         dispatch(loadShortcuts(res.shortcuts));
       } else {
@@ -289,25 +247,21 @@ export const ShortcutsPanel: React.FC<{}> = () => {
 
 const LinkElement: React.FC<{ shortcut: shortcut; delShortcut: (id: number) => void; }> = (props) => {
   const dispatch = useDispatch();
-  const [isOptionOn, setIsOptionOn] = useState(false);
+  const [isEditOn, setIsEditOn] = useState(false);
 
   return (
-    <Shortcut key={props.shortcut.id} onMouseLeave={() => setIsOptionOn(false)}>
+    <Shortcut key={props.shortcut.id} onMouseLeave={() => setIsEditOn(false)}>
       <LinkUrl href={props.shortcut.url} target="_blank">
         <ShortcutIconContainer>
-          {/* @ts-ignore */}
-          <ShortcutIcon src={props.shortcut.logo} onError={(e) => handleErrorImage(e)}></ShortcutIcon>
+          <ShortcutIcon src={props.shortcut.logo} onError={(e: Event) => handleErrorImage(e)}></ShortcutIcon>
         </ShortcutIconContainer>
         <LinkTitle>{props.shortcut.name}</LinkTitle>
       </LinkUrl>
-      <EditOptionContainer isOptionOn={isOptionOn}>
-        <EditOption1 isOptionOn={isOptionOn} onClick={() => { dispatch(setEditPanel({ name: 'ShortcutEdit', data: props.shortcut })); }}>Edit</EditOption1>
-        <EditOption2 isOptionOn={isOptionOn} onClick={() => { dispatch(deleteShortcut(props.shortcut)); }}>Delete</EditOption2>
+      <EditOptionContainer isEditOn={isEditOn}>
+        <EditOption1 isEditOn={isEditOn} onClick={() => { dispatch(setEditPanel({ name: 'ShortcutEdit', data: props.shortcut })); }}>Edit</EditOption1>
+        <EditOption2 isEditOn={isEditOn} onClick={() => { dispatch(deleteShortcut(props.shortcut)); }}>Delete</EditOption2>
       </EditOptionContainer>
-      <EditIcon title='More actions' onClick={() => setIsOptionOn(!isOptionOn)}>
-        {/* <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-three-dots" viewBox="0 0 16 16">
-          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
-        </svg> */}
+      <EditIcon title='More actions' onClick={() => setIsEditOn(!isEditOn)}>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
           <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
         </svg>

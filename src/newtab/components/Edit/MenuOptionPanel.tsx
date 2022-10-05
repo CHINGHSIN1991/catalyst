@@ -9,6 +9,7 @@ import { getPersonalization, loadPersonalization } from '../../features/reducers
 import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine } from '../../../static/styleSetting';
 import { PanelButton, ButtonContainer } from '../../../static/components';
 
+type bol = { bol: boolean; };
 
 const Wrapper = styled(EditPanelWrapper)`
   width: 320px;
@@ -41,14 +42,14 @@ const PublicOption = styled.div`
   line-height: 20px;
   width: 50%;
   text-align: center;
-  font-weight: ${(props) => { return props.boolean ? 'bold' : 'normal'; }};
-  color: ${(props) => { return props.boolean ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.3)'; }};
+  font-weight: ${(props: bol) => props.bol ? 'bold' : 'normal'};
+  color: ${(props: bol) => props.bol ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.3)'};
   transition: 0.2s;
 `;
 
 const PublicOptionBg = styled.div`
   position: absolute;
-  left: ${(props) => { return props.boolean ? '4px' : 'calc(50% + 4px)'; }};
+  left: ${(props: bol) => props.bol ? '4px' : 'calc(50% + 4px)'};
   transition: 0.2s;
   width: calc(50% - 8px);
   height: 20px;
@@ -150,14 +151,21 @@ export const MenuOptionPanel: React.FC<{}> = () => {
   );
 };
 
-const OptionElement: React.FC<{ title: string, truthy: string, falsy: string; bol: boolean, keyName: string, handleSettingChanged: (key: string) => void; }> = (props) => {
+const OptionElement: React.FC<{
+  title: string,
+  truthy: string,
+  falsy: string;
+  bol: boolean,
+  keyName: string,
+  handleSettingChanged: (key: string) => void;
+}> = (props) => {
   return (
-    <InfoContainer onClick={() => { console.log(props.keyName); props.handleSettingChanged(props.keyName); }}>
+    <InfoContainer onClick={() => props.handleSettingChanged(props.keyName)}>
       <Title>{props.title}</Title>
       <PublicOptionSet>
-        <PublicOptionBg boolean={props.bol}></PublicOptionBg>
-        <PublicOption boolean={props.bol}>{props.truthy}</PublicOption>
-        <PublicOption boolean={!props.bol}>{props.falsy}</PublicOption>
+        <PublicOptionBg bol={props.bol}></PublicOptionBg>
+        <PublicOption bol={props.bol}>{props.truthy}</PublicOption>
+        <PublicOption bol={!props.bol}>{props.falsy}</PublicOption>
       </PublicOptionSet>
     </InfoContainer>
   );

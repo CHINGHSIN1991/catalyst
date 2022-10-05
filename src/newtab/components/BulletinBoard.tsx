@@ -9,38 +9,23 @@ import { setAlertWindow } from '../features/reducers/alertSlice';
 
 import { handleTextAreaChange } from "../../utils/functions";
 import { BulletinTogglePanel } from "./BulletinTogglePanel";
-import { memo } from "../../static/types";
+import { memo, scheme, tempMemo } from "../../static/types";
 import { memoColorList, colorScheme } from "../../static/optionList";
+import { ScrollbarContainer, ScrollbarTextArea } from "../../static/styleSetting";
 
-const Wrapper = styled.div`
+type color = { color: string; };
+type colorComparison = { color: string, tempColor: string; };
+type coord = { x: number, y: number; };
+
+const Wrapper = styled(ScrollbarContainer)`
   width: 100vw;
   height: 100vh;
-  overflow-y:auto;
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-    /* background: transparent;
-    border-radius: 4px; */
-  }
-  &::-webkit-scrollbar-track-piece {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0,0,0,0.4);
-    border: 1px solid slategrey
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
 `;
 
 const CreatePanel = styled.div`
   border-radius: 8px;
-  border: ${props => props.theme.panelBorder};
-  background-color: ${props => props.theme.panelBackground};
+  border: ${(props: scheme) => props.theme.panelBorder};
+  background-color: ${(props: scheme) => props.theme.panelBackground};
   position: absolute;
   top: 16px;
   left: 50%;
@@ -53,39 +38,20 @@ const CreatePanel = styled.div`
   align-items: center;
 `;
 
-const MemoInput = styled.textarea`
+const MemoInput = styled(ScrollbarTextArea)`
   border-radius: 6px;
   padding: 8px;
   resize: none;
   width: 332px;
   height: 64px;
-  background-color: ${(props) => { return props.bgColor; }};
+  background-color: ${(props: color) => props.color};
   opacity: 0.8;
   border: solid rgb(160,160,160) 1px;
   z-index: 3;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 6px;
+  :focus {
+    outline: none;
   }
-  &::-webkit-scrollbar-button {
-    display: none;
-    /* background: transparent;
-    border-radius: 4px; */
-  }
-  &::-webkit-scrollbar-track-piece {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0,0,0,0.1);
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
-  :focus{
-    outline: solid 1px rgba(200,200,200,1);
-  }
-`;
+ `;
 
 const OptionContainer = styled.div`
   display: flex;
@@ -104,32 +70,15 @@ const ColorBorder = styled.div`
   height: 24px;
   margin: 4px 12px 4px 4px;
   border-radius: 7px;
-  border: solid 2px ${(props) => { return props.color === props.tempColor ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0)'; }};
-  box-shadow: ${(props) => { return props.color === props.tempColor ? '2px 2px 2px 1px rgba(0, 0, 0, 0.2)' : 'none'; }};
+  border: solid 2px ${(props: colorComparison) => props.color === props.tempColor ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0)'};
+  box-shadow: ${(props: colorComparison) => props.color === props.tempColor ? '2px 2px 2px 1px rgba(0, 0, 0, 0.2)' : 'none'};
 `;
 
 const ColorContent = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 4px;
-  background-color: ${(props) => { return props.color; }};
-`;
-
-const ColorPick = styled.input`
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  margin: 8px 16px 8px 4px;
-  height: 32px;
-  padding: 0;
-  width: 80px;
-  /* border-radius: 4px; */
-  ::-webkit-color-swatch{
-    border-radius: 4px;
-  }
+  background-color: ${(props: color) => props.color};
 `;
 
 const CreateBtn = styled.div`
@@ -141,7 +90,6 @@ const CreateBtn = styled.div`
   padding: 0 8px;
   margin: 4px 4px;
   margin-left: auto;
-  /* box-shadow: 0px 5px 5px rgba(0,0,0,0.4); */
   background-color: rgba(255,255,255,0.8);
   border: solid 1px rgba(255,255,255,0.5);
   backdrop-filter: blur(8px);
@@ -154,7 +102,7 @@ const CreateBtn = styled.div`
 
 const MemoContainer = styled.div`
   width: 100%;
-  margin-top: 160px;
+  margin-top: 128px;
   height: auto;
   display: flex;
   align-items: flex-start;
@@ -180,30 +128,11 @@ const MemoWrapper = styled.div`
   opacity: 0.85;
   width: 100%;
   height: 100%;
-  background-color: ${(props) => { return props.color; }};
+  background-color: ${(props: color) => props.color};
 `;
 
-const MemoContent = styled.div`
+const MemoContent = styled(ScrollbarContainer)`
   max-height: 240px;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-    /* background: transparent;
-    border-radius: 4px; */
-  }
-  &::-webkit-scrollbar-track-piece {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0,0,0,0.15);
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
 `;
 
 const MemoEditBtn = styled.div`
@@ -218,34 +147,6 @@ const MemoEditBtn = styled.div`
   cursor: pointer;
   :hover{
     color: black;
-  }
-`;
-
-const MemoEditPanel = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  right: 12px;
-  top: 24px;
-  width: 64px;
-  transition: 0.05s;
-  height: ${(props) => { console.log(props.editId); return props.id === props.editId ? '40px' : '0px'; }};
-  border-radius: 4px;
-  overflow: hidden;
-`;
-
-const MemoEditOption = styled.div`
-  font-size: 12px;
-  line-height: 20px;
-  text-align: center;
-  width: 100%;
-  height: 20px;
-  background-color: rgb(120,120,120);
-  color: ${props => props.theme.primary};
-  transition: 0.1s;
-  cursor: pointer;
-  :hover{
-    background-color: rgb(80,80,80);
   }
 `;
 
@@ -271,20 +172,18 @@ const CreateAt = styled.a`
   }
 `;
 
-type tempMemo = {
-  memo: string;
-  color: string;
-};
-
-export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> = (props) => {
+export const BulletinBoard: React.FC<{
+  setIsBoardOn: (boo: boolean) => void;
+}> = (props) => {
   const dispatch = useDispatch();
   const [tempMemo, setTempMemo] = useState({ memo: "", color: memoColorList[0] });
   const [memos, setMemos] = useState<memo[]>([]);
 
-  function addMemoByEnter(e) {
+  function addMemoByEnter(e: KeyboardEvent) {
+    console.log(e);
     if (tempMemo.memo) {
-      var code = e.keyCode || e.which;
-      if (code === 13) {
+      const code = e.code || e.key;
+      if (code === 'Enter') {
         addMemo();
       }
     }
@@ -308,7 +207,6 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
     const r = parseInt(hex.slice(1, 3), 16),
       g = parseInt(hex.slice(3, 5), 16),
       b = parseInt(hex.slice(5, 7), 16);
-    // return (r | g << 8 | b << 16);
     return (r + g + b);
   }
 
@@ -329,7 +227,7 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
     }
   }
 
-  function changePosition(coord: { x: number, y: number; }, index: number) {
+  function changePosition(coord: coord, index: number) {
     const tempMemos = [...memos];
     tempMemos[index].position = { x: coord.x, y: coord.y };
     setMemos(tempMemos);
@@ -374,9 +272,6 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16">
                     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                   </svg>
-                  {/* <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-three-dots" viewBox="0 0 16 16">
-                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
-                  </svg> */}
                 </MemoEditBtn>
                 <MemoContent>
                   <MemoTextContent>{item.memo}</MemoTextContent>
@@ -386,10 +281,6 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
                     </CreateAtContainer>
                   }
                 </MemoContent>
-                {/* <MemoEditPanel id={item.id} editId={editMemo && editMemo.id}>
-                  <MemoEditOption onClick={() => setEditOn(true)}>Edit</MemoEditOption>
-                  <MemoEditOption onClick={() => deleteMemo(item.id)}>Delete</MemoEditOption>
-                </MemoEditPanel> */}
               </Memo>
             </Draggable>
           );
@@ -403,12 +294,11 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
           name="memo"
           value={tempMemo.memo}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleTextAreaChange(e, tempMemo, setTempMemo)}
-          onKeyPress={(e: Event) => addMemoByEnter(e)}
-          bgColor={tempMemo.color}
+          onKeyPress={(e: KeyboardEvent) => addMemoByEnter(e)}
+          color={tempMemo.color}
         ></MemoInput>
         <OptionContainer>
           {memoColorList && memoColorList.map((item) => { return <ColorElement key={item} color={item} tempMemo={tempMemo} setTempMemo={setTempMemo}></ColorElement>; })}
-          {/* <ColorPick type="color"></ColorPick> */}
           <CreateBtn onClick={addMemo}>Create</CreateBtn>
         </OptionContainer>
       </CreatePanel>
@@ -417,7 +307,11 @@ export const BulletinBoard: React.FC<{ setIsBoardOn: (boo: boolean) => void; }> 
   );
 };
 
-const ColorElement: React.FC<{ color: string; tempMemo: tempMemo; setTempMemo: (tempMemo: tempMemo) => void; }> = (props) => {
+const ColorElement: React.FC<{
+  color: string,
+  tempMemo: tempMemo,
+  setTempMemo: (tempMemo: tempMemo) => void;
+}> = (props) => {
   function tempMemoEdit() {
     const tempMemo = { ...props.tempMemo, color: props.color };
     props.setTempMemo(tempMemo);

@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from "styled-components";
 
+type isProcess = { isProcess: boolean; };
+
 const Wrapper = styled.div`
   position: absolute;
   display: flex;
@@ -13,13 +15,13 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100%;
   transition: 0.1s;
-  height: ${(props) => { return props.isProcess ? '232px' : '0px'; }};
+  height: ${(props: isProcess) => props.isProcess ? '232px' : '0px'};
 `;
 
 const StatusContainer = styled.div`
   position: relative;
   width: 100%;
-  height: ${(props) => { return props.isProcess ? '224px' : '0px'; }};
+  height: ${(props: isProcess) => props.isProcess ? '224px' : '0px'};
   background-color: rgb(240,240,240);
   left: 0px;
   top: 0px;
@@ -28,7 +30,6 @@ const StatusContainer = styled.div`
 `;
 
 const StatusContent = styled.div`
-  /* border: solid 1px; */
   width: 200px;
   height: 240px;
   line-height: 180px;

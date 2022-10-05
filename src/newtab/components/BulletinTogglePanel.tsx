@@ -1,58 +1,21 @@
 import React from 'react';
 import styled from "styled-components";
 import { useDispatch } from 'react-redux';
+
 import { setAlertWindow } from '../features/reducers/alertSlice';
 
-import { memo } from "../../static/types";
-import { colorScheme } from '../../static/optionList';
+import { memo, scheme } from "../../static/types";
 import { ToggleTitle, ToggleButton } from '../../static/styleSetting';
 
 const Wrapper = styled.div`
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   position: absolute;
   bottom: 40px;
-  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
-  /* border: solid 1px; */
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
-
-// const ToggleTitle = styled.div`
-//   /* border: solid 1px; */
-//   opacity: 0;
-//   transform: translateY(30px);
-//   position: absolute;
-//   text-align: center;
-//   text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
-//   width: 180px;
-//   transition: 0.2s;
-// `;
-
-// const ToggleButton = styled.div`
-//   width: 48px;
-//   height: 48px;
-//   margin: 0 24px;
-//   border-radius: 50%;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   /* border: solid 1px; */
-//   cursor: pointer;
-//   box-shadow: 0px 5px 5px ${(props) => { return props.panelBackground; }};
-//   border: ${(props) => { return props.panelBorder; }};
-//   background-color: ${(props) => { return props.panelBackground; }};
-//   backdrop-filter: blur(16px);
-//   :hover{
-//     ${ToggleTitle} {
-//       opacity: 1;
-//       transform: translateY(40px);
-//     }
-//   }
-// `;
-
-
 
 export const BulletinTogglePanel: React.FC<{
   setIsBoardOn: (boo: boolean) => void;

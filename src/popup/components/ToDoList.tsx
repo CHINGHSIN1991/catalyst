@@ -2,6 +2,10 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
+import { todo } from '../../static/types';
+
+type isDone = { isDone: boolean; };
+
 const Wrapper = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   width: 100%;
@@ -19,8 +23,8 @@ const ToDoItem = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-  color: ${(props) => { return props.isDone ? 'darkgray' : 'black'; }};
-  text-decoration: ${(props) => { return props.isDone ? 'line-through' : 'none'; }};
+  color: ${(props: isDone) => props.isDone ? 'darkgray' : 'black'};
+  text-decoration: ${(props: isDone) => props.isDone ? 'line-through' : 'none'};
 `;
 
 const CheckContainer = styled.div`
@@ -46,16 +50,6 @@ const IconContainer = styled.div`
   align-items: center;
   margin-right: 8px;
 `;
-
-interface todo {
-  workContent: string;
-  isDone: boolean;
-  id: number;
-  isSetAlert: boolean;
-  alertDate?: string;
-  alertTime?: string;
-  alertSend?: boolean;
-}
 
 export const ToDoList: React.FC<{}> = () => {
   const [workList, setWorkList] = useState(null);

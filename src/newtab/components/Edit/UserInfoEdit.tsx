@@ -97,7 +97,7 @@ export const UserInfoEditPanel: React.FC<{}> = () => {
       </EditPanelTitle>
       <InfoContainer>
         <Title>Name</Title>
-        <Input name="name" title="Name" value={userName.name} onChange={(e) => handleInputChange(e, userName, setUserName)} type="text"></Input>
+        <Input name="name" title="Name" value={userName.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, userName, setUserName)} type="text"></Input>
       </InfoContainer>
       <InfoContainer>
         <Title>Email</Title>
@@ -107,7 +107,6 @@ export const UserInfoEditPanel: React.FC<{}> = () => {
         <Title>User id</Title>
         <Content>{userInfo.id}</Content>
       </InfoContainer>
-      {/* <InputComponent name="name" title="Name" value={userName.name} onChange={(e) => handleInputChange(e, userName, setUserName)}></InputComponent> */}
       <ButtonContainer>
         <PanelButton name="Save" width={80} disabled={!userName.name} onClick={() => editUserNameProcess(userName)}></PanelButton>
         <PanelButton name="Cancel" width={80} onClick={cancelProcess}></PanelButton>

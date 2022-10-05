@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import styled from "styled-components";
+
 import { ResetStyle, GlobalStyle } from "../static/globalStyle";
 
 import { UserInfoPanel } from './components/UserInfoPanel';

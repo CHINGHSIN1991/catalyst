@@ -7,11 +7,11 @@ import { getPersonalization } from '../features/reducers/optionsSlice';
 
 import { fetchWeatherData } from '../../utils/api';
 import { FocusPanelTitle } from '../../static/styleSetting';
+import { openWeatherData, scheme, centralPanel } from '../../static/types';
 
 
 
 const Wrapper = styled.div`
-  /* border: solid 1px; */
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: inline-flex;
   flex-direction: column;
@@ -22,18 +22,16 @@ const Wrapper = styled.div`
   right: 0;
   margin: 0 auto;
   border-radius: 4px;
-  /* border: solid 1px; */
-  border: ${props => props.theme.panelBorder};
-  background-color: ${props => props.theme.panelBackground};
+  border: ${(props: scheme) => props.theme.panelBorder};
+  background-color: ${(props: scheme) => props.theme.panelBackground};
   backdrop-filter: blur(16px);
-  height: ${(props) => props.centralPanel === "Weather" ? "128px" : "0px"};
-  width: ${(props) => props.centralPanel === "Weather" ? "480px" : "0px"};
+  height: ${(props: centralPanel) => props.centralPanel === "Weather" ? "128px" : "0px"};
+  width: ${(props: centralPanel) => props.centralPanel === "Weather" ? "480px" : "0px"};
   transition: 0.1s;
   overflow: hidden;
 `;
 
 const WeatherInfoContainer = styled.div`
-  /* border: solid 1px; */
   display: flex;
   justify-content: flex-start;
   padding: 8px 0 16px 0;
@@ -42,13 +40,11 @@ const WeatherInfoContainer = styled.div`
 `;
 
 const MainInfo = styled.div`
-  /* border: solid 1px; */
   border-right: solid 1px rgba(255,255,255,0.2);
   display: flex;
   flex-grow: 1;
   flex-direction: column;
   align-items: center;
-  /* width: 40px; */
   padding: 0 24px;
   height: 100%;
 
@@ -87,108 +83,6 @@ const Info = styled.div`
 const InfoTitle = styled.div`
   width: 64px;
 `;
-
-interface openWeatherData {
-  coord: {
-    lon: number,
-    lat: number,
-  };
-  weather: [
-    {
-      id: number,
-      main: string,
-      description: string,
-      icon: string,
-    }
-  ],
-  base: string,
-  main: {
-    temp: number,
-    feels_like: number,
-    temp_min: number,
-    temp_max: number,
-    pressure: number,
-    humidity: number,
-    sea_level: number,
-    grnd_level: number;
-  },
-  visibility: number,
-  wind: {
-    speed: number,
-    deg: number,
-    gust: number;
-  },
-  rain: {
-    "1h": number;
-  },
-  clouds: {
-    "all": number;
-  },
-  dt: number,
-  sys: {
-    type: number,
-    id: number,
-    country: string,
-    sunrise: number,
-    sunset: number;
-  },
-  timezone: number,
-  id: number,
-  name: string,
-  cod: number;
-}
-
-type accuDayWeatherData = {
-  HasPrecipitation: boolean,
-  Icon: number,
-  IconPhrase: string,
-  LocalSource: {
-    Id: number,
-    Number: string,
-    WeatherCode: string,
-  };
-  PrecipitationIntensity: string,
-  PrecipitationType: string,
-};
-
-type accuTemperature = {
-  Value: number,
-  Unit: string,
-  UnitType: number,
-};
-type accuTemperatureSet = {
-  Maximum: accuTemperature,
-  Minimum: accuTemperature,
-};
-
-type accuWeatherData = {
-  Date: string,
-  Day: accuDayWeatherData,
-  EpochDate: number,
-  Link: string,
-  MobileLink: string,
-  Night: accuDayWeatherData,
-  Sources: string[],
-  Temperature: accuTemperatureSet,
-};
-
-type accuWeatherHeadline = {
-  Category: string,
-  EffectiveDate: string,
-  EffectiveEpochDate: Date,
-  EndDate: string,
-  EndEpochDateL: Date,
-  Link: string,
-  MobileLink: string,
-  Severity: number,
-  Text: string,
-};
-
-interface accuWeatherDataSet {
-  DailyForecasts: accuWeatherData[],
-  Headline: accuWeatherHeadline,
-  updateTime: Date,
-}
 
 export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
   const personalization = useSelector(getPersonalization);

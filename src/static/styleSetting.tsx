@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { scheme } from "./types";
 
 export const PanelBasicSetting = styled.div`
   display: flex;
@@ -6,8 +7,8 @@ export const PanelBasicSetting = styled.div`
   padding: 12px;
   border-radius: 6px;
   margin: 8px 8px 0;
-  border: ${props => props.theme.panelBorder};
-  background-color: ${props => props.theme.panelBackground};
+  border: ${(props: scheme) => props.theme.panelBorder};
+  background-color: ${(props: scheme) => props.theme.panelBackground};
   backdrop-filter: blur(16px);
   :last-child {
     margin: 8px
@@ -112,13 +113,76 @@ export const ToggleButton = styled.div`
   /* border: solid 1px; */
   cursor: pointer;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
-  border: ${props => props.theme.panelBorder};
-  background-color: ${props => props.theme.panelBackground};
+  border: ${(props: scheme) => props.theme.panelBorder};
+  background-color: ${(props: scheme) => props.theme.panelBackground};
   backdrop-filter: blur(16px);
   :hover{
     ${ToggleTitle} {
       opacity: 1;
       transform: translateY(40px);
     }
+  }
+`;
+
+export const ScrollbarContainer = styled.div`
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+  &::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.4);
+    border: 1px solid slategrey
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: transparent;
+  }
+`;
+
+export const ScrollbarList = styled.ul`
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+  &::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.4);
+    border: 1px solid slategrey
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: transparent;
+  }
+`;
+
+export const ScrollbarTextArea = styled.textarea`
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+  &::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.4);
+    border: 1px solid slategrey
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: transparent;
   }
 `;

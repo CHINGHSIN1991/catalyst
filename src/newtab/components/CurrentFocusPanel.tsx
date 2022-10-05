@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 import { fetchCalendarData } from '../../utils/api';
+import { calendarItem, scheme } from '../../static/types';
 
 const Wrapper = styled.div`
-  /* border: solid 1px; */
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   width: 100%;
   display: flex;
@@ -18,38 +18,10 @@ const FocusBlock = styled.div`
   font-size: 1.75rem;
   text-align: center;
   font-weight: bold;
-  color: ${props => props.theme.primary};
-  text-shadow: 0 0 10px ${props => props.theme.inversePrimary},  0 0 20px ${props => props.theme.primaryOpacity};
+  color: ${(props: scheme) => props.theme.primary};
+  text-shadow: 0 0 10px ${(props: scheme) => props.theme.inversePrimary},  0 0 20px ${(props: scheme) => props.theme.primaryOpacity};
   transform: translateY(-80px);
-  /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
 `;
-
-type role = {
-  email: string, displayName: string, self: boolean;
-};
-
-type timeNode = { dateTime: string, timeZone: string; };
-type timeDay = { date: string; };
-
-interface calendarItem {
-  colorId?: string;
-  created?: string;
-  creator?: role;
-  end: timeNode | timeDay;
-  etag?: string;
-  evenType: string;
-  htmlLink?: string;
-  iCalUID: string;
-  id?: string;
-  kind?: string;
-  organizer?: role;
-  reminders?: { useDefault: boolean; };
-  sequence?: 0;
-  start: timeNode | timeDay;
-  status?: string;
-  summary: string;
-  updated?: string;
-}
 
 export const CurrentFocusPanel: React.FC<{}> = () => {
   const [calendarItem, setCalendarItem] = useState(null);

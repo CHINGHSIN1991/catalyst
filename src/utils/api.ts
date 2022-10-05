@@ -2,29 +2,7 @@ import { userInfo, tempEvent } from "../static/types"
 import { v4 as uuidv4 } from 'uuid';
 
 export async function fetchWeatherData(lat:number,lon:number) :Promise<any>{
-  // console.log(lat)
-  // console.log(lon)
   const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.OPEN_WEATHER_API_KEY}`)
-  if(!res.ok) {
-    throw new Error('something wrong')
-  }
-  const data = await res.json()
-  return data
-}
-
-export async function getLocationKey(lat:number,lon:number) :Promise<any>{
-  // console.log(lat)
-  // console.log(lon)
-  const res = await fetch(`http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${process.env.ACCU_WEATHER_API_KEY}&q=${lat},${lon}`)
-  if(!res.ok) {
-    throw new Error('something wrong')
-  }
-  const data = await res.json()
-  return data
-}
-
-export async function fetchAccuWeatherData(locationKey: string) :Promise<any>{
-  const res = await fetch(`http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${process.env.ACCU_WEATHER_API_KEY}&metric=true`)
   if(!res.ok) {
     throw new Error('something wrong')
   }
@@ -60,8 +38,6 @@ export async function postNewEvent(userInfo: userInfo, tempEvent: tempEvent) {
       requestBody.end = {date: tempEvent.endDate} 
     } else {
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-      // console.log(timeZone)
-      // console.log((new Date(`${tempEvent.startDate} ${tempEvent.startTime}`)).toISOString())
       requestBody.start = {
         dateTime: (new Date(`${tempEvent.startDate} ${tempEvent.startTime}`)).toISOString(),
         timeZone

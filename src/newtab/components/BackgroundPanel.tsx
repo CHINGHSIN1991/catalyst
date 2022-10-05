@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadBackgrounds, getBackgrounds, changeBackgroundRandomly } from './../features/reducers/backgroundSlice';
 
 import { getBackgroundImg } from '../../utils/api';
+import { scheme, unsplashData, currentComparison } from '../../static/types';
 
+type url = { url: string; };
 
 const BackgroundContainer = styled.div`
 width: 100%;
@@ -18,8 +20,8 @@ left: 0px;
 top: 0px;
 width: 100%;
 height: 100%;
-background-image: url(${(props) => { return props.url; }});
-opacity: ${(props) => { return props.current === props.index ? 1 : 0; }};
+background-image: url(${(props: url) => props.url});
+opacity: ${(props: currentComparison) => props.current === props.index ? 1 : 0};
 transition: 1.5s;
 background-position: center;
 background-size: cover;
@@ -41,21 +43,20 @@ top: 0px;
 width: 100%;
 height: 32px;
 z-index: 5;
-text-shadow: 0 0 8px ${props => props.theme.inversePrimary},  0 0 8px ${props => props.theme.primaryOpacity};
+text-shadow: 0 0 8px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${props => props.theme.primaryOpacity};
 `;
 
 const Photographer = styled.a`
 padding: 0 8px;
-color: ${props => props.theme.primary};
+color: ${(props: scheme) => props.theme.primary};
 font-size: 12px;
 font-weight: bold;
 cursor: pointer;
 `;
 
-
 const DownloadIcon = styled.a`
 display: flex;
-color: ${props => props.theme.primary};
+color: ${(props: scheme) => props.theme.primary};
 align-items: center;
 justify-content: center;
 width: 20px;
@@ -68,9 +69,9 @@ export const BackgroundComponent: React.FC<{}> = () => {
   const backgroundSetting = useSelector(getBackgrounds);
   const timeIntervalId = useRef(null);
 
-  function processBackgroundData(data) {
+  function processBackgroundData(data: unsplashData[]) {
     let tempBackgrounds = [];
-    data.forEach((item) => {
+    data.forEach((item: unsplashData) => {
       tempBackgrounds.push(
         {
           id: item.id,
@@ -88,7 +89,7 @@ export const BackgroundComponent: React.FC<{}> = () => {
     const ct = new Date();
     const today = `${ct.getFullYear()}-${ct.getMonth() + 1}-${ct.getDate()}`;
 
-    chrome.storage.local.get(['backgroundSetting'], (res) => {
+    chrome.storage.sync.get(['backgroundSetting'], (res) => {
       if (res.backgroundSetting) {
         if (res.backgroundSetting.lastUpdate !== today) {
           getBackgroundImg("nature").then((images) => {
@@ -125,7 +126,7 @@ export const BackgroundComponent: React.FC<{}> = () => {
   }, []);
 
   useEffect(() => {
-    chrome.storage.local.set({ backgroundSetting: backgroundSetting });
+    chrome.storage.sync.set({ backgroundSetting: backgroundSetting });
   }, [backgroundSetting]);
 
   return (

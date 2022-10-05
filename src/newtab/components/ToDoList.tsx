@@ -2,24 +2,15 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { PanelBasicSetting, PanelTitle, CreateButton } from '../../static/styleSetting';
+import { PanelBasicSetting, PanelTitle, CreateButton, ScrollbarContainer } from '../../static/styleSetting';
 import { handleInputChange } from '../../utils/functions';
+import { todo, scheme, isEditOn } from '../../static/types';
 
+type isDone = { isDone: boolean; };
 
 const WorksPanel = styled(PanelBasicSetting)`
-  /* border: solid 1px;   */
   display: flex;
   flex-grow:1;
-`;
-
-const ListItem = styled.div`
-  border: solid 1px;
-  display: flex;
-`;
-
-const WorkContent = styled.div`
-  border: solid 1px;
-  width: 120px;
 `;
 
 const CheckContainer = styled.div`
@@ -41,12 +32,11 @@ const AlarmContainer = styled.div`
 `;
 
 const TextNote = styled.div`
-  /* border: solid 1px; */
   height: 0px;
   padding-top: 0px;
   font-size: 0.75rem;
   line-height: 1rem;
-  color: ${props => props.theme.fourthly};
+  color: ${(props: scheme) => props.theme.fourthly};
   text-overflow: ellipsis;
   word-break: break-all;
   overflow: hidden;
@@ -83,12 +73,12 @@ const ToDoContent = styled.div`
   /* border: solid 1px; */
   display: flex;
   align-items: flex-start;
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
 `;
 
 const TextContent = styled.div`
   /* border: solid 1px; */
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   flex-grow: 1;
   width: auto;
   overflow: hidden;
@@ -99,7 +89,7 @@ const TextTitle = styled.div`
   line-height: 1rem;
   /* width: 80px; */
   color: ${(props) => { return props.isDone ? props.theme.tertiary : props.theme.primary; }};
-  text-decoration: ${(props) => { return props.isDone ? "line-through" : "none"; }};
+  text-decoration: ${(props: isDone) => { return props.isDone ? "line-through" : "none"; }};
   padding: 4px 0;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -113,7 +103,7 @@ const TitleEdit = styled.input`
   padding: 4px 8px;
   border: solid 1px darkgrey;
   outline: none;
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   border-radius: 4px;
   transition: 0.3s;
   :focus{
@@ -156,12 +146,12 @@ const EditPanel = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
-  padding: ${(props) => { return props.isEditOn ? '16px' : '0px'; }};
+  padding: ${(props: isEditOn) => props.isEditOn ? '16px' : '0px'};
   border-radius: 4px;
   top: 0;
   right: 0;
   transition: 0.1s;
-  width: ${(props) => { return props.isEditOn ? "100%" : "0%"; }};
+  width: ${(props: isEditOn) => props.isEditOn ? "100%" : "0%"};
   height: 100%;
   background-color: rgba(80,80,80,0.5);
   backdrop-filter: blur(8px);
@@ -171,8 +161,8 @@ const EditPanel = styled.div`
 const EditOption = styled.div`
   padding: 6px;
   margin: 8px 24px;
-  opacity: ${(props) => { return props.isEditOn ? 1 : 0; }};
-  transform: ${(props) => { return props.isEditOn ? 'translateY(0%)' : 'translateY(50%)'; }};  
+  opacity: ${(props: isEditOn) => props.isEditOn ? 1 : 0};
+  transform: ${(props: isEditOn) => props.isEditOn ? 'translateY(0%)' : 'translateY(50%)'};  
   transition: 0.2s;
   font-size: 0.75rem;
   color: black;
@@ -198,7 +188,7 @@ const AddToDoContainer = styled.div`
   border-radius: 4px;
   background-color: rgba(255,255,255,0.1);
   width: 100%;
-  height: ${(props) => { return props.isEditOn ? "86px" : "0px"; }};
+  height: ${(props: isEditOn) => props.isEditOn ? "86px" : "0px"};
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -223,7 +213,7 @@ const ToDoTitle = styled.div`
 const ToDoInput = styled.input`
   height: 24px;
   padding: 0 4px;
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   border: solid 1px gray;
   border-radius: 4px;
   background-color: rgba(0,0,0,0.1);
@@ -263,52 +253,22 @@ const EditButton = styled.div`
   }
 `;
 
-const ToDoContainer = styled.div`
+const ToDoContainer = styled(ScrollbarContainer)`
   width: 100%;
   transition: 0.2s;
-  height: ${(props) => { return props.isEditOn ? 'calc(100vh - 836px)' : 'calc(100vh - 750px)'; }};
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-    /* background: transparent;
-    border-radius: 4px; */
-  }
-  &::-webkit-scrollbar-track-piece {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0,0,0,0.4);
-    border: 1px solid slategrey
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
+  height: ${(props: isEditOn) => props.isEditOn ? 'calc(100vh - 836px)' : 'calc(100vh - 750px)'};
   @media (max-width:1580px) {
-    height: ${(props) => { return props.isEditOn ? 'calc(100vh - 614px)' : 'calc(100vh - 528px)'; }};
+    height: ${(props: isEditOn) => props.isEditOn ? 'calc(100vh - 614px)' : 'calc(100vh - 528px)'};
   } 
 `;
 
-interface todo {
-  workContent: string;
-  isDone?: boolean;
-  id: number;
-  isSetAlert: boolean;
-  alertDate?: string;
-  alertTime?: string;
-  alertSend?: boolean;
-}
-
 export const ToDoListPanel: React.FC<{}> = () => {
   const [workList, setWorkList] = useState(null);
-  const [tempTodo, setTempTodo] = useState({
+  const [tempTodo, setTempTodo] = useState<todo>({
     id: 0,
     workContent: "",
     isSetAlert: false,
-  } as todo);
+  });
   const [isEditOn, setIsEditOn] = useState(false);
 
   function editTodo() {
@@ -322,7 +282,7 @@ export const ToDoListPanel: React.FC<{}> = () => {
         delete tempItem.alertTime;
         delete tempItem.alertSend;
       }
-      workList.forEach((item) => {
+      workList.forEach((item: todo) => {
         if (item.id === tempItem.id) {
           tempWorkList.push(tempItem);
         } else {
@@ -360,7 +320,7 @@ export const ToDoListPanel: React.FC<{}> = () => {
 
   function changeIsDone(id: number) {
     let tempWorkList = [];
-    workList.forEach((todo) => {
+    workList.forEach((todo: todo) => {
       if (todo.id === id) {
         todo.isDone = !todo.isDone;
         tempWorkList.push(todo);
@@ -389,7 +349,7 @@ export const ToDoListPanel: React.FC<{}> = () => {
   return (
     <WorksPanel>
       <PanelTitle>To do list</PanelTitle>
-      {!!!tempTodo.id && <AddToDoPanel isEditOn={isEditOn} setIsEditOn={setIsEditOn} tempTodo={tempTodo} setTempTodo={setTempTodo} editTodo={editTodo} handleIsSetAlert={handleIsSetAlert}></AddToDoPanel>}
+      {!tempTodo.id && <AddToDoPanel isEditOn={isEditOn} setIsEditOn={setIsEditOn} tempTodo={tempTodo} setTempTodo={setTempTodo} editTodo={editTodo} handleIsSetAlert={handleIsSetAlert}></AddToDoPanel>}
       <ToDoContainer isEditOn={isEditOn}>
         <ToDoElements>
           {workList && workList.map((item: todo) => {
@@ -444,8 +404,8 @@ const ToDoElement: React.FC<{
         {props.tempTodo.id === props.item.id && <TextContent>
           <TitleEdit style={{ width: "224px" }} value={props.tempTodo.workContent} name="title" type="text" ></TitleEdit>
           {props.tempTodo.isSetAlert && <ToDoLabel htmlFor="">
-            <ToDoInput name="alertDate" onChange={(e) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertDate || ""} type="date" />
-            <ToDoInput name="alertTime" onChange={(e) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertTime || ""} type="time" />
+            <ToDoInput name="alertDate" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertDate || ""} type="date" />
+            <ToDoInput name="alertTime" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertTime || ""} type="time" />
           </ToDoLabel>}
         </TextContent>}
         {props.item.isSetAlert && props.tempTodo.id !== props.item.id &&
@@ -454,7 +414,7 @@ const ToDoElement: React.FC<{
               <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
             </svg>
           </AlarmContainer>}
-        {props.tempTodo.id !== props.item.id && <EditTrigger title="More actions" onClick={(e) => { e.stopPropagation(); setIsEditOn(true); }}>
+        {props.tempTodo.id !== props.item.id && <EditTrigger title="More actions" onClick={(e: Event) => { e.stopPropagation(); setIsEditOn(true); }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
             <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
           </svg>
@@ -464,9 +424,9 @@ const ToDoElement: React.FC<{
           <Btn onClick={() => { setIsEditOn(false); props.setTempTodo({ id: 0, workContent: "", isSetAlert: false }); }}>Cancel</Btn>
         </CompleteBtns>}
       </ToDoContent>
-      <EditPanel isEditOn={isEditOn} onClick={(e) => { e.stopPropagation(); setIsEditOn(false); }}>
-        <EditOption1 isEditOn={isEditOn} onClick={(e) => { e.stopPropagation(); setIsEditOn(false); props.setTempTodo(props.item); }}>Edit</EditOption1>
-        <EditOption2 isEditOn={isEditOn} onClick={(e) => { e.stopPropagation(); props.delTodo(props.item.id); }}>Delete</EditOption2>
+      <EditPanel isEditOn={isEditOn} onClick={(e: Event) => { e.stopPropagation(); setIsEditOn(false); }}>
+        <EditOption1 isEditOn={isEditOn} onClick={(e: Event) => { e.stopPropagation(); setIsEditOn(false); props.setTempTodo(props.item); }}>Edit</EditOption1>
+        <EditOption2 isEditOn={isEditOn} onClick={(e: Event) => { e.stopPropagation(); props.delTodo(props.item.id); }}>Delete</EditOption2>
       </EditPanel>
     </TempLink>
   );
@@ -476,7 +436,7 @@ const AddToDoPanel: React.FC<{
   tempTodo: todo;
   setTempTodo: (tempTodo: todo) => void;
   editTodo: () => void;
-  handleIsSetAlert: (e) => void;
+  handleIsSetAlert: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isEditOn: boolean;
   setIsEditOn: (boo: boolean) => void;
 }> = (props) => {
@@ -497,8 +457,8 @@ const AddToDoPanel: React.FC<{
       </ToDoLabel>
       {!props.tempTodo.isSetAlert && <ToDoLabel htmlFor="">
         <ToDoTitle>Alert</ToDoTitle>
-        <ToDoInput name="alertDate" onChange={(e) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertDate || ""} type="date" />
-        <ToDoInput name="alertTime" onChange={(e) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertTime || ""} type="time" />
+        <ToDoInput name="alertDate" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertDate || ""} type="date" />
+        <ToDoInput name="alertTime" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertTime || ""} type="time" />
       </ToDoLabel>}
       {props.isEditOn && <div style={{ display: "flex", paddingBottom: "4px" }}>
         <EditButton onClick={() => { props.editTodo(); props.setIsEditOn(false); }}>Done</EditButton>

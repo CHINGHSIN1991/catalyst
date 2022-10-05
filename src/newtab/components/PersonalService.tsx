@@ -5,9 +5,10 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { getUserInfo, loadUserInfo } from '../features/reducers/userInfoSlice';
 
-import { PanelBasicSetting } from '../../static/styleSetting';
+import { PanelBasicSetting, ScrollbarContainer } from '../../static/styleSetting';
 import { serviceList } from '../../static/optionList';
 import { handleErrorImage } from '../../utils/functions';
+import { scheme } from '../../static/types';
 
 const PersonalPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */
@@ -21,41 +22,19 @@ const WelcomeMessage = styled.div`
   padding: 0px 16px 16px 0px;
 `;
 
-const ServiceLinks = styled.div`
+const ServiceLinks = styled(ScrollbarContainer)`
   max-height: 104px;
-  overflow-y: scroll;
   width: 100%;
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-    /* background: transparent;
-    border-radius: 4px; */
-  }
-  &::-webkit-scrollbar-track-piece {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0,0,0,0.4);
-    border: 1px solid slategrey
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
   @media (max-width:1580px) {
-  /* 銀幕寬度小於1200套用此區塊 */
     max-height: 72px;
   }
 `;
 
 const ServiceLink = styled.a`
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   padding: 8px;
   border-radius: 4px;
   margin: 0 8px;
@@ -90,7 +69,7 @@ const WelcomeSentence = styled.div`
 `;
 
 const UserName = styled.a`
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   display: flex;
   flex-shrink: 1;
   align-items: center;
@@ -105,14 +84,11 @@ const UserName = styled.a`
   overflow: hidden;  
   white-space: nowrap;
   text-overflow: ellipsis;
-  /* :hover{
-    color: lightgray
-  } */
 `;
 
 const MoreServiceButton = styled.a`
   display: block;
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   margin: 8px 16px;
   width: 100%;
   height: 24px;
@@ -188,7 +164,7 @@ export const PersonalServicePanel: React.FC<{}> = () => {
       <ServiceLinks>
         {serviceList.map((item) => {
           return <ServiceLink key={item.imgUrl.light} href={item.link} target="_blank">
-            <ServiceIcon src={item.imgUrl.light} onError={(e) => handleErrorImage(e)} />
+            <ServiceIcon src={item.imgUrl.light} onError={(e: Event) => handleErrorImage(e)} />
             <ServiceTitle>{item.name.english}</ServiceTitle>
           </ServiceLink>;
         })}

@@ -5,8 +5,9 @@ import { useSelector } from 'react-redux';
 
 import { getPersonalization } from '../features/reducers/optionsSlice';
 
+import { scheme } from '../../static/types';
+
 const Wrapper = styled.div`
-  /* border: solid 1px; */
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   width: 100%;
   display: flex;
@@ -19,11 +20,10 @@ const DateBlock = styled.div`
   font-size: 2rem;
   text-align: center;
   font-weight: bold;
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   padding-bottom: 32px;
   transform: translateY(-80px);
-  text-shadow: 0 0 5px ${props => props.theme.inversePrimary},  0 0 8px ${props => props.theme.primaryOpacity};
-  /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
+  text-shadow: 0 0 5px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${(props: scheme) => props.theme.primaryOpacity};
 `;
 
 const TimeBlock = styled.div`
@@ -33,10 +33,9 @@ const TimeBlock = styled.div`
   text-align: center;
   font-weight: normal;
   padding-bottom: 32px;
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   transform: translateY(-80px);
-  text-shadow: 0 0 16px ${props => props.theme.inversePrimary},  0 0 20px ${props => props.theme.primaryOpacity};
-  /* text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0); */
+  text-shadow: 0 0 16px ${(props: scheme) => props.theme.inversePrimary},  0 0 20px ${(props: scheme) => props.theme.primaryOpacity};
 `;
 
 const TimeBlockSmall = styled.div`

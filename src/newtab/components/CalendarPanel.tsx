@@ -8,43 +8,31 @@ import { loadUserInfo, getUserInfo } from '../features/reducers/userInfoSlice';
 import { getPersonalization } from '../features/reducers/optionsSlice';
 import { setEditPanel } from '../features/reducers/editSlice';
 
-import { PanelBasicSetting, PanelTitle, CreateButton } from '../../static/styleSetting';
+import { PanelBasicSetting, PanelTitle, CreateButton, ScrollbarContainer } from '../../static/styleSetting';
 import { fetchCalendarData } from '../../utils/api';
 import { calendarColorList } from '../../static/optionList';
-import { calendarItem } from '../../static/types';
+import { calendarItem, scheme, timeNode, timeDay } from '../../static/types';
+
+type period = {
+  base: number,
+  start: number,
+  end: number,
+  color: string,
+};
+
+type data = timeNode | timeDay;
+type key = 'start' | 'end';
 
 const CalendarWrapper = styled(PanelBasicSetting)`
   display: flex;
   flex-grow:0;
 `;
 
-const CalendarContainer = styled.div`
-  /* border: solid 1px; */
+const CalendarContainer = styled(ScrollbarContainer)`
   position: relative;
   max-height: 480px;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-    /* background: transparent;
-    border-radius: 4px; */
-  }
-  &::-webkit-scrollbar-track-piece {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0,0,0,0.4);
-    border: 1px solid slategrey
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
   
   @media (max-width:1580px) {
-  /* 銀幕寬度小於1200套用此區塊 */
     max-height: 240px;
   }
 `;
@@ -69,7 +57,6 @@ const CalendarBarsContainer = styled.div`
 `;
 
 const BarColumn = styled.div`
-  /* display: flex; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,9 +70,9 @@ const EventItem = styled.div`
   border-radius: 4px;
   position: absolute;
   width: calc(100% - 8px);
-  top: ${(props) => { return `${(props.start - props.base) * 32 + 16}px`; }};
-  height: ${(props) => { return `${(props.end - props.start) * 32}px`; }};
-  background-color: ${(props) => { return props.color; }};
+  top: ${(props: period) => `${(props.start - props.base) * 32 + 16}px`};
+  height: ${(props: period) => `${(props.end - props.start) * 32}px`};
+  background-color: ${(props: period) => props.color};
   opacity: 0.8;
 `;
 
@@ -101,7 +88,6 @@ const EventContent = styled.div`
 `;
 
 const EventValue = styled.div`
-  /* border: solid 1px; */
   padding-bottom: 4px;
   width: 100%;
 `;
@@ -116,13 +102,13 @@ const TimeLine = styled.div`
 const TimeValue = styled.div`
   font-size: 0.75rem;
   padding-right: 8px;
-  color: ${props => props.theme.secondary};
+  color: ${(props: scheme) => props.theme.secondary};
 `;
 
 const TimeHr = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${props => props.theme.fourthly};
+  background-color: ${(props: scheme) => props.theme.fourthly};
 `;
 
 const TimeLineDisplay = styled.div`
@@ -154,11 +140,6 @@ export const CalendarPanel: React.FC<{}> = () => {
   //   }).then((res) => { console.log(res); }).catch((err) => { console.log(err.message); });
   // }
 
-  function getTime(timeString: string) {
-    const time = new Date(timeString);
-    return `${time.getMonth() + 1}/${time.getDate()} - ${time.getHours()}:${time.getMinutes()} `;
-  }
-
   function setTimeLine() {
     const current = Date.now();
     const cd = new Date();
@@ -166,7 +147,7 @@ export const CalendarPanel: React.FC<{}> = () => {
     setTimeLineInfo({ current, startTime });
   }
 
-  function getTimeStamp(data, key) {
+  function getTimeStamp(data: data, key: key) {
     let timeStamp = 0;
     if ('date' in data) {
       if (key === 'start') {
@@ -276,11 +257,11 @@ const CalendarBackground: React.FC<{}> = () => {
 const CalendarBars: React.FC<{
   calendarItems: calendarItem[][];
   dateStart: number;
-  getTimeStamp: (data: {}, key: string) => number;
+  getTimeStamp: (data: data, key: key) => number;
 }> = (props) => {
   const personalization = useSelector(getPersonalization);
 
-  function getTimeString(data, key) {
+  function getTimeString(data: data, key: key) {
     if ('date' in data) {
       if (key === 'start') {
         const time = new Date(`${data.date} 00:00`);
@@ -295,7 +276,7 @@ const CalendarBars: React.FC<{
     }
   }
 
-  function getTime(data, key) {
+  function getTime(data: data, key: key) {
     if ('date' in data) {
       if (key === 'start') {
         return '00:00';

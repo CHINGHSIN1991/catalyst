@@ -41,7 +41,6 @@ const Timer = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  /* border: solid 1px; */
 `;
 
 const Btn = styled.div`
@@ -95,7 +94,7 @@ export const PomodoroPanel: React.FC<{}> = () => {
     });
   }
 
-  function checkInputTime(e) {
+  function checkInputTime(e: React.ChangeEvent<HTMLInputElement>) {
     let tempNumber = parseInt(e.target.value, 10) % 100;
     if (tempNumber > 60) {
       tempNumber = 60;
@@ -138,7 +137,7 @@ export const PomodoroPanel: React.FC<{}> = () => {
             max='60'
             min='1'
             value={pomoAlertTime.value}
-            onChange={(e) => checkInputTime(e)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => checkInputTime(e)}
           ></TimerInput>}
         {(isRunning || passedSeconds !== 0) && pomoTimer.minutes}:{pomoTimer.seconds}
       </Timer>
