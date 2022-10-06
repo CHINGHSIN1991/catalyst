@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect, useContext } from "react";
+import { useSelector } from 'react-redux';
 
 import { getShortcuts } from '../features/reducers/shortcutsSlice';
-import { setAlertWindow } from '../features/reducers/alertSlice';
+import AlertContext from '../features/alertContext';
 
 import { PanelBasicSetting, PanelTitle, ScrollbarContainer } from '../../static/styleSetting';
 import { handleInputChange, handleTextAreaChange, handleErrorImage } from '../../utils/functions';
@@ -259,8 +259,8 @@ const EditOption2 = styled(EditOption)`
 `;
 
 export const InspirationNotePanel: React.FC<{}> = () => {
-  const dispatch = useDispatch();
   const ShortcutNumber = useSelector(getShortcuts);
+  const [alertState, setAlertState] = useContext(AlertContext);
   const [noteCategories, setNoteCategories] = useState([]);
   const [inspirationNotes, setInspirationNotes] = useState(null);
   const [tempNote, setTempNote] = useState({
@@ -324,11 +324,11 @@ export const InspirationNotePanel: React.FC<{}> = () => {
   }
 
   function checkToDeleteTag(deletedTag: string) {
-    dispatch(setAlertWindow({
-      name: 'All notes with this tag will be deleted',
+    setAlertState({
+      title: 'All notes with this tag will be deleted',
       message: 'Are you sure you want to delete this tag?',
       function: () => deleteTag(deletedTag)
-    }));
+    });
   }
 
   useEffect(() => {

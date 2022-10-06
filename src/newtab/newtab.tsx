@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import ReactDOM from 'react-dom/client';
 import styled, { ThemeProvider } from "styled-components";
 
 import { store } from './features/store';
 import { loadPersonalization, getPersonalization } from './features/reducers/optionsSlice';
+import AlertContext from './features/alertContext';
 
 import { ResetStyle, GlobalStyle } from "../static/globalStyle";
 import { colorScheme } from '../static/optionList';
+import { scheme, alertState } from '../static/types';
 
 import { ShortcutsPanel } from './components/ShortcutsPanel';
 import { InspirationNotePanel } from './components/InspirationNotes';
@@ -25,7 +27,8 @@ import { BackgroundComponent, PhotographerInfo } from './components/BackgroundPa
 import { TogglePanel } from './components/TogglePanel';
 import { AlertWindow } from './components/AlertWindow';
 
-
+type isBoardOn = { isBoardOn: boolean; };
+type isMenuOn = { isMenuOn: boolean; };
 
 const Wrapper = styled.div`
   /* border: solid 5px; */
@@ -43,8 +46,6 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
-
-
 const HeightLimiter = styled.div`
   /* border: solid 1px black; */
   display: inline-flex;
@@ -55,7 +56,7 @@ const HeightLimiter = styled.div`
 `;
 
 const Container = styled.div`
-  left: ${(props: { isBoardOn: boolean; }) => { return props.isBoardOn ? "-100vw" : "0"; }};
+  left: ${(props: isBoardOn) => props.isBoardOn ? "-100vw" : "0"};
   top: 0;
   display: flex;
   width: 200vw;
@@ -70,7 +71,7 @@ const MenuContainer = styled.div`
   position: absolute;
   font-family: 'Noto Sans', 'Microsoft JhengHei';
   width: 360px;
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -78,19 +79,19 @@ const MenuContainer = styled.div`
 `;
 
 const MenuContainerLeft = styled(MenuContainer)`
-  left: ${(props) => { return props.isMenuOn ? "0px" : "-400px"; }};
+  left: ${(props: isMenuOn) => props.isMenuOn ? "0px" : "-400px"};
   top: 0px;
 `;
 
 const MenuContainerRight = styled(MenuContainer)`
-  right: ${(props) => { return props.isMenuOn ? "0px" : "-400px"; }};
+  right: ${(props: isMenuOn) => props.isMenuOn ? "0px" : "-400px"};
   top: 0px;
 `;
 
 const FocusPanel = styled.div`
   /* border: solid 1px; */
   width: calc(100% - 720px);
-  color: ${props => props.theme.primary};
+  color: ${(props: scheme) => props.theme.primary};
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -109,11 +110,15 @@ const MainBoard = styled.div`
 `;
 
 const App: React.FC<{}> = () => {
+  const [alertState, setAlertState] = useState<alertState>({ title: '' });
+
   return (
     <Provider store={store}>
-      <ResetStyle />
-      <GlobalStyle />
-      <NewTab></NewTab>
+      <AlertContext.Provider value={[alertState, setAlertState]}>
+        <ResetStyle />
+        <GlobalStyle />
+        <NewTab></NewTab>
+      </AlertContext.Provider>
     </Provider >
   );
 };
@@ -121,6 +126,7 @@ const App: React.FC<{}> = () => {
 const NewTab: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const personalization = useSelector(getPersonalization);
+  const alertContent = useContext(AlertContext);
   const [isMenuOn, setIsMenuOn] = useState(false);
   const [isBoardOn, setIsBoardOn] = useState(false);
   const [centralPanel, setCentralPanel] = useState("");

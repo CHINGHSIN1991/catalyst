@@ -237,7 +237,7 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
 
   function applyCollection(index: number) {
     if (tempBackgroundSetting.backgroundList[index].length > 0) {
-      setTempBackgroundSetting({ ...tempBackgroundSetting, current: { setting: index, slice: 0 } });
+      setTempBackgroundSetting({ ...tempBackgroundSetting, bgSetting: { ...tempBackgroundSetting.bgSetting, current: { setting: index, slice: 0 } } });
     }
   }
 
@@ -264,21 +264,21 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
               current={current}
               index={item}
               onClick={() => setCurrentSet(item)}
-              currentApplied={tempBackgroundSetting.current.setting}
+              currentApplied={tempBackgroundSetting.bgSetting.current.setting}
             >
               <BackgroundListOptionTitle
                 current={current}
                 index={item}
               >{item === 0 ? 'Random' : `Collection ${item}`}
               </BackgroundListOptionTitle>
-              {(item === tempBackgroundSetting.current.setting || item === current) &&
+              {(item === tempBackgroundSetting.bgSetting.current.setting || item === current) &&
                 <ApplyButton
                   onClick={() => applyCollection(item)}
-                  applied={tempBackgroundSetting.current.setting}
+                  applied={tempBackgroundSetting.bgSetting.current.setting}
                   index={item}
                   current={current}>
-                  {tempBackgroundSetting.current.setting === item && 'Current'}
-                  {tempBackgroundSetting.current.setting !== item && tempBackgroundSetting.backgroundList[item].length > 0 && 'Apply'}
+                  {tempBackgroundSetting.bgSetting.current.setting === item && 'Current'}
+                  {tempBackgroundSetting.bgSetting.current.setting !== item && tempBackgroundSetting.backgroundList[item].length > 0 && 'Apply'}
                 </ApplyButton>}
             </BackgroundListOption>;
           })}

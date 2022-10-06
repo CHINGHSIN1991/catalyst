@@ -6,7 +6,6 @@ import calendarReducer from './reducers/calendarSlice'
 import userInfoReducer from "./reducers/userInfoSlice";
 import backgroundReducer from "./reducers/backgroundSlice";
 import personalizationReducer from './reducers/optionsSlice'
-import alertWindowStateReducer from './reducers/alertSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,7 +15,6 @@ export const store = configureStore({
     userInfo: userInfoReducer,
     backgrounds: backgroundReducer,
     personalization: personalizationReducer,
-    alertWindowState: alertWindowStateReducer,
   }
 })
 

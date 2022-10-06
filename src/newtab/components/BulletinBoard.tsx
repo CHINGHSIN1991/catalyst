@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import Draggable from "react-draggable";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useDispatch } from "react-redux";
 
-import { setAlertWindow } from '../features/reducers/alertSlice';
+import AlertContext from "../features/alertContext";
 
 import { handleTextAreaChange } from "../../utils/functions";
 import { BulletinTogglePanel } from "./BulletinTogglePanel";
@@ -175,7 +174,7 @@ const CreateAt = styled.a`
 export const BulletinBoard: React.FC<{
   setIsBoardOn: (boo: boolean) => void;
 }> = (props) => {
-  const dispatch = useDispatch();
+  const [alertState, setAlertState] = useContext(AlertContext);
   const [tempMemo, setTempMemo] = useState({ memo: "", color: memoColorList[0] });
   const [memos, setMemos] = useState<memo[]>([]);
 
@@ -222,7 +221,7 @@ export const BulletinBoard: React.FC<{
       setMemos([...memos, newMemo]);
       setTempMemo({ ...tempMemo, memo: "" });
     } else {
-      dispatch(setAlertWindow({ name: 'Empty memo', message: 'Please key some content' }));
+      setAlertState({ title: 'Empty memo', message: 'Please key some content' });
       setTempMemo({ ...tempMemo, memo: "" });
     }
   }

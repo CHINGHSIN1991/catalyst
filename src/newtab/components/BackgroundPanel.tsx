@@ -89,33 +89,36 @@ export const BackgroundComponent: React.FC<{}> = () => {
     const ct = new Date();
     const today = `${ct.getFullYear()}-${ct.getMonth() + 1}-${ct.getDate()}`;
 
-    chrome.storage.sync.get(['backgroundSetting'], (res) => {
-      if (res.backgroundSetting) {
-        if (res.backgroundSetting.lastUpdate !== today) {
+    chrome.storage.sync.get(['bgSetting', 'bgSet0', 'bgSet1', 'bgSet2', 'bgSet3', 'bgSet4', 'bgSet5'], (res) => {
+      if (res.bgSetting && res.bgSet0 && res.bgSet1 && res.bgSet2 && res.bgSet3 && res.bgSet4 && res.bgSet5) {
+        if (res.bgSetting.lastUpdate !== today) {
           getBackgroundImg("nature").then((images) => {
-            let newBackgroundList = [...res.backgroundSetting.backgroundList];
-            newBackgroundList[0] = processBackgroundData(images);
-            const tempBackgrounds = {
-              ...res.backgroundSetting,
-              lastUpdate: today,
-              backgroundList: newBackgroundList
+            const tempBgSetting = {
+              bgSetting: { ...res.bgSetting, lastUpdate: today },
+              backgroundList: [processBackgroundData(images), res.bgSet1, res.bgSet2, res.bgSet3, res.bgSet4, res.bgSet5],
             };
-            dispatch(loadBackgrounds(tempBackgrounds));
+            dispatch(loadBackgrounds(tempBgSetting));
           });
         } else {
-          dispatch(loadBackgrounds(res.backgroundSetting));
+          const tempBgSetting = {
+            bgSetting: res.bgSetting,
+            backgroundList: [res.bgSet0, res.bgSet1, res.bgSet2, res.bgSet3, res.bgSet4, res.bgSet5],
+          };
+          dispatch(loadBackgrounds(tempBgSetting));
         }
       } else {
-        getBackgroundImg("nature").then((res) => {
-          const tempBackgrounds = {
-            lastUpdate: today,
-            current: {
-              setting: 0,
-              slice: 0,
+        getBackgroundImg("nature").then((images) => {
+          const tempBgSetting = {
+            bgSetting: {
+              lastUpdate: today,
+              current: {
+                setting: 0,
+                slice: 0,
+              }
             },
-            backgroundList: [processBackgroundData(res), [], [], [], [], []]
+            backgroundList: [processBackgroundData(images), [], [], [], [], []],
           };
-          dispatch(loadBackgrounds(tempBackgrounds));
+          dispatch(loadBackgrounds(tempBgSetting));
         });
       }
     });
@@ -126,13 +129,21 @@ export const BackgroundComponent: React.FC<{}> = () => {
   }, []);
 
   useEffect(() => {
-    chrome.storage.sync.set({ backgroundSetting: backgroundSetting });
+    chrome.storage.sync.set({
+      bgSetting: backgroundSetting.bgSetting,
+      bgSet0: backgroundSetting.backgroundList[0],
+      bgSet1: backgroundSetting.backgroundList[1],
+      bgSet2: backgroundSetting.backgroundList[2],
+      bgSet3: backgroundSetting.backgroundList[3],
+      bgSet4: backgroundSetting.backgroundList[4],
+      bgSet5: backgroundSetting.backgroundList[5],
+    });
   }, [backgroundSetting]);
 
   return (
     <BackgroundContainer>
-      {backgroundSetting.backgroundList[backgroundSetting.current.setting].map((item, index) => {
-        return (<BackgroundImage key={item.id + index} url={item.url} index={index} current={backgroundSetting.current.slice}></BackgroundImage>);
+      {backgroundSetting.backgroundList[backgroundSetting.bgSetting.current.setting].map((item, index) => {
+        return (<BackgroundImage key={item.id + index} url={item.url} index={index} current={backgroundSetting.bgSetting.current.slice}></BackgroundImage>);
       })}
     </BackgroundContainer>
   );
@@ -144,12 +155,12 @@ export const PhotographerInfo: React.FC<{}> = () => {
   return (
     <BackgroundInfo>
       Photo by
-      <Photographer href={backgroundSetting.backgroundList[backgroundSetting.current.setting][backgroundSetting.current.slice].profile} target="_blank">
-        {backgroundSetting.backgroundList[backgroundSetting.current.setting][backgroundSetting.current.slice].user}
+      <Photographer href={backgroundSetting.backgroundList[backgroundSetting.bgSetting.current.setting][backgroundSetting.bgSetting.current.slice].profile} target="_blank">
+        {backgroundSetting.backgroundList[backgroundSetting.bgSetting.current.setting][backgroundSetting.bgSetting.current.slice].user}
       </Photographer>
       on
-      <Photographer href='https://unsplash.com/' target="_blank">{' Unsplash '}</Photographer>
-      <DownloadIcon href={backgroundSetting.backgroundList[backgroundSetting.current.setting][backgroundSetting.current.slice].downloadLink} target="_blank">
+      <Photographer href='https://unsplash.com/' target="_blank">Unsplash</Photographer>
+      <DownloadIcon href={backgroundSetting.backgroundList[backgroundSetting.bgSetting.current.setting][backgroundSetting.bgSetting.current.slice].downloadLink} target="_blank">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-link" viewBox="0 0 16 16">
           <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
           <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />

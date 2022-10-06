@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { background, backgroundSetting, currentComparison, appliedComparison } from '../../static/types';
 import { ScrollbarContainer } from '../../static/styleSetting';
 
-
 const Wrapper = styled.div`
   width: 100%;
   padding: 24px 0 0;
@@ -226,13 +225,13 @@ const ApplyButton = styled.div`
   margin: 2px 0 8px 16px;
   text-align: center;
   color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(80,80,80)' : 'rgb(80,80,80)'};
-  background-color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(218, 240, 233)' : 'rgb(184,184,184)'};
+  background-color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(173, 255, 218)' : 'rgb(184,184,184)'};
   white-space: nowrap;
   overflow: hidden;
   transition: 0.2s;
   /* padding: 4px 0 0 16px; */
   :hover {
-    background-color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(218, 240, 233)' : 'rgb(40,40,40)'};
+    background-color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(173, 255, 218)' : 'rgb(40,40,40)'};
     color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(80,80,80)' : 'rgb(240,240,240)'};
   }
   @media (max-width:768px) {
@@ -261,22 +260,35 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
 
   function applyCollection(index: number) {
     if (tempBackgroundSetting.backgroundList[index].length > 0) {
-      setTempBackgroundSetting({ ...tempBackgroundSetting, current: { setting: index, slice: 0 } });
+      setTempBackgroundSetting({ ...tempBackgroundSetting, bgSetting: { ...tempBackgroundSetting.bgSetting, current: { setting: index, slice: 0 } } });
     }
   }
 
   useEffect(() => {
-    chrome.storage.local.get(['backgroundSetting'], (res) => {
-      if (res.backgroundSetting) {
-        setTempBackgroundSetting(res.backgroundSetting);
-      }
+    chrome.storage.sync.get(['bgSetting', 'bgSet0', 'bgSet1', 'bgSet2', 'bgSet3', 'bgSet4', 'bgSet5'], (res) => {
+      const tempBgSetting = {
+        bgSetting: res.bgSetting,
+        backgroundList: [res.bgSet0, res.bgSet1, res.bgSet2, res.bgSet3, res.bgSet4, res.bgSet5],
+      };
+      console.log(tempBgSetting);
+      setTempBackgroundSetting(tempBgSetting);
     });
   }, []);
 
   useEffect(() => {
-    chrome.storage.local.set({ backgroundSetting: tempBackgroundSetting });
+    tempBackgroundSetting &&
+      chrome.storage.sync.set({
+        bgSetting: tempBackgroundSetting.bgSetting,
+        bgSet0: tempBackgroundSetting.backgroundList[0],
+        bgSet1: tempBackgroundSetting.backgroundList[1],
+        bgSet2: tempBackgroundSetting.backgroundList[2],
+        bgSet3: tempBackgroundSetting.backgroundList[3],
+        bgSet4: tempBackgroundSetting.backgroundList[4],
+        bgSet5: tempBackgroundSetting.backgroundList[5],
+      });
   }, [tempBackgroundSetting]);
 
+  console.log(tempBackgroundSetting);
   return (
     <Wrapper onClick={(e: Event) => e.stopPropagation()}>
       <EditPanelTitle>
@@ -288,26 +300,26 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
       <Title>{(current === 0 ? 'Get 10 random images everyday' : `You can add images from other collections`)}</Title>
       <BackgroundPanel>
         <BackgroundListPanel>
-          {tempBackgroundSetting && [0, 1, 2, 3, 4, 5].map((item) => {
+          {tempBackgroundSetting && [0, 1, 2, 3, 4, 5].map((number) => {
             return <BackgroundListOption
-              key={'option' + item}
+              key={'option' + number}
               current={current}
-              index={item} onClick={() => setCurrentSet(item)}
-              currentApplied={tempBackgroundSetting.current.setting}
+              index={number} onClick={() => setCurrentSet(number)}
+              currentApplied={tempBackgroundSetting.bgSetting.current.setting}
             >
-              <BackgroundListOptionTitle>{item === 0 ? 'Random' : `Collection ${item}`}
+              <BackgroundListOptionTitle>{number === 0 ? 'Random' : `Collection ${number}`}
                 {/* {tempBackgroundSetting.current.setting === item && <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pin-angle" viewBox="0 0 16 16">
                   <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146zm.122 2.112v-.002.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a4.507 4.507 0 0 0-.288-.076 4.922 4.922 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a4.924 4.924 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034.114 0 .23-.011.343-.04L9.927 2.028c-.029.113-.04.23-.04.343a1.779 1.779 0 0 0 .062.46z" />
                 </svg>} */}
               </BackgroundListOptionTitle>
-              {(item === tempBackgroundSetting.current.setting || item === current) &&
+              {(number === tempBackgroundSetting.bgSetting.current.setting || number === current) &&
                 <ApplyButton
-                  onClick={() => applyCollection(item)}
-                  applied={tempBackgroundSetting.current.setting}
-                  index={item}
+                  onClick={() => applyCollection(number)}
+                  applied={tempBackgroundSetting.bgSetting.current.setting}
+                  index={number}
                   current={current}>
-                  {tempBackgroundSetting.current.setting === item && 'Current'}
-                  {tempBackgroundSetting.current.setting !== item && tempBackgroundSetting.backgroundList[item].length > 0 && 'Apply'}
+                  {tempBackgroundSetting.bgSetting.current.setting === number && 'Current'}
+                  {tempBackgroundSetting.bgSetting.current.setting !== number && tempBackgroundSetting.backgroundList[number].length > 0 && 'Apply'}
                 </ApplyButton>}
             </BackgroundListOption>;
           })}

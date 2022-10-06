@@ -98,7 +98,7 @@ export const ToggleTitle = styled.div`
   position: absolute;
   text-align: center;
   text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
-  width: 120px;
+  width: auto;
   transition: 0.2s;
 `;
 

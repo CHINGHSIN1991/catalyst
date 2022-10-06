@@ -57,7 +57,6 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
         let tempList = [];
         result.todoList.forEach((todo: todo)=>{
           if(todo.isSetAlert && !todo.alertSend && (Date.parse(`${todo.alertDate} ${todo.alertTime}`)<now)){
-            console.log(this);
             this.registration.showNotification("To do list reminder",{
               body: `The set time of work item "${todo.workContent}" has passed`,
               icon: "CatalystLogo_128.png"
@@ -73,8 +72,7 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
         chrome.storage.local.set({ todoList: tempList }, function () {
           // console.log("set");
         });
-      }
-      
+      }      
     });
   }  
 })
