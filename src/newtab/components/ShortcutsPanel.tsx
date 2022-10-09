@@ -15,6 +15,9 @@ interface query {
 }
 
 const OrgFunctionPanel = styled(PanelBasicSetting)`
+  @media (max-width:1180px) {
+    flex-grow: 1;
+  }  
 `;
 
 const SearchPanel = styled.div`
@@ -64,6 +67,9 @@ const ShortcutsList = styled(ScrollbarList)`
   @media (max-width:1580px) {
     max-height: 200px;
   }
+  @media (max-width:1180px) {
+    max-height: calc(100vh - 360px);
+  } 
 `;
 
 const EditOptionContainer = styled.div`
@@ -138,12 +144,14 @@ const Shortcut = styled.li`
   flex-direction: column;
   cursor: pointer;
   transition: 0.2s;
-
   :hover {
     background-color: rgba(255,255,255,0.1);
     ${EditIcon}{
       opacity: 1;
     }
+  }
+  @media (max-width:1580px) {
+    width: 87px;
   }
 `;
 

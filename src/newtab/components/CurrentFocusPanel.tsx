@@ -11,8 +11,8 @@ import { getTimeString, getTimeStamp } from '../../utils/functions';
 import { subtitle } from '../../static/styleSetting';
 
 const Wrapper = styled.div`
-  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   width: 100%;
+  height: 64px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -78,9 +78,9 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
 
   function checkUpdate() {
     const current = Date.now();
-    if (currentTask.current && getTimeStamp(currentTask.current.end, 'end') < current) {
+    if (currentTask.current && taskOnGoing && getTimeStamp(currentTask.current.end, 'end') < current) {
       getCalendarEvents();
-    } else if (!currentTask.current && getTimeStamp(currentTask.current.start, 'start') < current) {
+    } else if (currentTask.current && !taskOnGoing && getTimeStamp(currentTask.current.start, 'start') < current) {
       getCalendarEvents();
     }
   }

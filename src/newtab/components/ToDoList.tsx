@@ -259,7 +259,10 @@ const ToDoContainer = styled(ScrollbarContainer)`
   height: ${(props: isEditOn) => props.isEditOn ? 'calc(100vh - 836px)' : 'calc(100vh - 750px)'};
   @media (max-width:1580px) {
     height: ${(props: isEditOn) => props.isEditOn ? 'calc(100vh - 614px)' : 'calc(100vh - 528px)'};
-  } 
+  }
+  @media (max-width:1180px) {
+    height: ${(props: isEditOn) => props.isEditOn ? 'calc(100vh - 428px)' : 'calc(100vh - 342px)'};
+  }
 `;
 
 export const ToDoListPanel: React.FC<{}> = () => {

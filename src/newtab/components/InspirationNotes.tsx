@@ -164,6 +164,9 @@ const ScrollContainer = styled(ScrollbarContainer)`
   padding-right: 2px;
   max-height: ${(props: shortcutNumber) => `calc(100vh - (288px + ${Math.ceil((props.shortcutNumber + 1) / 4) * 88}px ))`};
   flex-grow: 1;  
+  @media (max-width:1180px) {
+    max-height: calc(100vh - 332px);
+  } 
 `;
 
 const EditPanel = styled.div`

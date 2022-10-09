@@ -31,7 +31,6 @@ type isBoardOn = { isBoardOn: boolean; };
 type isMenuOn = { isMenuOn: boolean; };
 
 const Wrapper = styled.div`
-  /* border: solid 5px; */
   font-family: 'Noto Sans';
   position: fixed;
   left: 0;
@@ -82,9 +81,6 @@ const MenuContainer = styled.div`
   @media (max-width:1180px) {
     display: none;
   }
-  @media (max-width:768px) {
-    display: none;
-  }
 `;
 
 const MenuContainerLeft = styled(MenuContainer)`
@@ -98,20 +94,17 @@ const MenuContainerRight = styled(MenuContainer)`
 `;
 
 const FocusPanel = styled.div`
-  /* border: solid 1px; */
-  width: calc(100% - 720px);
   color: ${(props: scheme) => props.theme.primary};
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: calc(100% - 720px);
   @media (max-width:1580px) {
     width: calc(100% - 640px);
   }
   @media (max-width:1180px) {
-    width: 100%;
-  }
-  @media (max-width:768px) {
+    left: 0px;
     width: 100%;
   }
 `;
@@ -119,12 +112,62 @@ const FocusPanel = styled.div`
 const MainBoard = styled.div`
   width: 100vw;
   height: 100vh;
-  /* border: solid 5px; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+`;
+
+const MobileMenuList = styled.div`
+  position: absolute;
+  display: flex;
+  overflow: hidden;
+  top: 40px;
+  width: calc(100vw - 720px);
+  height: calc(100vh - 272px);
+  @media (max-width:1580px) {
+    width: calc(100vw - 640px);
+  }
+  @media (max-width:1180px) {
+    left: 0px;
+    width: 100%;
+  }
+`;
+
+const MobileMenuContainer = styled.div`
+  position: absolute;
+  width: calc(100vw - 720px);
+  height: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  top: 0px;
+  left: 0px;
+  transition: 0.2s;
+  @media (max-width:1580px) {
+    width: calc(100vw - 640px);
+  }
+  @media (max-width:1180px) {
+    width: 600vw;
+    left: ${props => { return `-${props.mobileToggle * 100}vw`; }};
+  }
+`;
+
+const MobileMenuItem = styled.div`
+  flex-shrink:0;
+  width: calc(100vw - 720px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @media (max-width:1580px) {
+    width: calc(100vw - 640px);
+  }
+  @media (max-width:1180px) {
+    width: 100vw;
+  }
 `;
 
 const App: React.FC<{}> = () => {
@@ -148,6 +191,17 @@ const NewTab: React.FC<{}> = () => {
   const [isBoardOn, setIsBoardOn] = useState(false);
   const [centralPanel, setCentralPanel] = useState("");
   const [theme, setTheme] = useState(colorScheme.dark);
+  const [mobileToggle, setMobileToggle] = useState(0);
+
+  console.log(mobileToggle);
+
+  function changeMobileMenu() {
+    if (mobileToggle < 5) {
+      setMobileToggle(mobileToggle + 1);
+    } else {
+      setMobileToggle(0);
+    }
+  }
 
   useEffect(() => {
     chrome.storage.sync.get(['personalization'], (res) => {
@@ -191,8 +245,30 @@ const NewTab: React.FC<{}> = () => {
             </MenuContainerLeft>
             <FocusPanel>
               <PhotographerInfo></PhotographerInfo>
-              <TimePanel></TimePanel>
-              <CurrentFocusPanel></CurrentFocusPanel>
+              <MobileMenuList>
+                <MobileMenuContainer mobileToggle={mobileToggle}>
+                  <MobileMenuItem>
+                    <TimePanel></TimePanel>
+                    <CurrentFocusPanel></CurrentFocusPanel>
+                  </MobileMenuItem>
+                  {mobileToggle !== 0 && <MobileMenuItem>
+                    <PersonalServicePanel></PersonalServicePanel>
+                    <SettingPanel></SettingPanel>
+                  </MobileMenuItem>}
+                  {mobileToggle !== 0 && <MobileMenuItem>
+                    <ShortcutsPanel></ShortcutsPanel>
+                  </MobileMenuItem>}
+                  {mobileToggle !== 0 && <MobileMenuItem>
+                    <CalendarPanel></CalendarPanel>
+                  </MobileMenuItem>}
+                  {mobileToggle !== 0 && <MobileMenuItem>
+                    <InspirationNotePanel></InspirationNotePanel>
+                  </MobileMenuItem>}
+                  {mobileToggle !== 0 && <MobileMenuItem>
+                    <ToDoListPanel></ToDoListPanel>
+                  </MobileMenuItem>}
+                </MobileMenuContainer>
+              </MobileMenuList>
               <PomodoroPanel centralPanel={centralPanel}></PomodoroPanel>
               <WeatherPanel centralPanel={centralPanel}></WeatherPanel>
               <TogglePanel
@@ -201,6 +277,7 @@ const NewTab: React.FC<{}> = () => {
                 setIsMenuOn={setIsMenuOn}
                 centralPanel={centralPanel}
                 setCentralPanel={setCentralPanel}
+                changeMobileMenu={changeMobileMenu}
               ></TogglePanel>
             </FocusPanel>
             <MenuContainerRight isMenuOn={isMenuOn}>
@@ -223,4 +300,4 @@ const rootElement = document.createElement('div');
 document.body.appendChild(rootElement);
 const root = ReactDOM.createRoot(rootElement);
 
-root.render(<App />);
+root.render(<App />);;;

@@ -13,6 +13,9 @@ export const PanelBasicSetting = styled.div`
   :last-child {
     margin: 8px
   }
+  @media (max-width:1180px) {
+    width: calc(100% - 48px);
+  }
 `;
 
 export const PanelOpenBackground = styled.div`
@@ -122,6 +125,9 @@ export const ToggleButton = styled.div`
       transform: translateY(40px);
     }
   }
+  @media (max-width:768px) {
+    margin: 0 16px;
+  }
 `;
 
 export const ScrollbarContainer = styled.div`
@@ -193,7 +199,6 @@ export const subtitle = styled.div`
   font-weight: bold;
   color: ${(props: scheme) => props.theme.primary};
   padding-bottom: 32px;
-  transform: translateY(-80px);
   text-shadow: 0 0 5px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${(props: scheme) => props.theme.primaryOpacity};
   @media (max-width:1580px) {
     font-size: 1.75rem;

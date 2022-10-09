@@ -9,11 +9,10 @@ import { scheme } from '../../static/types';
 import { subtitle } from '../../static/styleSetting';
 
 const Wrapper = styled.div`
-  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
+  padding-top: 120px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -23,7 +22,7 @@ const DateBlock = styled(subtitle)`
   font-weight: bold;
   color: ${(props: scheme) => props.theme.primary};
   padding-bottom: 32px;
-  transform: translateY(-80px);
+  /* transform: translateY(-80px); */
   text-shadow: 0 0 5px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${(props: scheme) => props.theme.primaryOpacity};
   @media (max-width:1580px) {
     font-size: 1.75rem;
@@ -44,7 +43,7 @@ const TimeBlock = styled.div`
   font-weight: normal;
   padding-bottom: 32px;
   color: ${(props: scheme) => props.theme.primary};
-  transform: translateY(-80px);
+  /* transform: translateY(-80px); */
   text-shadow: 0 0 16px ${(props: scheme) => props.theme.inversePrimary},  0 0 20px ${(props: scheme) => props.theme.primaryOpacity};
   @media (max-width:1580px) {
     font-size: 6rem;

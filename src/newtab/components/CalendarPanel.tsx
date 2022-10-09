@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import { getEvents, loadEvents } from '../features/reducers/calendarSlice';
 import { loadUserInfo, getUserInfo } from '../features/reducers/userInfoSlice';
 import { getPersonalization } from '../features/reducers/optionsSlice';
 import { setEditPanel } from '../features/reducers/editSlice';
+import AlertContext from "../features/alertContext";
 
 import { PanelBasicSetting, PanelTitle, CreateButton, ScrollbarContainer } from '../../static/styleSetting';
 import { fetchCalendarData } from '../../utils/api';
@@ -24,15 +25,20 @@ type period = {
 const CalendarWrapper = styled(PanelBasicSetting)`
   display: flex;
   flex-grow:0;
+  @media (max-width:1180px) {
+    flex-grow: 1;
+  } 
 `;
 
 const CalendarContainer = styled(ScrollbarContainer)`
   position: relative;
   max-height: 480px;
-  
   @media (max-width:1580px) {
     max-height: 240px;
   }
+  @media (max-width:1180px) {
+    max-height: calc(100vh - 344px);
+  } 
 `;
 
 const CalendarBackgroundContainer = styled.div`
@@ -119,6 +125,26 @@ const TimeLineDisplay = styled.div`
   background-color: rgba(255,255,255,0.7);
 `;
 
+const DelBtn = styled.div`
+  cursor: pointer;
+  color: rgba(255,255,255,0.4);
+  font-weight: normal;
+  font-size: 16px;
+  text-align: center;
+  line-height: 12px;
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  z-index: 3;
+  transition: 0.2s;
+  :hover{
+    color: rgba(255,255,255,1);
+    font-weight:bold;
+  }
+`;
+
 export const CalendarPanel: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector(getUserInfo);
@@ -127,16 +153,7 @@ export const CalendarPanel: React.FC<{}> = () => {
   const [timeLineInfo, setTimeLineInfo] = useState({ current: 0, startTime: 0 });
   const [calendarItems, setCalendarItems] = useState([]);
 
-  // function delEvent(item: calendarItem) {
-  //   console.log(item);
-  //   fetch(`https://www.googleapis.com/calendar/v3/calendars/${userInfo.email}/events/${item.id}`, {
-  //     headers: new Headers({
-  //       'Authorization': 'Bearer ' + authToken,
-  //       'Content-Type': 'application/json'
-  //     }),
-  //     method: "DELETE",
-  //   }).then((res) => { console.log(res); }).catch((err) => { console.log(err.message); });
-  // }
+
 
   function setTimeLine() {
     const current = Date.now();
@@ -151,7 +168,6 @@ export const CalendarPanel: React.FC<{}> = () => {
       // @ts-ignore
       chrome.identity.getProfileUserInfo({ 'accountStatus': 'ANY' },
         (res) => {
-          console.log(res);
           chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
             console.log(token);
             dispatch(loadUserInfo({ ...userInfo, email: res.email, id: res.id, authToken: token }));
@@ -169,7 +185,7 @@ export const CalendarPanel: React.FC<{}> = () => {
     }
   }
 
-  useEffect(() => {
+  function loadCalendarEvents() {
     chrome.identity.getProfileUserInfo(
       (userInfo) => {
         chrome.storage.sync.get(['userName'], function (userName) {
@@ -186,6 +202,10 @@ export const CalendarPanel: React.FC<{}> = () => {
         });
       }
     );
+  }
+
+  useEffect(() => {
+    loadCalendarEvents();
     setTimeLine();
     setInterval(() => setTimeLine(), 30000);
   }, []);
@@ -214,7 +234,7 @@ export const CalendarPanel: React.FC<{}> = () => {
       <PanelTitle>Calendar</PanelTitle>
       <CalendarContainer>
         <CalendarBackground></CalendarBackground>
-        <CalendarBars calendarItems={calendarItems} getTimeStamp={getTimeStamp} dateStart={dateStart}></CalendarBars>
+        <CalendarBars calendarItems={calendarItems} getTimeStamp={getTimeStamp} dateStart={dateStart} loadCalendarEvents={loadCalendarEvents}></CalendarBars>
         <TimeLineDisplay timeLineInfo={timeLineInfo}></TimeLineDisplay>
       </CalendarContainer>
       <CreateButton onClick={checkOauthData}>+</CreateButton>
@@ -242,8 +262,30 @@ const CalendarBars: React.FC<{
   calendarItems: calendarItem[][];
   dateStart: number;
   getTimeStamp: (data: timeData, key: timeKey) => number;
+  loadCalendarEvents: () => void;
 }> = (props) => {
+  const [alertState, setAlertState] = useContext(AlertContext);
+  const userInfo = useSelector(getUserInfo);
   const personalization = useSelector(getPersonalization);
+
+  function delEvent(item: calendarItem) {
+    console.log(item);
+    fetch(`https://www.googleapis.com/calendar/v3/calendars/${userInfo.email}/events/${item.id}`, {
+      headers: new Headers({
+        'Authorization': 'Bearer ' + userInfo.authToken,
+        'Content-Type': 'application/json'
+      }),
+      method: "DELETE",
+    }).then(() => props.loadCalendarEvents()).catch((err) => { console.log(err.message); });
+  }
+
+  function deleteAlert(item: calendarItem) {
+    setAlertState({
+      title: 'Data cannot be recovered after deletion',
+      message: `Are you sure you want to delete event "${item.summary}" ?`,
+      function: () => delEvent(item)
+    });
+  }
 
   return (
     <CalendarBarsContainer>
@@ -259,6 +301,7 @@ const CalendarBars: React.FC<{
               end={props.getTimeStamp(item.end, 'end') / 3600000}
               color={personalization.idCalendarColorful ? ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', monoCode: '#434343', colorId: '7' }).code) : ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', monoCode: '#434343', colorId: '7' }).monoCode)}
             ><EventContent>
+                <DelBtn onClick={() => deleteAlert(item)}>×</DelBtn>
                 <EventValue>{item.summary}</EventValue>
                 <EventValue>{getTimeString(item.start, 'start')} - {getTimeString(item.end, 'end')}</EventValue>
               </EventContent>

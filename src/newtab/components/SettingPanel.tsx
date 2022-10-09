@@ -18,6 +18,9 @@ const ButtonContainer = styled.div`
   height: 40px;
   display: flex;
   align-items: center;
+  @media (max-width:1180px) {
+    margin-top: 0px;
+  } 
 `;
 
 const ButtonArea = styled.div`

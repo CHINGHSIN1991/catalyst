@@ -15,6 +15,9 @@ import { scheme } from '../../static/types';
 
 const PersonalPanel = styled(PanelBasicSetting)`
   /* border: solid 1px;   */
+  @media (max-width:1180px) {
+    flex-grow:1;
+  }
 `;
 
 const WelcomeMessage = styled.div`
@@ -34,6 +37,9 @@ const ServiceLinks = styled(ScrollbarContainer)`
   @media (max-width:1580px) {
     max-height: 72px;
   }
+  @media (max-width:1180px) {
+    max-height: calc(100vh - 400px);
+  } 
 `;
 
 const ServiceIcon = styled.div`
@@ -75,6 +81,9 @@ const ServiceLink = styled.a`
     ${ServiceIcon} {
       background-image: ${(props) => `url(${props.hover})`};
     }
+  }
+  @media (max-width:1580px) {
+    width: 64px;
   }
 `;
 

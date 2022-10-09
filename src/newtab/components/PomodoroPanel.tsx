@@ -26,6 +26,10 @@ const Wrapper = styled.div`
   width: ${(props: centralPanel) => props.centralPanel === "Pomodoro" ? "400px" : "0px"};
   transition: 0.1s;
   overflow: hidden;
+  @media (max-width:1180px) {
+    width: ${(props: centralPanel) => props.centralPanel === "Pomodoro" ? "calc(100% - 48px)" : "0px"};
+    min-width: ${(props: centralPanel) => props.centralPanel === "Pomodoro" ? "280px" : "0px"};
+  }
 `;
 
 const PomodoroContainer = styled.div`
