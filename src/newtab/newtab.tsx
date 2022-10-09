@@ -76,6 +76,15 @@ const MenuContainer = styled.div`
   display: flex;
   flex-direction: column;
   transition: 0.4s;
+  @media (max-width:1580px) {
+    width: 320px
+  }
+  @media (max-width:1180px) {
+    display: none;
+  }
+  @media (max-width:768px) {
+    display: none;
+  }
 `;
 
 const MenuContainerLeft = styled(MenuContainer)`
@@ -96,6 +105,15 @@ const FocusPanel = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  @media (max-width:1580px) {
+    width: calc(100% - 640px);
+  }
+  @media (max-width:1180px) {
+    width: 100%;
+  }
+  @media (max-width:768px) {
+    width: 100%;
+  }
 `;
 
 const MainBoard = styled.div`
@@ -126,7 +144,6 @@ const App: React.FC<{}> = () => {
 const NewTab: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const personalization = useSelector(getPersonalization);
-  const alertContent = useContext(AlertContext);
   const [isMenuOn, setIsMenuOn] = useState(false);
   const [isBoardOn, setIsBoardOn] = useState(false);
   const [centralPanel, setCentralPanel] = useState("");

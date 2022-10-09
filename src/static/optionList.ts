@@ -133,138 +133,188 @@ export const languageList = [
 ]
 
 
-export const serviceList = [
+export const personalServiceList = [
   {
+    id: 0,
     name: {
       chinese: "搜尋",
       english:"Search",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/search.png?alt=media&token=3301117e-c4d4-4955-85b9-fac9c43b932d",
-      dark: "",
+      color: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/search.png?alt=media&token=144a102f-459d-43a4-86dc-72889f0bc6c1',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/search_white.png?alt=media&token=78e131ae-d7be-4a2c-86ed-73d42dd85935',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/search_dark.png?alt=media&token=c6acdf3b-7a28-490b-8ae9-575682b8052d',
     },
     link: "https://www.google.com.tw"
   },
   {
+    id: 1,
     name: {
       chinese: "地圖",
       english:"Maps",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/maps.png?alt=media&token=033f8734-daf6-4f21-9fbc-718e38c06cbe",
-      dark: "",
+      color: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/maps.png?alt=media&token=609f693f-f4a4-427d-a49c-abc591e3abf2',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/maps_white.png?alt=media&token=fbcc621d-01e7-43bc-8b7b-6825d62ed738',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/maps_dark.png?alt=media&token=b4d55ce6-5f7d-4fa3-a852-cd025447b75a',
     },
     link: "https://www.google.com/maps"
   },
   {
+    id: 2,
     name: {
       chinese: "Youtube",
       english:"Youtube",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/youtube.png?alt=media&token=44566ad5-4c35-42c9-883b-94fe1e071af9",
-      dark: "",
+      color:'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/youtube.png?alt=media&token=76bae46b-5472-4b7f-a215-1279ceb34da0',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/youtube_white.png?alt=media&token=ce022cee-dbba-4d4c-803a-4a6782ad066f',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/youtube_dark.png?alt=media&token=a35cf8c6-a7f8-4151-8108-6918c1c71e27',
     },
     link: "https://www.youtube.com"
   },
   {
+    id: 3,
     name: {
       chinese: "Play",
       english:"Play",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/play.png?alt=media&token=b67a13c8-e2c9-49a2-867a-d8f20369bf5b",
-      dark: "",
+      color: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/play.png?alt=media&token=9bf3b44c-1d9d-4ca0-ac97-2f6c35e1934e',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/play_white.png?alt=media&token=46d695e5-bd90-4f23-83d8-7b4647ff6774',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/play_dark.png?alt=media&token=14d07051-9f8b-40c0-91f5-2a7022f017e8',
     },
     link: "https://play.google.com/store"
   },
   {
+    id: 4,
     name: {
       chinese: "新聞",
       english:"News",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/news.png?alt=media&token=58973685-d890-44c1-9ca2-23f6ae107f83",
-      dark: "",
+      color: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/news.png?alt=media&token=35f5f9f5-2182-4412-a353-1fa0907b3a3c',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/news_white.png?alt=media&token=e2b48c7c-b567-4775-bdf5-97d225fb2c87',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/news_dark.png?alt=media&token=65163e1f-4a3b-4ea4-92d1-60dc8ace2b12',
     },
     link: "https://news.google.com"
   },
   {
+    id: 5,
     name: {
       chinese: "Gmail",
       english:"Gmail",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/gmail.png?alt=media&token=13a0a479-2920-4756-9d84-8afe74f837f2",
-      dark: "",
+      color:'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/gmail.png?alt=media&token=3adcef67-cb55-4aba-896a-ef7c1ae28767',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/gmail_white.png?alt=media&token=3e3530b3-954f-4fdc-a067-89673389d8ca',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/gmail_dark.png?alt=media&token=cb4f07b7-ce17-40b4-a8fd-dae7be95c580',
     },
     link: "https://mail.google.com/mail"
   },
   {
+    id: 6,
     name: {
       chinese: "Meet",
       english:"Meet",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/meet.png?alt=media&token=637ba558-47a9-48aa-8472-c0066754ea30",
-      dark: "",
+      color:'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/meet.png?alt=media&token=7a7d44b7-c45c-4d1d-8124-646da85fb0a8',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/meet_white.png?alt=media&token=1f9a1a67-484e-49d4-9781-142e70174006',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/meet_dark.png?alt=media&token=4ca87b64-e4cd-4303-90ba-e058c899b455',
     },
     link: "https://meet.google.com"
   },
   {
+    id: 7,
     name: {
       chinese: "聯絡人",
       english:"Contacts",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/contacts.png?alt=media&token=30fb9ec3-335a-4d08-9269-2063b00b43af",
-      dark: "",
+      color:'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/contacts.png?alt=media&token=b5cc6e51-4385-4bb3-9694-b812cb41f5df',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/contacts_white.png?alt=media&token=e9f268d3-16be-468f-a293-14551201b901',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/contacts_dark.png?alt=media&token=3394bc30-8edd-479f-88c0-60237f4919a7',
     },
     link: "https://contacts.google.com"
   },
   {
+    id: 8,
     name: {
       chinese: "雲端硬碟",
       english:"Drive",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/drive.png?alt=media&token=fd1e9bdc-bfae-4b3b-bdda-13d97eb275e3",
-      dark: "",
+      color:'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/drive.png?alt=media&token=af09ef7e-c6a4-4828-8d0c-0fd4dbb555cf',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/drive_white.png?alt=media&token=e6cdd362-a214-4c59-b18b-8ff6bc610af6',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/drive_dark.png?alt=media&token=14f12d21-4aa0-4af5-b462-05e17ccc8bff',
     },
     link: "https://drive.google.com"
   },
   {
+    id: 9,
     name: {
       chinese: "日曆",
       english:"Calendar",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/calendar.png?alt=media&token=c4907353-e293-44c9-948b-12ed07f0e0e9",
-      dark: "",
+      color:'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/calendar.png?alt=media&token=3f2a6610-229e-4621-add1-3ef8d344f206',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/calendar_white.png?alt=media&token=e9b84946-61cb-480d-bfff-956c4212a0de',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/calendar_dark.png?alt=media&token=76c79662-b1ae-4808-8c5f-fc967911779a',
     },
     link: "https://calendar.google.com"
   },
   {
+    id: 10,
     name: {
       chinese: "翻譯",
       english:"Translate",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/translate.png?alt=media&token=6aa06726-6a62-4c19-9b5e-b680d0ebf7f5",
-      dark: "",
+      color: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/translate.png?alt=media&token=9127b723-2748-49ba-9fd8-9797df624182',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/translate_white.png?alt=media&token=8aea9503-39d0-4339-a0e5-aec5066bc166',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/translate_dark.png?alt=media&token=55d67a6c-36d3-4e1e-b222-7230af6e9f43',
     },
     link: "https://translate.google.com"
   },
   {
+    id: 11,
     name: {
       chinese: "相片",
       english:"Photos",
     },
     imgUrl: {
-      light: "https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/photos.png?alt=media&token=8259bce7-2525-42d4-a41b-46ebc90cbe73",
-      dark: "",
+      color:'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/photos.png?alt=media&token=803d7239-796c-432b-a42e-0868bd4247e5',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/photos_white.png?alt=media&token=6923353a-ae51-4109-a47c-e79c911d853b',
+      dark: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/photos_dark.png?alt=media&token=e57fa39e-57c3-47b9-bf9e-50a8fc25b71e',
     },
     link: "https://photos.google.com"
+  },
+  {
+    id:12,
+    name: {
+      chinese: '播客',
+      english: 'Podcast',
+    },
+    imgUrl: {
+      color: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/podcasts.png?alt=media&token=bce36e44-7165-4af6-82ae-ab68d432a5ec',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/podcasts_white.png?alt=media&token=233995fd-19b5-46a2-afab-52c82e273797',
+      dark:'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/podcasts_dark.png?alt=media&token=87ccdcab-68f6-4f63-a1ff-b9d476b7a67a',
+    },
+  link:'https://podcasts.google.com/',
+  },
+  {
+    id:13,
+    name: {
+      chinese: '文件',
+      english: 'Document',
+    },
+    imgUrl: {
+      color: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/document.png?alt=media&token=66b2e1b4-ae85-4aac-8924-b23f85182ff2',
+      light: 'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/document_white.png?alt=media&token=e319c00c-7edd-44b4-9b32-d5cf05797973',
+      dark:'https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/document_dark.png?alt=media&token=77137425-a6d0-4227-b799-eaf385711033',
+    },
+  link:'https://docs.google.com/document/',
   },
 ]
 
@@ -285,6 +335,10 @@ export const calendarColorList = [
 ]
 
 const basicScheme = {
+  accentColor: 'rgba(0,255,162,1)',
+  accentColorSecondary: 'rgba(80,255,255,1)',
+  accentText: 'rgba(80,80,80,1)',
+  panelBorder: 'solid 0.5px rgba(120,120,120,0.4)',
 }
 
 export const colorScheme = {
@@ -299,8 +353,7 @@ export const colorScheme = {
     primaryHover: 'rgba(255,255,255,0.4)',
     inversePrimary: 'rgba(255,255,255,1)',
     inverseSecondary: 'rgba(200,200,200,1)',
-    panelBackground: 'rgba(255,255,255,0.45)',    
-    panelBorder: 'solid 0.5px rgba(120,120,120,0.4)',
+    panelBackground: 'rgba(255,255,255,0.5)',    
   },
   dark:{
     ...basicScheme,
@@ -314,6 +367,5 @@ export const colorScheme = {
     inversePrimary: 'rgba(40,40,40,1)',
     inverseSecondary: 'rgba(80,80,80,1)',
     panelBackground: 'rgba(0,0,0,0.4)',
-    panelBorder: 'solid 0.5px rgba(120,120,120,0.4)',
   },
 }

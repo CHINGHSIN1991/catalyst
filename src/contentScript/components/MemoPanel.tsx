@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { handleTextAreaChange } from '../../utils/functions';
+import { handleTextAreaChange, statusChangeDelay } from '../../utils/functions';
 import { memoColorList } from '../../static/optionList';
 import { ScrollbarTextArea } from '../../static/styleSetting';
 
@@ -122,26 +122,20 @@ export const MemoPanel = () => {
           tempMemoList = res.memos;
         }
         tempMemoList.push(newMemo);
-        chrome.storage.local.set({ memos: tempMemoList }, () => { console.log('done'); setTempMemo({ memo: '' }); setTimeout(() => setProcessStatus(2), 600); });
+        chrome.storage.local.set({ memos: tempMemoList }, () => { setTempMemo({ memo: '' }); setTimeout(() => setProcessStatus(2), 600); });
       });
     }
   }
 
   useEffect(() => {
-    if (processStatus === 2) {
-      setTimeout(() => {
-        setProcessStatus(3);
-      }, 600);
-    } else if (processStatus === 3) {
-      setTimeout(() => {
-        setProcessStatus(0);
-      }, 600);
+    if (processStatus > 1) {
+      statusChangeDelay(4, 400, processStatus, setProcessStatus);
     }
   }, [processStatus]);
 
   return (
     <Wrapper>
-      <ColorPanel onClick={(e) => e.stopPropagation()}>
+      <ColorPanel onClick={(e: Event) => e.stopPropagation()}>
         {memoColorList && memoColorList.map((code) => {
           return (<ColorContainer
             key={'memo' + code}

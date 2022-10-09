@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
+import AlertContext from '../../features/alertContext';
 import { getEditPanelState, setEditPanel } from '../../features/reducers/editSlice';
 import { loadBackgrounds } from '../../features/reducers/backgroundSlice';
 
 import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine, ScrollbarContainer } from '../../../static/styleSetting';
 import { background, backgroundSetting, currentComparison, appliedComparison } from '../../../static/types';
 import { PanelButton, ButtonContainer } from '../../../static/components';
+import { deepCopy } from '../../../utils/functions';
 
 type bg = { bg: string; };
 
@@ -218,15 +220,34 @@ const BackgroundListOptionTitle = styled.div`
 export const BackgroundEditPanel: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const editPanelState = useSelector(getEditPanelState);
+  const [alertState, setAlertState] = useContext(AlertContext);
   const [tempBackgroundSetting, setTempBackgroundSetting] = useState<backgroundSetting>(null);
   const [current, setCurrentSet] = useState(0);
 
+
   function addImgToCollection(image: background, collection: number) {
-    let temp = JSON.parse(JSON.stringify(tempBackgroundSetting));
+    let temp = deepCopy(tempBackgroundSetting);
     if (!temp.backgroundList[collection].find((item: background) => item.id === image.id)) {
-      temp.backgroundList[collection].push(image);
-      setTempBackgroundSetting(temp);
+      if (temp.backgroundList[collection].length >= 12) {
+        setAlertState({
+          title: 'Collection is full',
+          message: `The number of images in collection ${collection} has reached the limit. Do you want to replace the first image with the selected image?`,
+          function: () => replaceFirstImage(image, collection)
+        });
+      } else {
+        temp.backgroundList[collection].push(image);
+        setTempBackgroundSetting(temp);
+      }
+    } else {
+      setAlertState({ title: 'Duplicate images', message: `This image is already in collection${collection}` });
     }
+  }
+
+  function replaceFirstImage(image: background, collection: number) {
+    let temp = deepCopy(tempBackgroundSetting);
+    temp.backgroundList[collection].shift();
+    temp.backgroundList[collection].push(image);
+    setTempBackgroundSetting(temp);
   }
 
   function delImgInCollection(image: background, collection: number) {
@@ -255,7 +276,7 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
         </EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
       </EditPanelTitle>
-      <Title>{(current === 0 ? 'Get 10 random images everyday' : `You can add images from other collections`)}</Title>
+      <Title>{(current === 0 ? 'Get 10 random images everyday' : `You can add images from other collections ( max 12 images )`)}</Title>
       <BackgroundPanel>
         <BackgroundListPanel>
           {tempBackgroundSetting && [0, 1, 2, 3, 4, 5].map((item) => {

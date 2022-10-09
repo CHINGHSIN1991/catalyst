@@ -6,8 +6,6 @@ import { ToggleTitle, ToggleButton } from '../../static/styleSetting';
 const Wrapper = styled.div`
   position: absolute;
   bottom: 40px;
-  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
-  /* border: solid 1px; */
   width: 100%;
   display: flex;
   justify-content: center;

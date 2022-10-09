@@ -3,10 +3,13 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
+import { setEditPanel } from '../features/reducers/editSlice';
 import { getUserInfo, loadUserInfo } from '../features/reducers/userInfoSlice';
+import { getPersonalization } from '../features/reducers/optionsSlice';
+import { getServiceList, loadServiceList } from '../features/reducers/personalServiceSlice';
 
 import { PanelBasicSetting, ScrollbarContainer } from '../../static/styleSetting';
-import { serviceList } from '../../static/optionList';
+import { personalServiceList } from '../../static/optionList';
 import { handleErrorImage } from '../../utils/functions';
 import { scheme } from '../../static/types';
 
@@ -33,6 +36,26 @@ const ServiceLinks = styled(ScrollbarContainer)`
   }
 `;
 
+const ServiceIcon = styled.div`
+  width: 28px;
+  height: 28px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: ${(props) => `url(${props.src})`};  
+  /* object-fit: contain; */
+  transition: 0.2s;
+  :hover {
+    background-image: ${(props) => `url(${props.hover}), url(${props.backup})`};
+  }
+`;
+
+const ServiceOnError = styled.img`
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+`;
+
 const ServiceLink = styled.a`
   color: ${(props: scheme) => props.theme.primary};
   padding: 8px;
@@ -49,13 +72,10 @@ const ServiceLink = styled.a`
 
   :hover {
     background-color: rgba(255,255,255,0.1);
+    ${ServiceIcon} {
+      background-image: ${(props) => `url(${props.hover})`};
+    }
   }
-`;
-
-const ServiceIcon = styled.img`
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
 `;
 
 const ServiceTitle = styled.div`  
@@ -131,6 +151,8 @@ position: absolute;
 export const PersonalServicePanel: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector(getUserInfo);
+  const serviceList = useSelector(getServiceList);
+  const personalization = useSelector(getPersonalization);
   const [welcomeMessage, setWelcomeMessage] = useState("Have a nice day !");
 
   function setWelcomeMsg(current: number) {
@@ -142,6 +164,7 @@ export const PersonalServicePanel: React.FC<{}> = () => {
       setWelcomeMessage("Good evening !");
     }
   }
+
   useEffect(() => {
     const current = (new Date()).getHours();
     setWelcomeMsg(current);
@@ -149,6 +172,13 @@ export const PersonalServicePanel: React.FC<{}> = () => {
     chrome.storage.sync.get(['userName'], function (res) {
       if ('userName' in res) {
         dispatch(loadUserInfo({ ...userInfo, name: res.userName }));
+      }
+    });
+
+    chrome.storage.sync.get(['serviceList'], function (res) {
+      if ('serviceList' in res) {
+        console.log(res);
+        dispatch(loadServiceList(res.serviceList));
       }
     });
   }, []);
@@ -163,21 +193,23 @@ export const PersonalServicePanel: React.FC<{}> = () => {
       </WelcomeMessage>
       <ServiceLinks>
         {serviceList.map((item) => {
-          return <ServiceLink key={item.imgUrl.light} href={item.link} target="_blank">
-            <ServiceIcon src={item.imgUrl.light} onError={(e: Event) => handleErrorImage(e)} />
-            <ServiceTitle>{item.name.english}</ServiceTitle>
+          return <ServiceLink key={personalServiceList[item].imgUrl.light} href={personalServiceList[item].link} hover={personalServiceList[item].imgUrl.color} target="_blank">
+            <ServiceIcon src={personalization.isDarkMode ? personalServiceList[item].imgUrl.light : personalServiceList[item].imgUrl.dark} onError={(e: Event) => handleErrorImage(e)}>
+              <ServiceOnError src='https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/onError.png?alt=media&token=3a641010-249b-4fbb-a1bd-256adfb460ea' onError={(e: Event) => handleErrorImage(e)}></ServiceOnError>
+            </ServiceIcon>
+            <ServiceTitle>{personalServiceList[item].name.english}</ServiceTitle>
           </ServiceLink>;
         })}
         <MoreServiceButton href="https://about.google/products/" target="_blank">
           See more services
         </MoreServiceButton>
       </ServiceLinks>
-      <CreateButton onClick={() => { }}>
+      <CreateButton onClick={() => dispatch(setEditPanel({ name: 'ServiceEdit' }))}>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
           <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
         </svg>
       </CreateButton>
-    </PersonalPanel>
+    </PersonalPanel >
   );
 }
 

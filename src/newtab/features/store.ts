@@ -5,7 +5,8 @@ import editPanelStateReducer from './reducers/editSlice';
 import calendarReducer from './reducers/calendarSlice'
 import userInfoReducer from "./reducers/userInfoSlice";
 import backgroundReducer from "./reducers/backgroundSlice";
-import personalizationReducer from './reducers/optionsSlice'
+import personalizationReducer from './reducers/optionsSlice';
+import serviceListReducer from './reducers/personalServiceSlice';
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     userInfo: userInfoReducer,
     backgrounds: backgroundReducer,
     personalization: personalizationReducer,
+    serviceList: serviceListReducer,
   }
 })
 

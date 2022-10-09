@@ -42,7 +42,7 @@ const SelectOption = styled.option`
 export const PronounceToolEditPanel: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const personalization = useSelector(getPersonalization);
-  const [language, setLanguage] = useState(null);
+  const [language, setLanguage] = useState('zh-TW');
 
   function saveLanguageSetting() {
     const tempPersonalization = { ...personalization, pronounce: language };
@@ -64,6 +64,9 @@ export const PronounceToolEditPanel: React.FC<{}> = () => {
         </EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
       </EditPanelTitle>
+      <div style={{ color: 'red' }}>
+        *feature in development
+      </div>
       <SelectInput value={language} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setLanguage(e.target.value)}>
         {languageList.map((item) => { return <SelectOption key={item.LangCultureName} value={item.LangCultureName}>{item.DisplayEN}</SelectOption>; })}
       </SelectInput>

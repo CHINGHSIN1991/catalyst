@@ -44,6 +44,7 @@ const MemoInput = styled(ScrollbarTextArea)`
   width: 332px;
   height: 64px;
   background-color: ${(props: color) => props.color};
+  transition: 0.2s;
   opacity: 0.8;
   border: solid rgb(160,160,160) 1px;
   z-index: 3;

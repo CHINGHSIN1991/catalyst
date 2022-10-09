@@ -340,10 +340,15 @@ export const ToDoListPanel: React.FC<{}> = () => {
     });
   }
 
-  useEffect(() => {
+  function getTodo() {
     chrome.storage.local.get(['todoList'], function (result) {
       setWorkList(result.todoList);
     });
+  }
+
+  useEffect(() => {
+    getTodo();
+    setInterval(getTodo, 1200);
   }, []);
 
   return (

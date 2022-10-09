@@ -291,7 +291,12 @@ export const InspirationNotePanel: React.FC<{}> = () => {
 
   function delNote(id: number) {
     let tempNotes = {};
-    let tempCategories = ["no category", ...noteCategories];
+    let tempCategories = [];
+    if (noteCategories) {
+      tempCategories = ["no category", ...noteCategories];
+    } else {
+      tempCategories = ["no category"];
+    }
     tempCategories.forEach((category) => {
       if (inspirationNotes[category]) {
         let tempArray = [];

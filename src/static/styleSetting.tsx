@@ -186,3 +186,22 @@ export const ScrollbarTextArea = styled.textarea`
     box-shadow: transparent;
   }
 `;
+
+export const subtitle = styled.div`
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+  color: ${(props: scheme) => props.theme.primary};
+  padding-bottom: 32px;
+  transform: translateY(-80px);
+  text-shadow: 0 0 5px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${(props: scheme) => props.theme.primaryOpacity};
+  @media (max-width:1580px) {
+    font-size: 1.75rem;
+  }
+  @media (max-width:1180px) {
+    font-size: 1.25rem;
+  }
+  @media (max-width:768px) {
+    font-size: 1rem;
+  }
+`;

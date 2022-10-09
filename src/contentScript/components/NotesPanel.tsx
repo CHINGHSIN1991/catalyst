@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { handleInputChange, handleTextAreaChange } from '../../utils/functions';
+import { handleInputChange, handleTextAreaChange, statusChangeDelay } from '../../utils/functions';
 
 import { AlertComponent } from './AlertComponent';
 
@@ -209,6 +209,7 @@ export const NotesPanel = () => {
       logo: `https://icon.horse/icon/${linkUrl.hostname}`,
       note: noteLink.note
     };
+
     chrome.storage.sync.get(['inspirationNotes'], (result) => {
       let tempInspirationNotes = result.inspirationNotes;
       let targetCategoryNotes = [];
@@ -218,7 +219,7 @@ export const NotesPanel = () => {
       targetCategoryNotes.push(inspirationNote);
       tempInspirationNotes = { ...tempInspirationNotes, [currentCategory]: targetCategoryNotes };
       console.log(tempInspirationNotes);
-      chrome.storage.sync.set({ inspirationNotes: tempInspirationNotes }, () => { console.log('done'); });
+      chrome.storage.sync.set({ inspirationNotes: tempInspirationNotes });
       setNoteLink({ title: '', note: '' });
       setTimeout(() => setProcessStatus(2), 600);
     });
@@ -234,21 +235,15 @@ export const NotesPanel = () => {
   }, []);
 
   useEffect(() => {
-    if (processStatus === 2) {
-      setTimeout(() => {
-        setProcessStatus(3);
-      }, 600);
-    } else if (processStatus === 3) {
-      setTimeout(() => {
-        setProcessStatus(0);
-      }, 600);
+    if (processStatus > 1) {
+      statusChangeDelay(4, 400, processStatus, setProcessStatus);
     }
   }, [processStatus]);
 
   return (
     <Wrapper>
-      <TagsPanel onClick={(e) => e.stopPropagation()}>
-        <TagInput isEditOn={isEditOn} name="category" value={tempCategory.category} onChange={(e) => handleInputChange(e, tempCategory, setTempCategory)} type="text"></TagInput>
+      <TagsPanel onClick={(e: Event) => e.stopPropagation()}>
+        <TagInput isEditOn={isEditOn} name="category" value={tempCategory.category} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, tempCategory, setTempCategory)} type="text"></TagInput>
         <AddBtn isEditOn={isEditOn} onClick={addCategory}>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -258,7 +253,7 @@ export const NotesPanel = () => {
           <SelectOption value="no category" style={{ color: "darkgray" }}>- Tag -</SelectOption>
           {noteCategories.map((category, index) => { return <SelectOption key={category + index} value={category}>{category}</SelectOption>; })}
         </SelectBlock>
-        <Btn isEditOn={isEditOn} onClick={(e) => { setIsEditOn(!isEditOn); }}>
+        <Btn isEditOn={isEditOn} onClick={(e: Event) => { setIsEditOn(!isEditOn); }}>
           {isEditOn ? 'CANCEL' : 'ADD TAG'}
         </Btn>
       </TagsPanel>

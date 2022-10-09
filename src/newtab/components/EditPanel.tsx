@@ -11,6 +11,7 @@ import { UserInfoEditPanel } from './Edit/UserInfoEdit';
 import { PronounceToolEditPanel } from './Edit/PronounceToolEdit';
 import { MenuOptionPanel } from './Edit/MenuOptionPanel';
 import { DisplayModePanel } from './Edit/DisplayModeEdit';
+import { ServiceEditPanel } from './Edit/PersonalServiceEdit';
 
 type editPanelState = { editPanelState: string; };
 
@@ -57,6 +58,7 @@ export const EditPanel: React.FC<{}> = () => {
         {editPanelState.name === 'PronounceToolEdit' && <PronounceToolEditPanel></PronounceToolEditPanel>}
         {editPanelState.name === 'MenuOptionEdit' && <MenuOptionPanel></MenuOptionPanel>}
         {editPanelState.name === 'DisplayModeEdit' && <DisplayModePanel></DisplayModePanel>}
+        {editPanelState.name === 'ServiceEdit' && <ServiceEditPanel></ServiceEditPanel>}
       </PanelContainer>
     </PanelOpenBackground>
   );

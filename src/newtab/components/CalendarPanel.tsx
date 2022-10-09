@@ -11,7 +11,8 @@ import { setEditPanel } from '../features/reducers/editSlice';
 import { PanelBasicSetting, PanelTitle, CreateButton, ScrollbarContainer } from '../../static/styleSetting';
 import { fetchCalendarData } from '../../utils/api';
 import { calendarColorList } from '../../static/optionList';
-import { calendarItem, scheme, timeNode, timeDay } from '../../static/types';
+import { calendarItem, scheme, timeData, timeKey } from '../../static/types';
+import { getTimeString, getTimeStamp } from '../../utils/functions';
 
 type period = {
   base: number,
@@ -19,9 +20,6 @@ type period = {
   end: number,
   color: string,
 };
-
-type data = timeNode | timeDay;
-type key = 'start' | 'end';
 
 const CalendarWrapper = styled(PanelBasicSetting)`
   display: flex;
@@ -147,20 +145,6 @@ export const CalendarPanel: React.FC<{}> = () => {
     setTimeLineInfo({ current, startTime });
   }
 
-  function getTimeStamp(data: data, key: key) {
-    let timeStamp = 0;
-    if ('date' in data) {
-      if (key === 'start') {
-        timeStamp = Date.parse(`${data.date}T00:00:00`);
-      } else {
-        timeStamp = Date.parse(`${data.date}T23:59:59`);
-      }
-    } else {
-      timeStamp = Date.parse(data.dateTime);
-    }
-    return timeStamp;
-  }
-
   function checkOauthData() {
     console.log(userInfo);
     if (!userInfo.email || !userInfo.authToken) {
@@ -257,37 +241,9 @@ const CalendarBackground: React.FC<{}> = () => {
 const CalendarBars: React.FC<{
   calendarItems: calendarItem[][];
   dateStart: number;
-  getTimeStamp: (data: data, key: key) => number;
+  getTimeStamp: (data: timeData, key: timeKey) => number;
 }> = (props) => {
   const personalization = useSelector(getPersonalization);
-
-  function getTimeString(data: data, key: key) {
-    if ('date' in data) {
-      if (key === 'start') {
-        const time = new Date(`${data.date} 00:00`);
-        return `${time.getMonth() + 1}/${time.getDate()} 00:00`;
-      } else {
-        const time = new Date(`${data.date} 23:59`);
-        return ` ${time.getMonth() + 1}/${time.getDate()} 23:59`;
-      }
-    } else {
-      const time = new Date(data.dateTime);
-      return `${time.getMonth() + 1}/${time.getDate()} ${`${time.getHours()}`.padStart(2, "0")}:${`${time.getMinutes()}`.padStart(2, "0")}`;
-    }
-  }
-
-  function getTime(data: data, key: key) {
-    if ('date' in data) {
-      if (key === 'start') {
-        return '00:00';
-      } else {
-        return '23:59';
-      }
-    } else {
-      const time = new Date(data.dateTime);
-      return `${`${time.getHours()}`.padStart(2, "0")}:${`${time.getMinutes()}`.padStart(2, "0")}`;
-    }
-  }
 
   return (
     <CalendarBarsContainer>
@@ -304,7 +260,7 @@ const CalendarBars: React.FC<{
               color={personalization.idCalendarColorful ? ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', monoCode: '#434343', colorId: '7' }).code) : ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', monoCode: '#434343', colorId: '7' }).monoCode)}
             ><EventContent>
                 <EventValue>{item.summary}</EventValue>
-                <EventValue>{getTime(item.start, 'start')} - {getTime(item.end, 'end')}</EventValue>
+                <EventValue>{getTimeString(item.start, 'start')} - {getTimeString(item.end, 'end')}</EventValue>
               </EventContent>
             </EventItem>);
         })

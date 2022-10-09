@@ -286,6 +286,9 @@ export type openWeatherData = {
 
   export type scheme = {
     theme:{
+      accentColor: string,
+      accentColorSecondary: string,
+      accentText: string,
       primary: string,
       secondary: string,
       tertiary: string,
@@ -317,3 +320,6 @@ export type openWeatherData = {
     message?:string,
     function?:any,
   }
+
+  export type timeData = timeNode | timeDay;
+  export type timeKey = 'start' | 'end';

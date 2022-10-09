@@ -51,6 +51,7 @@ const AlertTitleText = styled(EditPanelTitleText)`
 
 const InfoContainer = styled.div`
   text-align: center;
+  line-height: 24px;
   padding: 16px 0 8px;
   width: 100%;
 `;

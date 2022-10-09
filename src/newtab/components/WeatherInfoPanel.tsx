@@ -9,8 +9,6 @@ import { fetchWeatherData } from '../../utils/api';
 import { FocusPanelTitle } from '../../static/styleSetting';
 import { openWeatherData, scheme, centralPanel } from '../../static/types';
 
-
-
 const Wrapper = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: inline-flex;
