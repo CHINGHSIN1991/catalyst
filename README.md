@@ -55,7 +55,7 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 
 ## Tech
 
-- Fundamentals: HTML5  |  CSS3  |  JavaScript
+- Fundamentals: HTML5  |  CSS3  |  JavaScript(ES6)
 - Tools for Development: Webpack  |  TypeScript
 - Libraries: React  |  React-DOM  |  Redux | React-Redux  |  Redux Toolkit  |  Styled Components
 - APIs: Chrome extension APIs  |  Google calendar API | Unsplash Image API | OpenWeather API
