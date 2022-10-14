@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from "styled-components";
-import { useDispatch } from 'react-redux';
 
-import { setAlertWindow } from '../features/reducers/alertSlice';
+import AlertContext from '../features/alertContext';
 
 import { memo, scheme } from "../../static/types";
 import { ToggleTitle, ToggleButton } from '../../static/styleSetting';
@@ -24,15 +23,15 @@ export const BulletinTogglePanel: React.FC<{
   clearAll: () => void;
   memos: memo[];
 }> = (props) => {
-  const dispatch = useDispatch();
+  const [alertState, setAlertState] = useContext(AlertContext);
 
   function checkToClearAll() {
     if (props.memos.length > 0) {
-      dispatch(setAlertWindow({
-        name: 'Data cannot be recovered after deletion',
+      setAlertState({
+        title: 'Data cannot be recovered after deletion',
         message: 'Are you sure you want to clear all memos?',
         function: props.clearAll
-      }));
+      });
     }
   }
 

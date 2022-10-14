@@ -1,7 +1,8 @@
 import { userInfo, tempEvent } from "../static/types"
 import { v4 as uuidv4 } from 'uuid';
+import { openWeatherData } from "../static/types";
 
-export async function fetchWeatherData(lat:number,lon:number) :Promise<any>{
+export async function fetchWeatherData(lat:number,lon:number) :Promise<openWeatherData>{
   const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.OPEN_WEATHER_API_KEY}`)
   if(!res.ok) {
     throw new Error('something wrong')
@@ -65,7 +66,6 @@ export async function postNewEvent(userInfo: userInfo, tempEvent: tempEvent) {
 export async function getBackgroundImg(query?: string) {
   const page = Math.floor(Math.random()*100);
   if(query){
-    // console.log(query);
     const res = await fetch(`https://api.unsplash.com/photos/?client_id=${process.env.UNSPLASH_API_KEY}&query=${query}&page=${page}`)
     if(! res.ok) {
       throw new Error ('can not get image')

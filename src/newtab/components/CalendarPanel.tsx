@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,11 +7,13 @@ import { getEvents, loadEvents } from '../features/reducers/calendarSlice';
 import { loadUserInfo, getUserInfo } from '../features/reducers/userInfoSlice';
 import { getPersonalization } from '../features/reducers/optionsSlice';
 import { setEditPanel } from '../features/reducers/editSlice';
+import AlertContext from "../features/alertContext";
 
 import { PanelBasicSetting, PanelTitle, CreateButton, ScrollbarContainer } from '../../static/styleSetting';
 import { fetchCalendarData } from '../../utils/api';
 import { calendarColorList } from '../../static/optionList';
-import { calendarItem, scheme, timeNode, timeDay } from '../../static/types';
+import { calendarItem, scheme, timeData, timeKey } from '../../static/types';
+import { getTimeString, getTimeStamp } from '../../utils/functions';
 
 type period = {
   base: number,
@@ -20,21 +22,30 @@ type period = {
   color: string,
 };
 
-type data = timeNode | timeDay;
-type key = 'start' | 'end';
+type timeLineInfo = {
+  timeLineInfo: {
+    current: number,
+    startTime: number,
+  };
+};
 
 const CalendarWrapper = styled(PanelBasicSetting)`
   display: flex;
   flex-grow:0;
+  @media (max-width:1180px) {
+    flex-grow: 1;
+  } 
 `;
 
 const CalendarContainer = styled(ScrollbarContainer)`
   position: relative;
   max-height: 480px;
-  
   @media (max-width:1580px) {
     max-height: 240px;
   }
+  @media (max-width:1180px) {
+    max-height: calc(100vh - 344px);
+  } 
 `;
 
 const CalendarBackgroundContainer = styled.div`
@@ -115,10 +126,30 @@ const TimeLineDisplay = styled.div`
   position: absolute;
   margin-left:39px;
   width: calc(100% - 39px);
-  top: ${(props) => { return `calc(${(props.timeLineInfo.current - props.timeLineInfo.startTime) / 86400000 * 768}px + 15px)`; }};
+  top: ${(props: timeLineInfo) => `calc(${(props.timeLineInfo.current - props.timeLineInfo.startTime) / 86400000 * 768}px + 15px)`};
   height: 2px;
   box-shadow: 0px 0px 5px 2px rgba(255, 255, 255, 0.2);
   background-color: rgba(255,255,255,0.7);
+`;
+
+const DelBtn = styled.div`
+  cursor: pointer;
+  color: rgba(255,255,255,0.4);
+  font-weight: normal;
+  font-size: 16px;
+  text-align: center;
+  line-height: 12px;
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  z-index: 3;
+  transition: 0.2s;
+  :hover{
+    color: rgba(255,255,255,1);
+    font-weight:bold;
+  }
 `;
 
 export const CalendarPanel: React.FC<{}> = () => {
@@ -129,16 +160,7 @@ export const CalendarPanel: React.FC<{}> = () => {
   const [timeLineInfo, setTimeLineInfo] = useState({ current: 0, startTime: 0 });
   const [calendarItems, setCalendarItems] = useState([]);
 
-  // function delEvent(item: calendarItem) {
-  //   console.log(item);
-  //   fetch(`https://www.googleapis.com/calendar/v3/calendars/${userInfo.email}/events/${item.id}`, {
-  //     headers: new Headers({
-  //       'Authorization': 'Bearer ' + authToken,
-  //       'Content-Type': 'application/json'
-  //     }),
-  //     method: "DELETE",
-  //   }).then((res) => { console.log(res); }).catch((err) => { console.log(err.message); });
-  // }
+
 
   function setTimeLine() {
     const current = Date.now();
@@ -147,29 +169,12 @@ export const CalendarPanel: React.FC<{}> = () => {
     setTimeLineInfo({ current, startTime });
   }
 
-  function getTimeStamp(data: data, key: key) {
-    let timeStamp = 0;
-    if ('date' in data) {
-      if (key === 'start') {
-        timeStamp = Date.parse(`${data.date}T00:00:00`);
-      } else {
-        timeStamp = Date.parse(`${data.date}T23:59:59`);
-      }
-    } else {
-      timeStamp = Date.parse(data.dateTime);
-    }
-    return timeStamp;
-  }
-
   function checkOauthData() {
-    console.log(userInfo);
     if (!userInfo.email || !userInfo.authToken) {
       // @ts-ignore
       chrome.identity.getProfileUserInfo({ 'accountStatus': 'ANY' },
         (res) => {
-          console.log(res);
           chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
-            console.log(token);
             dispatch(loadUserInfo({ ...userInfo, email: res.email, id: res.id, authToken: token }));
             const cd = new Date();
             const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
@@ -185,7 +190,7 @@ export const CalendarPanel: React.FC<{}> = () => {
     }
   }
 
-  useEffect(() => {
+  function loadCalendarEvents() {
     chrome.identity.getProfileUserInfo(
       (userInfo) => {
         chrome.storage.sync.get(['userName'], function (userName) {
@@ -202,6 +207,10 @@ export const CalendarPanel: React.FC<{}> = () => {
         });
       }
     );
+  }
+
+  useEffect(() => {
+    loadCalendarEvents();
     setTimeLine();
     setInterval(() => setTimeLine(), 30000);
   }, []);
@@ -230,7 +239,7 @@ export const CalendarPanel: React.FC<{}> = () => {
       <PanelTitle>Calendar</PanelTitle>
       <CalendarContainer>
         <CalendarBackground></CalendarBackground>
-        <CalendarBars calendarItems={calendarItems} getTimeStamp={getTimeStamp} dateStart={dateStart}></CalendarBars>
+        <CalendarBars calendarItems={calendarItems} getTimeStamp={getTimeStamp} dateStart={dateStart} loadCalendarEvents={loadCalendarEvents}></CalendarBars>
         <TimeLineDisplay timeLineInfo={timeLineInfo}></TimeLineDisplay>
       </CalendarContainer>
       <CreateButton onClick={checkOauthData}>+</CreateButton>
@@ -257,36 +266,29 @@ const CalendarBackground: React.FC<{}> = () => {
 const CalendarBars: React.FC<{
   calendarItems: calendarItem[][];
   dateStart: number;
-  getTimeStamp: (data: data, key: key) => number;
+  getTimeStamp: (data: timeData, key: timeKey) => number;
+  loadCalendarEvents: () => void;
 }> = (props) => {
+  const [alertState, setAlertState] = useContext(AlertContext);
+  const userInfo = useSelector(getUserInfo);
   const personalization = useSelector(getPersonalization);
 
-  function getTimeString(data: data, key: key) {
-    if ('date' in data) {
-      if (key === 'start') {
-        const time = new Date(`${data.date} 00:00`);
-        return `${time.getMonth() + 1}/${time.getDate()} 00:00`;
-      } else {
-        const time = new Date(`${data.date} 23:59`);
-        return ` ${time.getMonth() + 1}/${time.getDate()} 23:59`;
-      }
-    } else {
-      const time = new Date(data.dateTime);
-      return `${time.getMonth() + 1}/${time.getDate()} ${`${time.getHours()}`.padStart(2, "0")}:${`${time.getMinutes()}`.padStart(2, "0")}`;
-    }
+  function delEvent(item: calendarItem) {
+    fetch(`https://www.googleapis.com/calendar/v3/calendars/${userInfo.email}/events/${item.id}`, {
+      headers: new Headers({
+        'Authorization': 'Bearer ' + userInfo.authToken,
+        'Content-Type': 'application/json'
+      }),
+      method: "DELETE",
+    }).then(() => props.loadCalendarEvents()).catch((err) => { console.log(err.message); });
   }
 
-  function getTime(data: data, key: key) {
-    if ('date' in data) {
-      if (key === 'start') {
-        return '00:00';
-      } else {
-        return '23:59';
-      }
-    } else {
-      const time = new Date(data.dateTime);
-      return `${`${time.getHours()}`.padStart(2, "0")}:${`${time.getMinutes()}`.padStart(2, "0")}`;
-    }
+  function deleteAlert(item: calendarItem) {
+    setAlertState({
+      title: 'Data cannot be recovered after deletion',
+      message: `Are you sure you want to delete event "${item.summary}" ?`,
+      function: () => delEvent(item)
+    });
   }
 
   return (
@@ -303,8 +305,9 @@ const CalendarBars: React.FC<{
               end={props.getTimeStamp(item.end, 'end') / 3600000}
               color={personalization.idCalendarColorful ? ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', monoCode: '#434343', colorId: '7' }).code) : ((calendarColorList.find((color) => color.colorId === item.colorId) || { name: 'Peacock', code: '#30A7E3', monoCode: '#434343', colorId: '7' }).monoCode)}
             ><EventContent>
+                <DelBtn onClick={() => deleteAlert(item)}>×</DelBtn>
                 <EventValue>{item.summary}</EventValue>
-                <EventValue>{getTime(item.start, 'start')} - {getTime(item.end, 'end')}</EventValue>
+                <EventValue>{getTimeString(item.start, 'start')} - {getTimeString(item.end, 'end')}</EventValue>
               </EventContent>
             </EventItem>);
         })

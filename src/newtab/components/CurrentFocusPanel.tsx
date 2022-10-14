@@ -1,135 +1,102 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
+
+import { getEvents } from '../features/reducers/calendarSlice';
 
 import { fetchCalendarData } from '../../utils/api';
-import { calendarItem, scheme } from '../../static/types';
+import { calendarItem, scheme, timeKey } from '../../static/types';
+import { getTimeString, getTimeStamp } from '../../utils/functions';
+import { Subtitle } from '../../static/styleSetting';
 
 const Wrapper = styled.div`
-  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   width: 100%;
+  height: 64px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
-const FocusBlock = styled.div`
-  font-size: 1.75rem;
-  text-align: center;
-  font-weight: bold;
-  color: ${(props: scheme) => props.theme.primary};
-  text-shadow: 0 0 10px ${(props: scheme) => props.theme.inversePrimary},  0 0 20px ${(props: scheme) => props.theme.primaryOpacity};
-  transform: translateY(-80px);
+const FocusBlock = styled(Subtitle)`
 `;
 
 export const CurrentFocusPanel: React.FC<{}> = () => {
+  const events = useSelector(getEvents);
   const [calendarItem, setCalendarItem] = useState(null);
   const [taskOnGoing, setTaskOnGoing] = useState(null);
-  const [updateTime, setUpdateTime] = useState(null);
+  const currentTask = useRef(null);
 
-  function sortByDeadline(items: calendarItem[]) {
+  function getCalendarEvents() {
+    chrome.identity.getProfileUserInfo(
+      (res) => {
+        chrome.identity.getAuthToken({ 'interactive': false }, function (token) {
+          const current = new Date();
+          const timeStampStart = Date.parse(`${current.getFullYear()}-${current.getMonth() + 1}-${current.getDate()} 00:00`);
+          const dayStart = new Date(timeStampStart - 1000);
+          const dayEnd = new Date(timeStampStart + 259200000);
+          fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => {
+            const task = checkIsCurrent(res.items);
+            currentTask.current = task;
+            setCalendarItem(task);
+          });
+        });
+      }
+    );
+  }
+
+  function sortByTimeStamp(items: calendarItem[], key: timeKey) {
     let tempItems = items;
     tempItems.sort(function (a, b) {
-      let aValue: string;
-      let bValue: string;
-      if ("dateTime" in a.end) {
-        aValue = a.end.dateTime;
-      } else {
-        aValue = `${a.end.date} 00:00:00`;
-      }
-      if ("dateTime" in b.end) {
-        bValue = b.end.dateTime;
-      } else {
-        bValue = `${b.end.date} 23:59:59`;
-      }
-      return Date.parse(aValue) - Date.parse(bValue);
+      return getTimeStamp(a[key], key) - getTimeStamp(b[key], key);
     });
     return tempItems;
   }
 
   function checkIsCurrent(items: calendarItem[]) {
-    let tempItems = [...items];
-    let focusItem: calendarItem;
     const current = Date.now();
-    focusItem = tempItems.find((item) => {
-      let startTime: string;
-      if ("dateTime" in item.start) {
-        startTime = item.start.dateTime;
+    let tempItems = sortByTimeStamp(items.filter(item => getTimeStamp(item.end, 'end') > current), 'start');
+    const onGoing = [];
+    const upComing = [];
+    tempItems.forEach(item => {
+      if (getTimeStamp(item.start, 'start') > current) {
+        upComing.push(item);
       } else {
-        startTime = item.start.date;
+        onGoing.push(item);
       }
-      return Date.parse(startTime) < current;
     });
-    if (focusItem) {
-      return focusItem;
+    if (onGoing.length) {
+      setTaskOnGoing(true);
+      return sortByTimeStamp(onGoing, 'end')[0];
     } else {
-      return items[0];
+      setTaskOnGoing(false);
+      return upComing[0];
     }
   }
 
-  function showFocus() {
+  function checkUpdate() {
     const current = Date.now();
-    let updateTime: number;
-    if (calendarItem) {
-      let startTime = "";
-      let endTime = "";
-      if ("dateTime" in calendarItem.start) {
-        startTime = calendarItem.start.dateTime;
-      } else {
-        startTime = `${calendarItem.start.date} 00:00`;
-      }
-      if (Date.parse(startTime) < current) {
-        if ("dateTime" in calendarItem.end) {
-          endTime = calendarItem.end.dateTime;
-        } else {
-          endTime = `${calendarItem.end.date} 23:59`;
-        }
-        // console.log("on going");
-        setTaskOnGoing(true);
-        updateTime = (Date.parse(endTime) - current);
-      } else {
-        // console.log("show next on");
-        setTaskOnGoing(false);
-        updateTime = (current - Date.parse(startTime));
-      }
+    if (currentTask.current && taskOnGoing && getTimeStamp(currentTask.current.end, 'end') < current) {
+      getCalendarEvents();
+    } else if (currentTask.current && !taskOnGoing && getTimeStamp(currentTask.current.start, 'start') < current) {
+      getCalendarEvents();
     }
-    setUpdateTime(updateTime);
-  }
-
-  function getTime(timeString: string) {
-    const time = new Date(timeString);
-    return `${time.getMonth() + 1}/${time.getDate()} - ${`${time.getHours()}`.padStart(2, "0")}:${`${time.getMinutes()}`.padStart(2, "0")}`;
   }
 
   useEffect(() => {
-    chrome.identity.getProfileUserInfo(
-      (res) => {
-        chrome.identity.getAuthToken({ 'interactive': false }, function (token) {
-          const dayStart = new Date();
-          const timeStampStart = Date.parse(`${dayStart.getFullYear()}-${dayStart.getMonth() + 1}-${dayStart.getDate()} 00:00`);
-          const dayEnd = new Date(timeStampStart + 259200000);
-          fetchCalendarData(res.email, dayStart, dayEnd, token).then((res) => { setCalendarItem(checkIsCurrent(sortByDeadline(res.items))); });
-        });
-      }
-    );
+    setInterval(checkUpdate, 1000);
   }, []);
 
   useEffect(() => {
-    showFocus();
-  }, [calendarItem]);
-
-  useEffect(() => {
-    if (updateTime) {
-      setTimeout(showFocus, updateTime + 5000);
-    }
-  }, [taskOnGoing]);
+    getCalendarEvents();
+  }, [events]);
 
   return (
     <Wrapper>
       <FocusBlock>
-        {taskOnGoing !== null && taskOnGoing && `Current focus: ${calendarItem.summary}（till ${getTime(calendarItem.end.dateTime)}）`}
-        {taskOnGoing !== null && !taskOnGoing && `Upcoming: ${calendarItem.summary}（start at ${getTime(calendarItem.start.dateTime)}）`}
+        {calendarItem && taskOnGoing !== null && taskOnGoing && `Current focus: ${calendarItem.summary}（till ${getTimeString(calendarItem.end, 'end')}）`}
+        {calendarItem && taskOnGoing !== null && !taskOnGoing && `Upcoming: ${calendarItem.summary}（start at ${getTimeString(calendarItem.start, 'start')}）`}
       </FocusBlock>
     </Wrapper>
   );

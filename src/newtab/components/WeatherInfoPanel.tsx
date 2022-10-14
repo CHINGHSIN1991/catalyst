@@ -9,8 +9,6 @@ import { fetchWeatherData } from '../../utils/api';
 import { FocusPanelTitle } from '../../static/styleSetting';
 import { openWeatherData, scheme, centralPanel } from '../../static/types';
 
-
-
 const Wrapper = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: inline-flex;
@@ -29,6 +27,10 @@ const Wrapper = styled.div`
   width: ${(props: centralPanel) => props.centralPanel === "Weather" ? "480px" : "0px"};
   transition: 0.1s;
   overflow: hidden;
+  @media (max-width:1180px) {
+    width: ${(props: centralPanel) => props.centralPanel === "Weather" ? "calc(100% - 48px)" : "0px"};
+    min-width: ${(props: centralPanel) => props.centralPanel === "Weather" ? "440px" : "0px"};
+  }
 `;
 
 const WeatherInfoContainer = styled.div`
@@ -56,6 +58,10 @@ const MainInfo = styled.div`
 
 const MainDegree = styled.div`
   font-size: 2rem;
+  @media (max-width:1180px) {
+    line-height: 32px;
+    font-size: 1.5rem;
+  }
 `;
 
 const City = styled.div`

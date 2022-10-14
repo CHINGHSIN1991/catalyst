@@ -57,6 +57,24 @@ const Input = styled.input`
   }
 `;
 
+const CheckBtn = styled.div`
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.75rem;
+  margin-left: 60px;
+  width: calc(100% - 60px);
+  height: 28px;
+  line-height: 20px;
+  border: solid 1px lightgrey;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(255,255,255,0);
+  transition: 0.2s;
+  :hover{
+    background-color: rgba(0,0,0,0.1);
+  }
+`;
+
 export const UserInfoEditPanel: React.FC<{}> = () => {
   const userInfo = useSelector(getUserInfo);
   const dispatch = useDispatch();
@@ -73,6 +91,14 @@ export const UserInfoEditPanel: React.FC<{}> = () => {
 
   function cancelProcess() {
     dispatch(setEditPanel({ name: '' }));
+  }
+
+  function checkOauthData() {
+    if (!userInfo.authToken) {
+      chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+        dispatch(loadUserInfo({ ...userInfo, authToken: token }));
+      });
+    }
   }
 
   useEffect(() => {
@@ -107,6 +133,11 @@ export const UserInfoEditPanel: React.FC<{}> = () => {
         <Title>User id</Title>
         <Content>{userInfo.id}</Content>
       </InfoContainer>
+      <InfoContainer>
+        <Title>Status</Title>
+        <Content>{userInfo.authToken ? 'Authorized' : 'Unauthorized'}</Content>
+      </InfoContainer>
+      {!userInfo.authToken && <CheckBtn onClick={checkOauthData}>Click to authorize</CheckBtn>}
       <ButtonContainer>
         <PanelButton name="Save" width={80} disabled={!userName.name} onClick={() => editUserNameProcess(userName)}></PanelButton>
         <PanelButton name="Cancel" width={80} onClick={cancelProcess}></PanelButton>

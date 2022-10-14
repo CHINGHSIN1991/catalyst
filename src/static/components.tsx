@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
 
+type disabled = { disabled: boolean; };
+type width = { width: number; };
+
 const InputLabel = styled.label`
   font-family: 'Noto Sans', 'Microsoft JhengHei';
-  /* border: solid 1px; */
   color: rgb(96,96,96);
   font-size: 0.875rem;
   line-height: 28px;
@@ -57,16 +59,16 @@ const PanelBtn = styled.div`
   font-size: 14px;
   line-height: 24px;
   height: 28px;
-  width: ${(props: { width: number; }) => { return `${props.width}px`; }};
+  width: ${(props: width) => `${props.width}px`};
   border-radius: 4px;
   margin: 8px;
-  color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgb(80,80,80,1)"; }};
-  background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(80,80,80,0)"; }};
-  border: solid 2px ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgba(80,80,80,1)"; }};
+  color: ${(props: disabled) => props.disabled ? "rgba(184,184,184,1)" : "rgb(80,80,80,1)"};
+  background-color: ${(props: disabled) => props.disabled ? "rgba(240,240,240,1)" : "rgba(80,80,80,0)"};
+  border: solid 2px ${(props: disabled) => props.disabled ? "rgba(184,184,184,1)" : "rgba(80,80,80,1)"};
   transition: 0.1s;
   :hover{
-    color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(184,184,184,1)" : "rgb(255,255,255,1)"; }};
-    background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(80,80,80,1)"; }};
+    color: ${(props: disabled) => props.disabled ? "rgba(184,184,184,1)" : "rgb(255,255,255,1)"};
+    background-color: ${(props: disabled) => props.disabled ? "rgba(240,240,240,1)" : "rgba(80,80,80,1)"};
   }
 `;
 
@@ -80,16 +82,16 @@ const AlertBtn = styled.div`
   font-size: 14px;
   line-height: 24px;
   height: 28px;
-  width: ${(props: { width: number; }) => { return `${props.width}px`; }};
+  width: ${(props: width) => `${props.width}px`};
   border-radius: 4px;
   margin: 8px;
-  color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgb(204, 109, 102,1)"; }};
-  background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(204, 109, 102,0)"; }};
-  border: solid 2px ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgba(204, 109, 102,1)"; }};
+  color: ${(props: disabled) => props.disabled ? "rgba(180, 180, 180,1)" : "rgb(204, 109, 102,1)"};
+  background-color: ${(props: disabled) => props.disabled ? "rgba(240,240,240,1)" : "rgba(204, 109, 102,0)"};
+  border: solid 2px ${(props: disabled) => props.disabled ? "rgba(180, 180, 180,1)" : "rgba(204, 109, 102,1)"};
   transition: 0.1s;
   :hover{
-    color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(180, 180, 180,1)" : "rgb(255,255,255,1)"; }};
-    background-color: ${(props: { disabled: boolean; }) => { return props.disabled ? "rgba(240,240,240,1)" : "rgba(204, 109, 102,1)"; }};
+    color: ${(props: disabled) => props.disabled ? "rgba(180, 180, 180,1)" : "rgb(255,255,255,1)"};
+    background-color: ${(props: disabled) => props.disabled ? "rgba(240,240,240,1)" : "rgba(204, 109, 102,1)"};
   }
 `;
 

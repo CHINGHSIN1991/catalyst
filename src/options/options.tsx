@@ -32,7 +32,6 @@ const SidePanel = styled.div`
   flex-direction: column;
   min-height: 100vh;
   height: 100%;
-  /* border: solid 1px; */
   padding: 16px;
   background-color: rgb(200,200,200);
   @media (max-width:1180px) {
@@ -54,7 +53,6 @@ const SidePanel = styled.div`
 `;
 
 const SelectOptionPanel = styled.div`
-  /* border: solid 1px; */
   width: 360px;
   height: 100vh;
   padding: 104px 16px;
@@ -82,7 +80,6 @@ const BackgroundPanel = styled.div`
 
 const BrandContainer = styled.div`
   padding: 24px 24px 0px;
-  /* border: solid 1px; */
   display: flex;
   width: 100%;
   @media (max-width:1180px) {
@@ -119,12 +116,10 @@ const BrandInfo = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  /* border: solid 1px; */
   padding-left: 16px;
 `;
 
 const BrandTitle = styled.div`
-  /* padding-top: 4px; */
   letter-spacing: 2px;
   font-size: 2rem;
   font-weight: bold;

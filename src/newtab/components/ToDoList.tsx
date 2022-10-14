@@ -36,7 +36,7 @@ const TextNote = styled.div`
   padding-top: 0px;
   font-size: 0.75rem;
   line-height: 1rem;
-  color: ${(props: scheme) => props.theme.fourthly};
+  color: ${(props: scheme) => props.theme.tertiary};
   text-overflow: ellipsis;
   word-break: break-all;
   overflow: hidden;
@@ -45,7 +45,6 @@ const TextNote = styled.div`
 
 
 const TempLink = styled.div`
-  /* border: solid 1px; */
   flex-shrink:0;
   padding: 4px;
   border-radius: 4px;
@@ -70,14 +69,12 @@ const ToDoElements = styled.div`
 `;
 
 const ToDoContent = styled.div`
-  /* border: solid 1px; */
   display: flex;
   align-items: flex-start;
   color: ${(props: scheme) => props.theme.primary};
 `;
 
 const TextContent = styled.div`
-  /* border: solid 1px; */
   color: ${(props: scheme) => props.theme.primary};
   flex-grow: 1;
   width: auto;
@@ -87,9 +84,8 @@ const TextContent = styled.div`
 const TextTitle = styled.div`
   font-size: 0.875rem;
   line-height: 1rem;
-  /* width: 80px; */
-  color: ${(props) => { return props.isDone ? props.theme.tertiary : props.theme.primary; }};
-  text-decoration: ${(props: isDone) => { return props.isDone ? "line-through" : "none"; }};
+  color: ${(props: isDone & scheme) => props.isDone ? props.theme.tertiary : props.theme.primary};
+  text-decoration: ${(props: isDone) => props.isDone ? "line-through" : "none"};
   padding: 4px 0;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -259,7 +255,10 @@ const ToDoContainer = styled(ScrollbarContainer)`
   height: ${(props: isEditOn) => props.isEditOn ? 'calc(100vh - 836px)' : 'calc(100vh - 750px)'};
   @media (max-width:1580px) {
     height: ${(props: isEditOn) => props.isEditOn ? 'calc(100vh - 614px)' : 'calc(100vh - 528px)'};
-  } 
+  }
+  @media (max-width:1180px) {
+    height: ${(props: isEditOn) => props.isEditOn ? 'calc(100vh - 428px)' : 'calc(100vh - 342px)'};
+  }
 `;
 
 export const ToDoListPanel: React.FC<{}> = () => {
@@ -340,10 +339,15 @@ export const ToDoListPanel: React.FC<{}> = () => {
     });
   }
 
-  useEffect(() => {
+  function getTodo() {
     chrome.storage.local.get(['todoList'], function (result) {
       setWorkList(result.todoList);
     });
+  }
+
+  useEffect(() => {
+    getTodo();
+    setInterval(getTodo, 1200);
   }, []);
 
   return (
@@ -402,7 +406,7 @@ const ToDoElement: React.FC<{
           {props.item.isSetAlert && <TextNote>{`Alarm : ${props.item.alertDate} ${props.item.alertTime}`}</TextNote>}
         </TextContent>}
         {props.tempTodo.id === props.item.id && <TextContent>
-          <TitleEdit style={{ width: "224px" }} value={props.tempTodo.workContent} name="title" type="text" ></TitleEdit>
+          <TitleEdit style={{ width: "224px" }} value={props.tempTodo.workContent} name="workContent" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} type="text" ></TitleEdit>
           {props.tempTodo.isSetAlert && <ToDoLabel htmlFor="">
             <ToDoInput name="alertDate" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertDate || ""} type="date" />
             <ToDoInput name="alertTime" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertTime || ""} type="time" />
@@ -445,7 +449,7 @@ const AddToDoPanel: React.FC<{
     <AddToDoContainer isEditOn={props.isEditOn}>
       <ToDoLabel htmlFor="workContent">
         <ToDoTitle>To do</ToDoTitle>
-        <ToDoInput style={{ width: "224px" }} type="text" id="workContent" name="workContent" value={props.tempTodo.workContent} onChange={(e) => handleInputChange(e, props.tempTodo, props.setTempTodo)} />
+        <ToDoInput style={{ width: "224px" }} type="text" id="workContent" name="workContent" value={props.tempTodo.workContent} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} />
         <AlarmTrigger onClick={() => props.setTempTodo({ ...props.tempTodo, isSetAlert: !props.tempTodo.isSetAlert })}>
           {!props.tempTodo.isSetAlert && <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bell-fill" viewBox="0 0 16 16">
             <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />

@@ -13,6 +13,9 @@ export const PanelBasicSetting = styled.div`
   :last-child {
     margin: 8px
   }
+  @media (max-width:1180px) {
+    width: calc(100% - 48px);
+  }
 `;
 
 export const PanelOpenBackground = styled.div`
@@ -60,7 +63,6 @@ export const CreateButton = styled.div`
   line-height: 20px;
   width: 24px;
   height: 24px;
-  /* border: solid 1px; */
   background-color: rgba(200,200,200,0.1);
   border-radius: 50%;
   transition: 0.2s;
@@ -90,7 +92,6 @@ export const EditPanelTitleUnderLine = styled.div`
 
 //
 export const ToggleTitle = styled.div`
-  /* border: solid 1px; */
   opacity: 0;
   transform: translateY(30px);
   color: rgba(255,255,255,1);
@@ -98,7 +99,7 @@ export const ToggleTitle = styled.div`
   position: absolute;
   text-align: center;
   text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
-  width: 120px;
+  width: auto;
   transition: 0.2s;
 `;
 
@@ -110,7 +111,6 @@ export const ToggleButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: solid 1px; */
   cursor: pointer;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
   border: ${(props: scheme) => props.theme.panelBorder};
@@ -121,6 +121,9 @@ export const ToggleButton = styled.div`
       opacity: 1;
       transform: translateY(40px);
     }
+  }
+  @media (max-width:768px) {
+    margin: 0 16px;
   }
 `;
 
@@ -184,5 +187,23 @@ export const ScrollbarTextArea = styled.textarea`
   }
   &::-webkit-scrollbar-track {
     box-shadow: transparent;
+  }
+`;
+
+export const Subtitle = styled.div`
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+  color: ${(props: scheme) => props.theme.primary};
+  padding-bottom: 32px;
+  text-shadow: 0 0 5px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${(props: scheme) => props.theme.primaryOpacity};
+  @media (max-width:1580px) {
+    font-size: 1.75rem;
+  }
+  @media (max-width:1180px) {
+    font-size: 1.5rem;
+  }
+  @media (max-width:768px) {
+    font-size: 1.2rem;
   }
 `;

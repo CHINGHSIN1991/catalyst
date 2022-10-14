@@ -71,11 +71,13 @@ export type background = {
 } 
 
 export type backgroundSetting = {
-  lastUpdate: string,
-  current: {
-    setting: number,
-    slice: number,
-  },
+  bgSetting:{
+    lastUpdate: string,
+    current: {
+      setting: number,
+      slice: number,
+    },
+  },  
   backgroundList: background[][]
 }
 
@@ -86,6 +88,7 @@ export type optionSetting = {
   idCalendarColorful: boolean,
   isPrivateShow: boolean,
   isDarkMode: boolean,
+  isPageToolShow: boolean,
   pronounce: string,
 }
 
@@ -284,6 +287,9 @@ export type openWeatherData = {
 
   export type scheme = {
     theme:{
+      accentColor: string,
+      accentColorSecondary: string,
+      accentText: string,
       primary: string,
       secondary: string,
       tertiary: string,
@@ -299,13 +305,22 @@ export type openWeatherData = {
   }
 
   export type inspirationNote = {
-    id: number;
-    logo: string;
-    note: string;
-    title: string;
-    url: string;
+    id: number,
+    logo: string,
+    note: string,
+    title: string,
+    url: string,
   }
 
   export type centralPanel = {
     centralPanel: 'Pomodoro'|'Weather'
   }
+
+  export type alertState = {
+    title:string,
+    message?:string,
+    function?:any,
+  }
+
+  export type timeData = timeNode | timeDay;
+  export type timeKey = 'start' | 'end';

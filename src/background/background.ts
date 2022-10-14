@@ -12,7 +12,6 @@ chrome.runtime.onInstalled.addListener((details) => {
       console.log("speak en-US");
     }
   })
-  console.log(details);
 })
 
 chrome.alarms.create("TodoListReminder",{
@@ -40,6 +39,7 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
           passedSeconds = 0;
           pomoIsRunning = false
           chrome.action.setBadgeText({text:''});
+          chrome.notifications.getAll((res)=>console.log(res));
           this.registration.showNotification("Pomodoro Timer",{
             body: `${res.pomoAlertTime} minutes has padded!`,
             icon: "CatalystLogo_128.png"
@@ -57,7 +57,7 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
         let tempList = [];
         result.todoList.forEach((todo: todo)=>{
           if(todo.isSetAlert && !todo.alertSend && (Date.parse(`${todo.alertDate} ${todo.alertTime}`)<now)){
-            console.log(this);
+            chrome.notifications.getAll((res)=>console.log(res));
             this.registration.showNotification("To do list reminder",{
               body: `The set time of work item "${todo.workContent}" has passed`,
               icon: "CatalystLogo_128.png"
@@ -65,16 +65,13 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
             const tempTodo = {...todo}
             tempTodo.alertSend = true;
             tempList.push(tempTodo)
-            // todoListPort.postMessage({msg: "update"})
           } else {
             tempList.push(todo);
           }        
         })
         chrome.storage.local.set({ todoList: tempList }, function () {
-          // console.log("set");
         });
-      }
-      
+      }      
     });
   }  
 })

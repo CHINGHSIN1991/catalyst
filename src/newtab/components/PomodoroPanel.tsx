@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
-import { useDispatch } from 'react-redux';
 
-import { setAlertWindow } from '../features/reducers/alertSlice';
+import AlertContext from '../features/alertContext';
 
 import { FocusPanelTitle } from '../../static/styleSetting';
 import { scheme, centralPanel } from '../../static/types';
@@ -20,7 +18,6 @@ const Wrapper = styled.div`
   right: 0;
   margin: 0 auto;
   border-radius: 4px;
-  /* border: solid 1px; */
   border: ${(props: scheme) => props.theme.panelBorder};
   background-color: ${(props: scheme) => props.theme.panelBackground};
   backdrop-filter: blur(16px);
@@ -28,10 +25,13 @@ const Wrapper = styled.div`
   width: ${(props: centralPanel) => props.centralPanel === "Pomodoro" ? "400px" : "0px"};
   transition: 0.1s;
   overflow: hidden;
+  @media (max-width:1180px) {
+    width: ${(props: centralPanel) => props.centralPanel === "Pomodoro" ? "calc(100% - 48px)" : "0px"};
+    min-width: ${(props: centralPanel) => props.centralPanel === "Pomodoro" ? "280px" : "0px"};
+  }
 `;
 
 const PomodoroContainer = styled.div`
-  /* border: solid 1px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,7 +74,7 @@ const Btn = styled.div`
 `;
 
 export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
-  const dispatch = useDispatch();
+  const [alertState, setAlertState] = useContext(AlertContext);
   const [passedSeconds, setPassedSeconds] = useState(0);
   const [pomoTimer, setPomoTimer] = useState({ minutes: '00', seconds: '00' });
   const [isRunning, setIsRunning] = useState(false);
@@ -103,7 +103,7 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
     let tempNumber = parseInt(e.target.value, 10) % 100;
     if (tempNumber > 60) {
       tempNumber = 60;
-      dispatch(setAlertWindow({ name: 'Pomodoro has a time limit of 60 minutes', message: 'Please enter an integer less than 60' }));
+      setAlertState({ title: 'Pomodoro has a time limit of 60 minutes', message: 'Please enter an integer less than 60' });
     } else if (tempNumber < 0) {
       tempNumber = 1;
     }
@@ -130,7 +130,7 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
       if (res.pomoAlertTime) {
         setPomoAlertTime({ value: res.pomoAlertTime });
       } else {
-        setPomoAlertTime({ value: 45 });
+        setPomoAlertTime({ value: 25 });
       }
     });
     updateTime();

@@ -76,6 +76,7 @@ export const DisplayModePanel: React.FC<{}> = () => {
     idCalendarColorful: true,
     isPrivateShow: true,
     isDarkMode: true,
+    isPageToolShow: true,
     pronounce: 'en-US',
   });
 
@@ -110,6 +111,14 @@ export const DisplayModePanel: React.FC<{}> = () => {
         bol={tempPersonalization.isDarkMode}
         handleSettingChanged={handleSettingChanged}
       ></OptionElement>
+      <OptionElement
+        title='Page tool'
+        truthy='Show'
+        falsy='Hidden'
+        keyName='isPageToolShow'
+        bol={tempPersonalization.isPageToolShow}
+        handleSettingChanged={handleSettingChanged}
+      ></OptionElement>
       <ButtonContainer>
         <PanelButton name="Save" width={80} onClick={saveOption}></PanelButton>
         <PanelButton name="Cancel" width={80} onClick={() => { dispatch(setEditPanel({ name: '' })); }}></PanelButton>
@@ -127,7 +136,7 @@ const OptionElement: React.FC<{
   handleSettingChanged: (key: string) => void,
 }> = (props) => {
   return (
-    <InfoContainer onClick={() => { console.log(props.keyName); props.handleSettingChanged(props.keyName); }}>
+    <InfoContainer onClick={() => { props.handleSettingChanged(props.keyName); }}>
       <Title>{props.title}</Title>
       <PublicOptionSet>
         <PublicOptionBg bol={props.bol}></PublicOptionBg>

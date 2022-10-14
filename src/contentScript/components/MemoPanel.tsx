@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { handleTextAreaChange } from '../../utils/functions';
+import { handleTextAreaChange, statusChangeDelay } from '../../utils/functions';
 import { memoColorList } from '../../static/optionList';
 import { ScrollbarTextArea } from '../../static/styleSetting';
 
@@ -25,12 +25,13 @@ const InputContainer = styled.div`
   padding-top: 8px;
 `;
 
-const Title = styled.div`
+const Title = styled.div`  
   font-size: 12px;
   color: rgb(100,100,100);
   width: 100%;
   height: 16px;
   line-height: 16px;
+  text-align: start;
 `;
 
 const NoteArea = styled(ScrollbarTextArea)`
@@ -79,7 +80,6 @@ const AddNoteBtn = styled.div`
 const ColorPanel = styled.div`
   display: flex;
   box-sizing: border-box;
-  /* border: solid 1px; */
   width: 200px;
   height: 24px;
 `;
@@ -122,26 +122,20 @@ export const MemoPanel = () => {
           tempMemoList = res.memos;
         }
         tempMemoList.push(newMemo);
-        chrome.storage.local.set({ memos: tempMemoList }, () => { console.log('done'); setTempMemo({ memo: '' }); setTimeout(() => setProcessStatus(2), 600); });
+        chrome.storage.local.set({ memos: tempMemoList }, () => { setTempMemo({ memo: '' }); setTimeout(() => setProcessStatus(2), 600); });
       });
     }
   }
 
   useEffect(() => {
-    if (processStatus === 2) {
-      setTimeout(() => {
-        setProcessStatus(3);
-      }, 600);
-    } else if (processStatus === 3) {
-      setTimeout(() => {
-        setProcessStatus(0);
-      }, 600);
+    if (processStatus > 1) {
+      statusChangeDelay(4, 400, processStatus, setProcessStatus);
     }
   }, [processStatus]);
 
   return (
     <Wrapper>
-      <ColorPanel onClick={(e) => e.stopPropagation()}>
+      <ColorPanel onClick={(e: Event) => e.stopPropagation()}>
         {memoColorList && memoColorList.map((code) => {
           return (<ColorContainer
             key={'memo' + code}

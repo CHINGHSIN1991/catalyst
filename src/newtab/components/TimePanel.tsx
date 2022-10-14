@@ -6,24 +6,33 @@ import { useSelector } from 'react-redux';
 import { getPersonalization } from '../features/reducers/optionsSlice';
 
 import { scheme } from '../../static/types';
+import { Subtitle } from '../../static/styleSetting';
 
 const Wrapper = styled.div`
-  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
+  padding-top: 120px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
-const DateBlock = styled.div`
+const DateBlock = styled(Subtitle)`
   font-size: 2rem;
   text-align: center;
   font-weight: bold;
   color: ${(props: scheme) => props.theme.primary};
   padding-bottom: 32px;
-  transform: translateY(-80px);
+  /* transform: translateY(-80px); */
   text-shadow: 0 0 5px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${(props: scheme) => props.theme.primaryOpacity};
+  @media (max-width:1580px) {
+    font-size: 1.75rem;
+  }
+  @media (max-width:1180px) {
+    font-size: 1.25rem;
+  }
+  @media (max-width:768px) {
+    font-size: 1rem;
+  }
 `;
 
 const TimeBlock = styled.div`
@@ -34,15 +43,18 @@ const TimeBlock = styled.div`
   font-weight: normal;
   padding-bottom: 32px;
   color: ${(props: scheme) => props.theme.primary};
-  transform: translateY(-80px);
+  /* transform: translateY(-80px); */
   text-shadow: 0 0 16px ${(props: scheme) => props.theme.inversePrimary},  0 0 20px ${(props: scheme) => props.theme.primaryOpacity};
+  @media (max-width:1580px) {
+    font-size: 6rem;
+  }
+  @media (max-width:1180px) {
+    font-size: 4rem;
+  }
+  @media (max-width:768px) {
+    font-size: 3rem;
+  }
 `;
-
-const TimeBlockSmall = styled.div`
-  font-size: 3.5rem;
-  padding: 8px 20px;
-`;
-
 
 export const TimePanel: React.FC<{}> = () => {
   const week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
@@ -86,7 +98,6 @@ export const TimePanel: React.FC<{}> = () => {
       {personalization.isMilitary && <TimeBlock>{`${currentClock.hour24} : ${currentClock.minutes} : ${currentClock.seconds}`}</TimeBlock>}
       {!personalization.isMilitary && <TimeBlock>
         {`${currentClock.hour12} : ${currentClock.minutes} : ${currentClock.seconds}`}
-        {/* <TimeBlockSmall>{currentClock.hourTerm}</TimeBlockSmall> */}
       </TimeBlock>}
     </Wrapper>
   );

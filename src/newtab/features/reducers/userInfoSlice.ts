@@ -15,8 +15,6 @@ const userInfoSlice = createSlice({
   initialState,
   reducers: {
     loadUserInfo(state, { payload }) {
-      // console.log('userInfo');
-      // console.log(payload);
       state.userInfo = payload;
     },
   }

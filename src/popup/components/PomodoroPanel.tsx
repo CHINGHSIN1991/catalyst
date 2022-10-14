@@ -63,7 +63,7 @@ export const PomodoroPanel: React.FC<{}> = () => {
   const [passedSeconds, setPassedSeconds] = useState(0);
   const [pomoTimer, setPomoTimer] = useState({ minutes: '00', seconds: '00' });
   const [isRunning, setIsRunning] = useState(false);
-  const [pomoAlertTime, setPomoAlertTime] = useState({ value: 45 });
+  const [pomoAlertTime, setPomoAlertTime] = useState({ value: 25 });
   const pomoTimeId = useRef(null);
 
 
@@ -114,7 +114,7 @@ export const PomodoroPanel: React.FC<{}> = () => {
       if (res.pomoAlertTime) {
         setPomoAlertTime({ value: res.pomoAlertTime });
       } else {
-        setPomoAlertTime({ value: 45 });
+        setPomoAlertTime({ value: 25 });
       }
     });
     updateTime();

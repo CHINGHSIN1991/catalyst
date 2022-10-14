@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-import { handleInputChange, handleTextAreaChange } from '../../utils/functions';
+import { handleInputChange, handleTextAreaChange, statusChangeDelay } from '../../utils/functions';
 
 import { AlertComponent } from './AlertComponent';
 
@@ -74,11 +74,11 @@ const SelectBlock = styled.select`
 
 const Title = styled.div`
   font-size: 12px;
-  /* padding-bottom: 2px; */
   color: rgb(100,100,100);
   width: 100%;
   height: 16px;
   line-height: 16px;
+  text-align: start;
 `;
 
 const Btn = styled.div`
@@ -92,9 +92,9 @@ const Btn = styled.div`
   font-size: 12px;
   line-height: 28px;
   border-radius: 4px;
-  margin-left: 4px;
+  margin: 0 0 0 4px;
   transition: 0.3s;
-  width: ${props => props.isEditOn ? '48px' : '56px'};
+  width: ${(props: isEditOn) => props.isEditOn ? '48px' : '56px'};
   height: 24px;
   :hover{
     background-color: rgb(120,120,120);
@@ -190,7 +190,6 @@ export const NotesPanel = () => {
     if (tempCategory.category) {
       notes.push(tempCategory.category);
       chrome.storage.sync.set({ noteCategories: notes }, function () {
-        console.log(notes);
         setNoteCategories([...notes]);
         setTempCategory({ category: "" });
         setIsEditOn(false);
@@ -209,6 +208,7 @@ export const NotesPanel = () => {
       logo: `https://icon.horse/icon/${linkUrl.hostname}`,
       note: noteLink.note
     };
+
     chrome.storage.sync.get(['inspirationNotes'], (result) => {
       let tempInspirationNotes = result.inspirationNotes;
       let targetCategoryNotes = [];
@@ -217,8 +217,7 @@ export const NotesPanel = () => {
       }
       targetCategoryNotes.push(inspirationNote);
       tempInspirationNotes = { ...tempInspirationNotes, [currentCategory]: targetCategoryNotes };
-      console.log(tempInspirationNotes);
-      chrome.storage.sync.set({ inspirationNotes: tempInspirationNotes }, () => { console.log('done'); });
+      chrome.storage.sync.set({ inspirationNotes: tempInspirationNotes });
       setNoteLink({ title: '', note: '' });
       setTimeout(() => setProcessStatus(2), 600);
     });
@@ -226,7 +225,6 @@ export const NotesPanel = () => {
 
   useEffect(() => {
     chrome.storage.sync.get(['noteCategories'], (result) => {
-      console.log(result.noteCategories);
       if (result.noteCategories) {
         setNoteCategories(result.noteCategories);
       }
@@ -234,21 +232,15 @@ export const NotesPanel = () => {
   }, []);
 
   useEffect(() => {
-    if (processStatus === 2) {
-      setTimeout(() => {
-        setProcessStatus(3);
-      }, 600);
-    } else if (processStatus === 3) {
-      setTimeout(() => {
-        setProcessStatus(0);
-      }, 600);
+    if (processStatus > 1) {
+      statusChangeDelay(4, 400, processStatus, setProcessStatus);
     }
   }, [processStatus]);
 
   return (
     <Wrapper>
-      <TagsPanel onClick={(e) => e.stopPropagation()}>
-        <TagInput isEditOn={isEditOn} name="category" value={tempCategory.category} onChange={(e) => handleInputChange(e, tempCategory, setTempCategory)} type="text"></TagInput>
+      <TagsPanel onClick={(e: Event) => e.stopPropagation()}>
+        <TagInput isEditOn={isEditOn} name="category" value={tempCategory.category} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, tempCategory, setTempCategory)} type="text"></TagInput>
         <AddBtn isEditOn={isEditOn} onClick={addCategory}>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -258,7 +250,7 @@ export const NotesPanel = () => {
           <SelectOption value="no category" style={{ color: "darkgray" }}>- Tag -</SelectOption>
           {noteCategories.map((category, index) => { return <SelectOption key={category + index} value={category}>{category}</SelectOption>; })}
         </SelectBlock>
-        <Btn isEditOn={isEditOn} onClick={(e) => { setIsEditOn(!isEditOn); }}>
+        <Btn isEditOn={isEditOn} onClick={(e: Event) => { setIsEditOn(!isEditOn); }}>
           {isEditOn ? 'CANCEL' : 'ADD TAG'}
         </Btn>
       </TagsPanel>

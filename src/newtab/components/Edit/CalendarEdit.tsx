@@ -154,13 +154,11 @@ export const CalendarEditPanel: React.FC<{}> = () => {
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    console.log({ ...tempEvent, [e.target.name]: e.target.value });
     setTempEvent({ ...tempEvent, [e.target.name]: e.target.value });
   }
 
   function postEvent() {
     postNewEvent(userInfo, tempEvent).then((res) => {
-      console.log(res);
       setTempEvent({
         summary: "",
         isAllDay: false,
