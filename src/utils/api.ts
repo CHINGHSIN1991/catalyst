@@ -66,7 +66,6 @@ export async function postNewEvent(userInfo: userInfo, tempEvent: tempEvent) {
 export async function getBackgroundImg(query?: string) {
   const page = Math.floor(Math.random()*100);
   if(query){
-    // console.log(query);
     const res = await fetch(`https://api.unsplash.com/photos/?client_id=${process.env.UNSPLASH_API_KEY}&query=${query}&page=${page}`)
     if(! res.ok) {
       throw new Error ('can not get image')

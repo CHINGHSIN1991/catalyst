@@ -9,6 +9,7 @@ const initialState = {
     idCalendarColorful: true,
     isPrivateShow: true,
     isDarkMode: true,
+    isPageToolShow: true,
     pronounce: 'en-US',
   }
 } 
@@ -18,8 +19,6 @@ const personalizationSlice = createSlice({
   initialState,
   reducers: {
     loadPersonalization(state, { payload }) {
-      // console.log('personalization');
-      // console.log(payload);
       state.personalization = payload;
     },
   }

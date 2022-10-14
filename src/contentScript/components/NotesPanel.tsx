@@ -74,11 +74,11 @@ const SelectBlock = styled.select`
 
 const Title = styled.div`
   font-size: 12px;
-  /* padding-bottom: 2px; */
   color: rgb(100,100,100);
   width: 100%;
   height: 16px;
   line-height: 16px;
+  text-align: start;
 `;
 
 const Btn = styled.div`
@@ -92,7 +92,7 @@ const Btn = styled.div`
   font-size: 12px;
   line-height: 28px;
   border-radius: 4px;
-  margin-left: 4px;
+  margin: 0 0 0 4px;
   transition: 0.3s;
   width: ${props => props.isEditOn ? '48px' : '56px'};
   height: 24px;
@@ -190,7 +190,6 @@ export const NotesPanel = () => {
     if (tempCategory.category) {
       notes.push(tempCategory.category);
       chrome.storage.sync.set({ noteCategories: notes }, function () {
-        console.log(notes);
         setNoteCategories([...notes]);
         setTempCategory({ category: "" });
         setIsEditOn(false);
@@ -218,7 +217,6 @@ export const NotesPanel = () => {
       }
       targetCategoryNotes.push(inspirationNote);
       tempInspirationNotes = { ...tempInspirationNotes, [currentCategory]: targetCategoryNotes };
-      console.log(tempInspirationNotes);
       chrome.storage.sync.set({ inspirationNotes: tempInspirationNotes });
       setNoteLink({ title: '', note: '' });
       setTimeout(() => setProcessStatus(2), 600);
@@ -227,7 +225,6 @@ export const NotesPanel = () => {
 
   useEffect(() => {
     chrome.storage.sync.get(['noteCategories'], (result) => {
-      console.log(result.noteCategories);
       if (result.noteCategories) {
         setNoteCategories(result.noteCategories);
       }

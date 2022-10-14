@@ -94,10 +94,8 @@ export const UserInfoEditPanel: React.FC<{}> = () => {
   }
 
   function checkOauthData() {
-    console.log(userInfo);
     if (!userInfo.authToken) {
       chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
-        console.log(token);
         dispatch(loadUserInfo({ ...userInfo, authToken: token }));
       });
     }

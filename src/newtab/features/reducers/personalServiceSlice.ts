@@ -9,8 +9,6 @@ const serviceListSlice = createSlice({
   initialState,
   reducers: {
     loadServiceList(state, { payload }) {
-      console.log('service list');
-      console.log(payload);
       state.serviceList = payload;
     },
   }

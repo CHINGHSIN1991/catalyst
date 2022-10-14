@@ -9,7 +9,6 @@ const editPanelSlice = createSlice({
   initialState,
   reducers: {
     setEditPanel(state, { payload }) {
-      console.log(payload);
       state.editPanelState.name = payload.name;
       if('data' in payload) {
         state.editPanelState.data = payload.data;

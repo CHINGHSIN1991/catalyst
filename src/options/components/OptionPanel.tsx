@@ -205,7 +205,7 @@ const OptionElement: React.FC<{
   handleSettingChanged: (key: string) => void;
 }> = (props) => {
   return (
-    <InfoContainer onClick={() => { console.log(props.keyName); props.handleSettingChanged(props.keyName); }}>
+    <InfoContainer onClick={() => { props.handleSettingChanged(props.keyName); }}>
       <Title>{props.title}</Title>
       <PublicOptionSet>
         <PublicOptionBg bol={props.bol}></PublicOptionBg>

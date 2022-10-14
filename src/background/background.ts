@@ -12,7 +12,7 @@ chrome.runtime.onInstalled.addListener((details) => {
       console.log("speak en-US");
     }
   })
-  console.log(details);
+  // console.log(details);
 })
 
 chrome.alarms.create("TodoListReminder",{

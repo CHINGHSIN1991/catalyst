@@ -193,8 +193,6 @@ const NewTab: React.FC<{}> = () => {
   const [theme, setTheme] = useState(colorScheme.dark);
   const [mobileToggle, setMobileToggle] = useState(0);
 
-  console.log(mobileToggle);
-
   function changeMobileMenu() {
     if (mobileToggle < 5) {
       setMobileToggle(mobileToggle + 1);
@@ -216,6 +214,7 @@ const NewTab: React.FC<{}> = () => {
           idCalendarColorful: true,
           isPrivateShow: true,
           isDarkMode: true,
+          isPageToolShow: true,
           pronounce: 'zh-TW',
         };
         chrome.storage.sync.set({ personalization: tempPersonalization }, () => {

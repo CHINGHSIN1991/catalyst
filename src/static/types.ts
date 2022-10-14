@@ -88,6 +88,7 @@ export type optionSetting = {
   idCalendarColorful: boolean,
   isPrivateShow: boolean,
   isDarkMode: boolean,
+  isPageToolShow: boolean,
   pronounce: string,
 }
 

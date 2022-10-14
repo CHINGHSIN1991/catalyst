@@ -25,12 +25,13 @@ const InputContainer = styled.div`
   padding-top: 8px;
 `;
 
-const Title = styled.div`
+const Title = styled.div`  
   font-size: 12px;
   color: rgb(100,100,100);
   width: 100%;
   height: 16px;
   line-height: 16px;
+  text-align: start;
 `;
 
 const NoteArea = styled(ScrollbarTextArea)`

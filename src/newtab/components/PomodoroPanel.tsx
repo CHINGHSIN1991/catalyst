@@ -124,6 +124,7 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
 
   useEffect(() => {
     chrome.storage.local.get(["pomoIsRunning", "pomoAlertTime"], (res) => {
+      console.log(res.pomoAlertTime);
       if (res.pomoIsRunning) {
         setIsRunning(true);
       } else {
@@ -132,7 +133,7 @@ export const PomodoroPanel: React.FC<{ centralPanel: string; }> = (props) => {
       if (res.pomoAlertTime) {
         setPomoAlertTime({ value: res.pomoAlertTime });
       } else {
-        setPomoAlertTime({ value: 45 });
+        setPomoAlertTime({ value: 25 });
       }
     });
     updateTime();

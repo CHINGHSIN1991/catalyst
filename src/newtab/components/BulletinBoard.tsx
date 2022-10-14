@@ -180,7 +180,6 @@ export const BulletinBoard: React.FC<{
   const [memos, setMemos] = useState<memo[]>([]);
 
   function addMemoByEnter(e: KeyboardEvent) {
-    console.log(e);
     if (tempMemo.memo) {
       const code = e.code || e.key;
       if (code === 'Enter') {

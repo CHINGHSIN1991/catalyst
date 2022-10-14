@@ -24,8 +24,6 @@ const backgroundSlice = createSlice({
   initialState,
   reducers: {
     loadBackgrounds(state, { payload }) {
-      // console.log('backgrounds');
-      // console.log(payload);
       state.backgrounds = payload;
     },
     changeBackgroundRandomly(state) {

@@ -163,13 +163,11 @@ export const CalendarPanel: React.FC<{}> = () => {
   }
 
   function checkOauthData() {
-    console.log(userInfo);
     if (!userInfo.email || !userInfo.authToken) {
       // @ts-ignore
       chrome.identity.getProfileUserInfo({ 'accountStatus': 'ANY' },
         (res) => {
           chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
-            console.log(token);
             dispatch(loadUserInfo({ ...userInfo, email: res.email, id: res.id, authToken: token }));
             const cd = new Date();
             const timeStampStart = Date.parse(`${cd.getFullYear()}-${cd.getMonth() + 1}-${cd.getDate()} 00:00`);
@@ -269,7 +267,6 @@ const CalendarBars: React.FC<{
   const personalization = useSelector(getPersonalization);
 
   function delEvent(item: calendarItem) {
-    console.log(item);
     fetch(`https://www.googleapis.com/calendar/v3/calendars/${userInfo.email}/events/${item.id}`, {
       headers: new Headers({
         'Authorization': 'Bearer ' + userInfo.authToken,

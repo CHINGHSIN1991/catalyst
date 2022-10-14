@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import styled from "styled-components";
 import { useState } from "react";
@@ -8,9 +8,11 @@ import { MemoPanel } from './components/MemoPanel';
 
 type isOpen = { isOpen: boolean; };
 type isMemo = { isMemo: boolean; };
+type isPageToolShow = { isPageToolShow: boolean; };
 
 const Wrapper = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
+  letter-spacing: 0px;
   box-sizing: border-box;
   position: fixed;
   right: 24px;
@@ -27,16 +29,20 @@ const Wrapper = styled.div`
   padding: ${(props: isOpen) => props.isOpen ? "24px" : "8px"};
   cursor: pointer;
   transition: 0.2s;
-  display: flex;
+  display: ${(props: isPageToolShow) => props.isPageToolShow ? "flex" : "none"};
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-weight: normal;
 `;
 
 const Logo = styled.img`
   width: 32px;
   height: 32px;
   object-fit: cover;
+  padding: 0px;
+  margin: 0px;
+  filter: blur(0px);
 `;
 
 const CtrlPanel = styled.div`
@@ -46,7 +52,9 @@ const CtrlPanel = styled.div`
   width: 200px;
   border-radius: 18px;
   height: 40px;
+  padding: 0px;
   margin-bottom: 24px;
+  font-weight: normal;
 `;
 
 const Panel = styled.div`
@@ -54,6 +62,9 @@ const Panel = styled.div`
   overflow: hidden;
   width: 200px;
   height: 240px;
+  margin: 0px;
+  padding: 0px;
+  font-weight: normal;
 `;
 
 const Container = styled.div`
@@ -63,7 +74,10 @@ const Container = styled.div`
   height: 232px;
   transition: 0.2s;
   left: ${(props: isMemo) => props.isMemo ? '-200px' : '0px'};
-  top: 0px;  
+  top: 0px;
+  margin: 0px;
+  padding: 0px;
+  font-weight: normal;
 `;
 
 const TogglePanel = styled.div`
@@ -75,6 +89,8 @@ const TogglePanel = styled.div`
   justify-content: space-between;
   padding: 4px;
   align-items: center;
+  margin: 0px;
+  font-weight: normal;
 `;
 
 const OptionContainer = styled.div`
@@ -86,6 +102,9 @@ const OptionContainer = styled.div`
   background-color: ${(props: isMemo) => { return props.isMemo ? 'rgb(80,80,80)' : 'rgb(120,120,120)'; }};
   border-radius: 14px;
   transition: 0.4s;
+  margin: 0px;
+  padding: 0px;
+  font-weight: normal;
 `;
 
 const OptionIconContainer = styled.div`
@@ -96,24 +115,42 @@ const OptionIconContainer = styled.div`
   transition: 0.4s;
   justify-content: center;
   align-items: center;
+  font-weight: normal;
+  margin: 0px;
+  padding: 0px;
 `;
 
 const OptionTitle = styled.div`
   font-size: 16px;
+  letter-spacing: 0px;
   color: ${(props: isMemo) => { return props.isMemo ? 'rgba(255,255,255,1)' : 'rgba(160,160,160,0)'; }};
   width: ${(props: isMemo) => { return props.isMemo ? '132px' : '0px'; }};
   transition: 0.4s;
   overflow: hidden;
   white-space: nowrap;
   text-align: center;
+  font-weight: normal;
+  margin: 0px;
+  padding: 0px;
 `;
 
 const App: React.FC<{}> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMemo, setIsMemo] = useState(false);
+  const [isPageToolShow, setIsPageToolShow] = useState(true);
+
+  useEffect(() => {
+    chrome.storage.sync.get(['personalization'], (res) => {
+      if (res.personalization) {
+        setIsPageToolShow(res.personalization.isPageToolShow);
+      } else {
+        setIsPageToolShow(true);
+      }
+    });
+  }, []);
 
   return (
-    <Wrapper isOpen={isOpen} onClick={(e: Event) => { e.stopPropagation(); setIsOpen(!isOpen); }}>
+    <Wrapper isOpen={isOpen} isPageToolShow={isPageToolShow} onClick={(e: Event) => { e.stopPropagation(); setIsOpen(!isOpen); }}>
       {isOpen &&
         <CtrlPanel onClick={(e: Event) => { e.stopPropagation(); setIsMemo(!isMemo); }}>
           <TogglePanel>

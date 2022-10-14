@@ -56,7 +56,6 @@ export const CurrentFocusPanel: React.FC<{}> = () => {
 
   function checkIsCurrent(items: calendarItem[]) {
     const current = Date.now();
-    console.log(items);
     let tempItems = sortByTimeStamp(items.filter(item => getTimeStamp(item.end, 'end') > current), 'start');
     const onGoing = [];
     const upComing = [];

@@ -276,7 +276,6 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
         bgSetting: res.bgSetting,
         backgroundList: [res.bgSet0, res.bgSet1, res.bgSet2, res.bgSet3, res.bgSet4, res.bgSet5],
       };
-      console.log(tempBgSetting);
       setTempBackgroundSetting(tempBgSetting);
     });
   }, []);
@@ -294,7 +293,6 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
       });
   }, [tempBackgroundSetting]);
 
-  console.log(tempBackgroundSetting);
   return (
     <Wrapper onClick={(e: Event) => e.stopPropagation()}>
       <EditPanelTitle>
