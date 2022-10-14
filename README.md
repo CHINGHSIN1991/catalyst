@@ -1,4 +1,3 @@
-
 <h3 align="center">
   <br>
   <a href="http://www.amitmerchant.com/electron-markdownify"><img src="https://user-images.githubusercontent.com/85145643/195566642-7b43d613-d144-47c2-b891-06ccdf97599b.jpg" alt="Catalyst" width="100%"></a>
@@ -50,7 +49,10 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 
 <a href="https://chrome.google.com/webstore/detail/catalyst/jhpdbbakbcmoaondmjjjbojlakgkeilo
 " target="_blank">Click to enter the web store</a> and install the latest version of Catalyst on Chrome ( This extension is only available on the browser )
-
+<br>
+<br>
+<a href="https://chrome.google.com/webstore/detail/catalyst/jhpdbbakbcmoaondmjjjbojlakgkeilo
+" target="_blank"><img alt="Chrome Web Store" src="https://img.shields.io/chrome-web-store/v/jhpdbbakbcmoaondmjjjbojlakgkeilo"></a>
 <br>
 
 ## Tech
