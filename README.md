@@ -32,8 +32,7 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 <br>
 
 ## Usage Scenario
-
-https://youtu.be/NQklDJnyl5g
+[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://youtu.be/NQklDJnyl5g)
 
 <br>
 
