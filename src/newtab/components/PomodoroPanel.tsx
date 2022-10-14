@@ -18,7 +18,6 @@ const Wrapper = styled.div`
   right: 0;
   margin: 0 auto;
   border-radius: 4px;
-  /* border: solid 1px; */
   border: ${(props: scheme) => props.theme.panelBorder};
   background-color: ${(props: scheme) => props.theme.panelBackground};
   backdrop-filter: blur(16px);
@@ -33,7 +32,6 @@ const Wrapper = styled.div`
 `;
 
 const PomodoroContainer = styled.div`
-  /* border: solid 1px; */
   display: flex;
   align-items: center;
   justify-content: center;

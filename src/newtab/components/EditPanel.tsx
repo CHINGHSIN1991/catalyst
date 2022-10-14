@@ -32,7 +32,6 @@ const PanelOpenBackground = styled.div`
 `;
 
 const PanelContainer = styled.div`
-  /* border: solid 1px; */
   width: ${(props: editPanelState) => props.editPanelState === '' ? '0vh' : '100vw'};
   height: ${(props: editPanelState) => props.editPanelState === '' ? '0vh' : '100vh'};
   transform: ${(props: editPanelState) => props.editPanelState === '' ? 'translateY(30%)' : 'translateY(0%)'};

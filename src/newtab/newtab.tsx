@@ -29,6 +29,8 @@ import { AlertWindow } from './components/AlertWindow';
 
 type isBoardOn = { isBoardOn: boolean; };
 type isMenuOn = { isMenuOn: boolean; };
+type bg = { currentBackground: string; };
+type mobileToggle = { mobileToggle: number; };
 
 const Wrapper = styled.div`
   font-family: 'Noto Sans';
@@ -38,7 +40,7 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  background-image: url(${(props) => { return props.currentBackground; }});
+  background-image: url(${(props: bg) => props.currentBackground});
   background-position: center;
   background-size: cover;
   transition: 0.5s;
@@ -46,7 +48,6 @@ const Wrapper = styled.div`
 `;
 
 const HeightLimiter = styled.div`
-  /* border: solid 1px black; */
   display: inline-flex;
   flex-direction: column;
   width: 100%;
@@ -66,7 +67,6 @@ const Container = styled.div`
 `;
 
 const MenuContainer = styled.div`
-  /* border: solid 1px; */
   position: absolute;
   font-family: 'Noto Sans', 'Microsoft JhengHei';
   width: 360px;
@@ -150,7 +150,7 @@ const MobileMenuContainer = styled.div`
   }
   @media (max-width:1180px) {
     width: 600vw;
-    left: ${props => { return `-${props.mobileToggle * 100}vw`; }};
+    left: ${(props: mobileToggle) => `-${props.mobileToggle * 100}vw`};
   }
 `;
 

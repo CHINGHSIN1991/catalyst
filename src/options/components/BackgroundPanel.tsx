@@ -6,6 +6,8 @@ import { background, backgroundSetting, currentComparison, appliedComparison } f
 import { ScrollbarContainer } from '../../static/styleSetting';
 import { deepCopy } from '../../utils/functions';
 
+type bg = { bg: string; };
+
 const Wrapper = styled.div`
   width: 100%;
   padding: 24px 0 0;
@@ -106,7 +108,7 @@ const BackgroundImage = styled.div`
   margin: 8px;
   width: 152px;
   height: 96px;
-  background-image: url(${(props: { bg: string; }) => { return props.bg; }});
+  background-image: url(${(props: bg) => props.bg});
   background-position: center;
   background-size: cover;
   overflow: hidden;

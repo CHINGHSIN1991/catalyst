@@ -45,7 +45,6 @@ const TextNote = styled.div`
 
 
 const TempLink = styled.div`
-  /* border: solid 1px; */
   flex-shrink:0;
   padding: 4px;
   border-radius: 4px;
@@ -70,14 +69,12 @@ const ToDoElements = styled.div`
 `;
 
 const ToDoContent = styled.div`
-  /* border: solid 1px; */
   display: flex;
   align-items: flex-start;
   color: ${(props: scheme) => props.theme.primary};
 `;
 
 const TextContent = styled.div`
-  /* border: solid 1px; */
   color: ${(props: scheme) => props.theme.primary};
   flex-grow: 1;
   width: auto;
@@ -87,9 +84,8 @@ const TextContent = styled.div`
 const TextTitle = styled.div`
   font-size: 0.875rem;
   line-height: 1rem;
-  /* width: 80px; */
-  color: ${(props) => { return props.isDone ? props.theme.tertiary : props.theme.primary; }};
-  text-decoration: ${(props: isDone) => { return props.isDone ? "line-through" : "none"; }};
+  color: ${(props: isDone & scheme) => props.isDone ? props.theme.tertiary : props.theme.primary};
+  text-decoration: ${(props: isDone) => props.isDone ? "line-through" : "none"};
   padding: 4px 0;
   text-overflow: ellipsis;
   overflow: hidden;

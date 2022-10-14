@@ -45,7 +45,7 @@ const SearchInput = styled.input`
 
 const SearchIcon = styled.div`
   position: absolute;
-  color: ${(props: query) => { return props.searchQuery === '' ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.7)'; }};
+  color: ${(props: query) => props.searchQuery === '' ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.7)'};
   top: 10px;
   right: 12px;
   width: 16px;

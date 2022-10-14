@@ -94,7 +94,7 @@ const Btn = styled.div`
   border-radius: 4px;
   margin: 0 0 0 4px;
   transition: 0.3s;
-  width: ${props => props.isEditOn ? '48px' : '56px'};
+  width: ${(props: isEditOn) => props.isEditOn ? '48px' : '56px'};
   height: 24px;
   :hover{
     background-color: rgb(120,120,120);

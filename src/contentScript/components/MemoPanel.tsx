@@ -80,7 +80,6 @@ const AddNoteBtn = styled.div`
 const ColorPanel = styled.div`
   display: flex;
   box-sizing: border-box;
-  /* border: solid 1px; */
   width: 200px;
   height: 24px;
 `;

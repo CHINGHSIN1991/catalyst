@@ -13,8 +13,11 @@ import { personalServiceList } from '../../static/optionList';
 import { handleErrorImage } from '../../utils/functions';
 import { scheme } from '../../static/types';
 
+type src = { src: string; };
+type hover = { hover: string; };
+type backup = { backup: string; };
+
 const PersonalPanel = styled(PanelBasicSetting)`
-  /* border: solid 1px;   */
   @media (max-width:1180px) {
     flex-grow:1;
   }
@@ -48,11 +51,11 @@ const ServiceIcon = styled.div`
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: ${(props) => `url(${props.src})`};  
+  background-image: ${(props: src) => `url(${props.src})`};  
   /* object-fit: contain; */
   transition: 0.2s;
   :hover {
-    background-image: ${(props) => `url(${props.hover}), url(${props.backup})`};
+    background-image: ${(props: hover & backup) => `url(${props.hover}), url(${props.backup})`};
   }
 `;
 
@@ -79,7 +82,7 @@ const ServiceLink = styled.a`
   :hover {
     background-color: rgba(255,255,255,0.1);
     ${ServiceIcon} {
-      background-image: ${(props) => `url(${props.hover})`};
+      background-image: ${(props: hover) => `url(${props.hover})`};
     }
   }
   @media (max-width:1580px) {
@@ -148,7 +151,6 @@ position: absolute;
   line-height: 20px;
   width: 24px;
   height: 24px;
-  /* border: solid 1px; */
   background-color: rgba(200,200,200,0.1);
   border-radius: 50%;
   transition: 0.2s;
@@ -186,7 +188,6 @@ export const PersonalServicePanel: React.FC<{}> = () => {
 
     chrome.storage.sync.get(['serviceList'], function (res) {
       if ('serviceList' in res) {
-        console.log(res);
         dispatch(loadServiceList(res.serviceList));
       }
     });

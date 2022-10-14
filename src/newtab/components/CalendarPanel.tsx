@@ -22,6 +22,13 @@ type period = {
   color: string,
 };
 
+type timeLineInfo = {
+  timeLineInfo: {
+    current: number,
+    startTime: number,
+  };
+};
+
 const CalendarWrapper = styled(PanelBasicSetting)`
   display: flex;
   flex-grow:0;
@@ -119,7 +126,7 @@ const TimeLineDisplay = styled.div`
   position: absolute;
   margin-left:39px;
   width: calc(100% - 39px);
-  top: ${(props) => { return `calc(${(props.timeLineInfo.current - props.timeLineInfo.startTime) / 86400000 * 768}px + 15px)`; }};
+  top: ${(props: timeLineInfo) => `calc(${(props.timeLineInfo.current - props.timeLineInfo.startTime) / 86400000 * 768}px + 15px)`};
   height: 2px;
   box-shadow: 0px 0px 5px 2px rgba(255, 255, 255, 0.2);
   background-color: rgba(255,255,255,0.7);
