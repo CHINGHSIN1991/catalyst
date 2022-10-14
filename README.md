@@ -46,24 +46,29 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 ## Tech
 
 - Fundamentals: HTML5  |  CSS3  |  JavaScript
-- Tools for Development: Webpack  |  Webpack  |  TypeScript
+- Tools for Development: Webpack  |  TypeScript
 - Libraries: React  |  React-DOM  |  Redux | React-Redux  |  Redux Toolkit  |  Styled Components
-
-APIs: Chrome extension API | Google calendar API
+- APIs: Chrome extension APIs  |  Google calendar API | Unsplash Image API | OpenWeather API
 
 This software uses the following open source packages:
-- [Electron](http://electron.atom.io/)
-- [Node.js](https://nodejs.org/)
-- [Marked - a markdown parser](https://github.com/chjj/marked)
-- [showdown](http://showdownjs.github.io/showdown/)
-- [CodeMirror](http://codemirror.net/)
-- Emojis are taken from [here](https://github.com/arvida/emoji-cheat-sheet.com)
-- [highlight.js](https://highlightjs.org/)
+- [Webpack 5.74.0](https://webpack.js.org/guides/installation/) | [Webpack-cli 4.10.0](https://www.npmjs.com/package/webpack-cli) | [Webpack-merge 5.8.0](https://www.npmjs.com/package/webpack-merge)
+- [clean-webpack-plugin 4.0.0](https://www.npmjs.com/package/clean-webpack-plugin) | [copy-webpack-plugin 11.0.0](https://www.npmjs.com/package/copy-webpack-plugin) | [dotenv-webpack 8.0.1](https://www.npmjs.com/package/dotenv-webpack) | [html-webpack-plugin 5.5.0](https://www.npmjs.com/package/html-webpack-plugin)
+- [ts-loader 9.3.1](https://www.npmjs.com/package/ts-loader) | [file-loader 6.2.0](https://v4.webpack.js.org/loaders/file-loader/) | [url-loader 4.1.1](https://www.npmjs.com/package/url-loader)
 
-## Demo
+- [TypeScript 4.8.2](https://www.typescriptlang.org/)
+- [@reduxjs/toolkit 1.8.5](https://www.npmjs.com/package/@reduxjs/toolkit) | [@types/chrome 0.0.196](https://www.npmjs.com/package/@types/chrome) | [@types/react 18.0.18](https://www.npmjs.com/package/@types/react) | [@types/react-dom 18.0.6](https://www.npmjs.com/package/@types/react-dom) | [@types/react-redux 7.1.24](https://www.npmjs.com/package/@types/react-dom)
+
+- [React 18.2.0](https://reactjs.org/) | [React-DOM 18.2.0](https://www.npmjs.com/package/react-dom) | [Redux 4.2.0](https://redux.js.org/) | [React-redux 8.0.2](https://react-redux.js.org/)
+
+- [React-draggable 4.4.5](https://www.npmjs.com/package/react-draggable)
+- [Styled-components 5.3.5](https://styled-components.com/)
+- [uuid 8.3.2](https://www.npmjs.com/package/uuid)
+
 
 ## Future Features
-
+- Feature to hide link organizer icon
+- Calendar events edit feature
+- Pronounce tool
 <!--
 <h4 align="center">A minimal Markdown Editor desktop app built on top of <a href="http://electron.atom.io" target="_blank">Electron</a>.</h4>
 
