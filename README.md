@@ -64,11 +64,14 @@ This software uses the following open source packages:
 - [Styled-components 5.3.5](https://styled-components.com/)
 - [uuid 8.3.2](https://www.npmjs.com/package/uuid)
 
+<br>
 
 ## Future Features
 - Feature to hide link organizer icon
 - Calendar events edit feature
 - Pronounce tool
+
+<br>
 <!--
 <h4 align="center">A minimal Markdown Editor desktop app built on top of <a href="http://electron.atom.io" target="_blank">Electron</a>.</h4>
 
