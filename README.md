@@ -32,7 +32,12 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 <br>
 
 ## Usage Scenario
-[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://youtu.be/NQklDJnyl5g)
+* Add a shortcut
+
+![ShortCut](https://user-images.githubusercontent.com/85145643/195750680-be06e9cc-10d9-418a-afc5-18c2db041ee5.gif)
+
+* Modify personal services
+
 
 <br>
 
