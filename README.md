@@ -13,7 +13,7 @@
   <a href="#usage-scenario">Usage Scenario</a>  • 
   <a href="#install">Install</a>  • 
   <a href="#tech">Tech</a>  • 
-  <a href="#related">Related</a>
+  <a href="#future-features">Future Features</a>
 </p>
 
 <br>
