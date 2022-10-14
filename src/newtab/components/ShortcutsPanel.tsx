@@ -151,7 +151,7 @@ const Shortcut = styled.li`
     }
   }
   @media (max-width:1580px) {
-    width: 87px;
+    width: 86px;
   }
 `;
 

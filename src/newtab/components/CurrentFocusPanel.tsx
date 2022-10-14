@@ -8,7 +8,7 @@ import { getEvents } from '../features/reducers/calendarSlice';
 import { fetchCalendarData } from '../../utils/api';
 import { calendarItem, scheme, timeKey } from '../../static/types';
 import { getTimeString, getTimeStamp } from '../../utils/functions';
-import { subtitle } from '../../static/styleSetting';
+import { Subtitle } from '../../static/styleSetting';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const FocusBlock = styled(subtitle)`
+const FocusBlock = styled(Subtitle)`
 `;
 
 export const CurrentFocusPanel: React.FC<{}> = () => {

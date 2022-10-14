@@ -40,6 +40,7 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
           passedSeconds = 0;
           pomoIsRunning = false
           chrome.action.setBadgeText({text:''});
+          chrome.notifications.getAll((res)=>console.log(res));
           this.registration.showNotification("Pomodoro Timer",{
             body: `${res.pomoAlertTime} minutes has padded!`,
             icon: "CatalystLogo_128.png"
@@ -57,6 +58,7 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
         let tempList = [];
         result.todoList.forEach((todo: todo)=>{
           if(todo.isSetAlert && !todo.alertSend && (Date.parse(`${todo.alertDate} ${todo.alertTime}`)<now)){
+            chrome.notifications.getAll((res)=>console.log(res));
             this.registration.showNotification("To do list reminder",{
               body: `The set time of work item "${todo.workContent}" has passed`,
               icon: "CatalystLogo_128.png"

@@ -410,7 +410,7 @@ const ToDoElement: React.FC<{
           {props.item.isSetAlert && <TextNote>{`Alarm : ${props.item.alertDate} ${props.item.alertTime}`}</TextNote>}
         </TextContent>}
         {props.tempTodo.id === props.item.id && <TextContent>
-          <TitleEdit style={{ width: "224px" }} value={props.tempTodo.workContent} name="title" type="text" ></TitleEdit>
+          <TitleEdit style={{ width: "224px" }} value={props.tempTodo.workContent} name="workContent" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} type="text" ></TitleEdit>
           {props.tempTodo.isSetAlert && <ToDoLabel htmlFor="">
             <ToDoInput name="alertDate" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertDate || ""} type="date" />
             <ToDoInput name="alertTime" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} value={props.tempTodo.alertTime || ""} type="time" />

@@ -193,7 +193,7 @@ export const ScrollbarTextArea = styled.textarea`
   }
 `;
 
-export const subtitle = styled.div`
+export const Subtitle = styled.div`
   font-size: 2rem;
   text-align: center;
   font-weight: bold;
@@ -204,9 +204,9 @@ export const subtitle = styled.div`
     font-size: 1.75rem;
   }
   @media (max-width:1180px) {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
   @media (max-width:768px) {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 `;

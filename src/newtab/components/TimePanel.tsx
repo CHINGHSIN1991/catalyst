@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { getPersonalization } from '../features/reducers/optionsSlice';
 
 import { scheme } from '../../static/types';
-import { subtitle } from '../../static/styleSetting';
+import { Subtitle } from '../../static/styleSetting';
 
 const Wrapper = styled.div`
   padding-top: 120px;
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const DateBlock = styled(subtitle)`
+const DateBlock = styled(Subtitle)`
   font-size: 2rem;
   text-align: center;
   font-weight: bold;
