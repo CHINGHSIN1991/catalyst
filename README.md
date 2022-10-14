@@ -8,7 +8,12 @@
   <br>
   <br>
     <img alt="Chrome Web Store" src="https://img.shields.io/chrome-web-store/v/jhpdbbakbcmoaondmjjjbojlakgkeilo">
-  <img alt="GitHub package.json version (subfolder of monorepo)" src="https://img.shields.io/github/package-json/v/CHINGHSIN1991/catalyst?color=%234AAF89&label=GitHub%20released">
+    <img alt="GitHub package.json version (subfolder of monorepo)" src="https://img.shields.io/github/package-json/v/CHINGHSIN1991/catalyst?color=%234B997B&label=GitHub%20released">
+  <br>
+  <br>
+    <img alt="Chrome Web Store" src="https://img.shields.io/chrome-web-store/users/jhpdbbakbcmoaondmjjjbojlakgkeilo">
+    <img alt="Chrome Web Store" src="https://img.shields.io/chrome-web-store/rating-count/jhpdbbakbcmoaondmjjjbojlakgkeilo">
+    <img alt="Chrome Web Store" src="https://img.shields.io/chrome-web-store/stars/jhpdbbakbcmoaondmjjjbojlakgkeilo">
   <br>
 </h3>
 
@@ -17,7 +22,8 @@
   <a href="#usage-scenario">Usage Scenario</a>  • 
   <a href="#install">Install</a>  • 
   <a href="#tech">Tech</a>  • 
-  <a href="#future-features">Future Features</a>
+  <a href="#future-features">Future Features</a>  • 
+  <a href="#version-history">Version History</a>
 </p>
 
 <br>
@@ -74,6 +80,13 @@ This software uses the following open source packages:
 - Feature to hide link organizer icon
 - Calendar events edit feature
 - Pronounce tool
+
+<br>
+
+## Version History
+- [ v1.0.0 ]  Chrome web store publishing - released @GitHub 2022/09/30 @Chrome web store 2022/10/05
+- [ v1.0.1 ]  Fixed and tested client id bug - released @GitHub 2022/10/12 @Chrome web store 2022/10/14
+- [ v1.0.2 ]  Added authorization feature and page tool hiden feature - released @GitHub 2022/10/14
 
 <br>
 <!--
