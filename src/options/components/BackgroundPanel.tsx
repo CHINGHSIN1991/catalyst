@@ -1,38 +1,61 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux';
 
-import AlertContext from '../../features/alertContext';
-import { getEditPanelState, setEditPanel } from '../../features/reducers/editSlice';
-import { loadBackgrounds } from '../../features/reducers/backgroundSlice';
-
-import { EditPanelWrapper, EditPanelTitle, EditPanelTitleText, EditPanelTitleUnderLine, ScrollbarContainer } from '../../../static/styleSetting';
-import { background, backgroundSetting, currentComparison, appliedComparison } from '../../../static/types';
-import { PanelButton, ButtonContainer } from '../../../static/components';
-import { deepCopy } from '../../../utils/functions';
+import { background, backgroundSetting, currentComparison, appliedComparison } from '../../static/types';
+import { ScrollbarContainer } from '../../static/styleSetting';
+import { deepCopy } from '../../utils/functions';
 
 type bg = { bg: string; };
 
-const Wrapper = styled(EditPanelWrapper)`
-  width: 738px;
-  padding: 24px;
+const Wrapper = styled.div`
+  width: 100%;
+  padding: 24px 0 0;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width:1180px) {
+    padding: 16px 0 0;
+  }
+`;
+
+const EditPanelTitle = styled.div`
+  color: rgba(255,255,255,1);
+  width: 100%;
+  padding: 16px 0;
+`;
+
+const EditPanelTitleText = styled.div`
+  font-weight: bold;
+`;
+
+const EditPanelTitleUnderLine = styled.div`
+  width: 100%;
+  height: 1px;
+  margin-top: 8px;
+  background-color: grey;
 `;
 
 const BackgroundContainer = styled(ScrollbarContainer)`
-  padding: 8px 10px;
-  background-color: darkgray;
+  padding: 16px;
+  background-color: lightgray;
   border-radius: 0px 8px 8px 8px; 
-  height: 400px;
+  min-height: 416px;
+  height: auto;
+  max-height: 600px;
   width: calc(100% - 120px);
   display: flex;
   align-items: flex-start;
   justify-content: start;
   align-content: flex-start;
   flex-wrap: wrap;
+  @media (max-width:1580px) {
+    min-height: 480px;
+  } 
+  @media (max-width:768px) {
+    width: calc(100% - 100px);
+  }
 `;
 
 const BackgroundListPanel = styled.div`
@@ -47,24 +70,34 @@ const BackgroundListPanel = styled.div`
 
 const BackgroundListOption = styled.div`
   cursor: pointer;
-  border-radius: 8px 0px 0px 8px ;
+  border-radius: 8px 0px 0px 8px ; 
   display: flex;
   flex-direction: column;
   margin-bottom: 3px;
   line-height: 24px;  
   width: ${(props: currentComparison) => props.index === props.current ? '120px' : '104px'};
   height: 60px;
-  background-color: ${(props: currentComparison) => props.index === props.current ? 'darkgray' : 'lightgray'};
+  background-color: ${(props: currentComparison) => props.index === props.current ? 'lightgray' : 'gray'};
   transition: 0.2s;
   :hover{
-    background-color: ${(props: currentComparison) => props.index === props.current ? 'darkgray' : 'darkgray'};
+    background-color: ${(props: currentComparison) => props.index === props.current ? 'lightgray' : 'darkgray'};
   }
   :last-child{
     margin-bottom: 0px;
   }
 
   @media (max-width:768px) {
-    width: ${(props: currentComparison) => props.index === props.current ? '100px' : '80px'};
+    width: ${(props: currentComparison) => props.index === props.current ? '90px' : '80px'};
+  } 
+`;
+
+const BackgroundListOptionTitle = styled.div`
+  padding: 4px 0 0 16px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  @media (max-width:768px) {
+    font-size: 0.75rem;
+    padding: 4px 0 0 8px;
   } 
 `;
 
@@ -73,12 +106,16 @@ const BackgroundImage = styled.div`
   border: solid 1px gray;
   border-radius: 4px;
   margin: 8px;
-  width: 120px;
-  height: 80px;
+  width: 152px;
+  height: 96px;
   background-image: url(${(props: bg) => props.bg});
   background-position: center;
   background-size: cover;
   overflow: hidden;
+  @media (max-width:1180px) {
+    width: 120px;
+    height: 80px;
+  } 
 `;
 
 const AddToCollectionOptionList = styled.div`
@@ -125,7 +162,7 @@ const DeleteBtn = styled.div`
 
 const AddToCollectionTitle = styled.div`
   width: 100%;
-  color: white;
+  color: rgba(255,255,255,1);
   font-size: 12px;
   text-align: center;
   opacity: 0;
@@ -163,7 +200,6 @@ const AddToCollectionPanel = styled.div`
     }
   }
 `;
-
 const Title = styled.div`
   width: 100%;
   padding-top: 8px;
@@ -191,63 +227,37 @@ const ApplyButton = styled.div`
   width: ${(props: appliedComparison) => props.applied === props.index ? '72px' : '56px'};
   margin: 2px 0 8px 16px;
   text-align: center;
-  color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(40,40,40)' : 'rgb(240,240,240)'};
-  background-color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(124, 247, 216)' : 'rgb(120,120,120)'};
+  color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(80,80,80)' : 'rgb(80,80,80)'};
+  background-color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(173, 255, 218)' : 'rgb(184,184,184)'};
   white-space: nowrap;
   overflow: hidden;
   transition: 0.2s;
+  /* padding: 4px 0 0 16px; */
   :hover {
-    background-color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(124, 247, 216)' : 'rgb(40,40,40)'};
-    color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(40,40,40)' : 'rgb(250,250,250)'};
+    background-color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(173, 255, 218)' : 'rgb(40,40,40)'};
+    color: ${(props: appliedComparison) => props.applied === props.index ? 'rgb(80,80,80)' : 'rgb(240,240,240)'};
   }
   @media (max-width:768px) {
     margin: 2px 0 8px 8px;
   } 
 `;
 
-const BackgroundListOptionTitle = styled.div`
-  padding: 4px 0 0 16px;
-  font-size: 0.875rem;
-  font-weight: bold;
-  color: ${(props: currentComparison) => props.current === props.index ? 'white' : 'rgb(40,40,40)'};
-  transition: 0.2s;
-  @media (max-width:768px) {
-    font-size: 0.75rem;
-    padding: 4px 0 0 8px;
-  } 
-`;
-
 export const BackgroundEditPanel: React.FC<{}> = () => {
-  const dispatch = useDispatch();
-  const editPanelState = useSelector(getEditPanelState);
-  const [alertState, setAlertState] = useContext(AlertContext);
   const [tempBackgroundSetting, setTempBackgroundSetting] = useState<backgroundSetting>(null);
   const [current, setCurrentSet] = useState(0);
-
+  const [isCollectionFull, setIsCollectionFull] = useState(0);
 
   function addImgToCollection(image: background, collection: number) {
     let temp = deepCopy(tempBackgroundSetting);
     if (!temp.backgroundList[collection].find((item: background) => item.id === image.id)) {
       if (temp.backgroundList[collection].length >= 12) {
-        setAlertState({
-          title: 'Collection is full',
-          message: `The number of images in collection ${collection} has reached the limit. Do you want to replace the first image with the selected image?`,
-          function: () => replaceFirstImage(image, collection)
-        });
+        setIsCollectionFull(collection);
       } else {
         temp.backgroundList[collection].push(image);
         setTempBackgroundSetting(temp);
+        setIsCollectionFull(0);
       }
-    } else {
-      setAlertState({ title: 'Duplicate images', message: `This image is already in collection${collection}` });
     }
-  }
-
-  function replaceFirstImage(image: background, collection: number) {
-    let temp = deepCopy(tempBackgroundSetting);
-    temp.backgroundList[collection].shift();
-    temp.backgroundList[collection].push(image);
-    setTempBackgroundSetting(temp);
   }
 
   function delImgInCollection(image: background, collection: number) {
@@ -263,10 +273,27 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
   }
 
   useEffect(() => {
-    if ('data' in editPanelState && editPanelState.name === 'BackgroundEdit') {
-      setTempBackgroundSetting(JSON.parse(JSON.stringify(editPanelState.data)));
-    }
-  }, [editPanelState]);
+    chrome.storage.sync.get(['bgSetting', 'bgSet0', 'bgSet1', 'bgSet2', 'bgSet3', 'bgSet4', 'bgSet5'], (res) => {
+      const tempBgSetting = {
+        bgSetting: res.bgSetting,
+        backgroundList: [res.bgSet0, res.bgSet1, res.bgSet2, res.bgSet3, res.bgSet4, res.bgSet5],
+      };
+      setTempBackgroundSetting(tempBgSetting);
+    });
+  }, []);
+
+  useEffect(() => {
+    tempBackgroundSetting &&
+      chrome.storage.sync.set({
+        bgSetting: tempBackgroundSetting.bgSetting,
+        bgSet0: tempBackgroundSetting.backgroundList[0],
+        bgSet1: tempBackgroundSetting.backgroundList[1],
+        bgSet2: tempBackgroundSetting.backgroundList[2],
+        bgSet3: tempBackgroundSetting.backgroundList[3],
+        bgSet4: tempBackgroundSetting.backgroundList[4],
+        bgSet5: tempBackgroundSetting.backgroundList[5],
+      });
+  }, [tempBackgroundSetting]);
 
   return (
     <Wrapper onClick={(e: Event) => e.stopPropagation()}>
@@ -276,30 +303,29 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
         </EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
       </EditPanelTitle>
-      <Title>{(current === 0 ? 'Get 10 random images everyday' : `You can add images from other collections ( max 12 images )`)}</Title>
+      <Title>
+        {isCollectionFull === 0 && (current === 0 ? 'Get 10 random images everyday' : `You can add images from other collections ( max 12 images )`)}
+        {isCollectionFull !== 0 && <span style={{ color: 'pink' }}>Collection {isCollectionFull} has reached the limit</span>}
+      </Title>
       <BackgroundPanel>
         <BackgroundListPanel>
-          {tempBackgroundSetting && [0, 1, 2, 3, 4, 5].map((item) => {
+          {tempBackgroundSetting && [0, 1, 2, 3, 4, 5].map((number) => {
             return <BackgroundListOption
-              key={'option' + item}
+              key={'option' + number}
               current={current}
-              index={item}
-              onClick={() => setCurrentSet(item)}
+              index={number} onClick={() => setCurrentSet(number)}
               currentApplied={tempBackgroundSetting.bgSetting.current.setting}
             >
-              <BackgroundListOptionTitle
-                current={current}
-                index={item}
-              >{item === 0 ? 'Random' : `Collection ${item}`}
+              <BackgroundListOptionTitle>{number === 0 ? 'Random' : `Collection ${number}`}
               </BackgroundListOptionTitle>
-              {(item === tempBackgroundSetting.bgSetting.current.setting || item === current) &&
+              {(number === tempBackgroundSetting.bgSetting.current.setting || number === current) &&
                 <ApplyButton
-                  onClick={() => applyCollection(item)}
+                  onClick={() => applyCollection(number)}
                   applied={tempBackgroundSetting.bgSetting.current.setting}
-                  index={item}
+                  index={number}
                   current={current}>
-                  {tempBackgroundSetting.bgSetting.current.setting === item && 'Current'}
-                  {tempBackgroundSetting.bgSetting.current.setting !== item && tempBackgroundSetting.backgroundList[item].length > 0 && 'Apply'}
+                  {tempBackgroundSetting.bgSetting.current.setting === number && 'Current'}
+                  {tempBackgroundSetting.bgSetting.current.setting !== number && tempBackgroundSetting.backgroundList[number].length > 0 && 'Apply'}
                 </ApplyButton>}
             </BackgroundListOption>;
           })}
@@ -318,10 +344,6 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
           })}
         </BackgroundContainer>
       </BackgroundPanel>
-      <ButtonContainer>
-        <PanelButton width={80} name='Save' onClick={() => { dispatch(loadBackgrounds(tempBackgroundSetting)); dispatch(setEditPanel({ name: '', data: '' })); }} />
-        <PanelButton width={80} name='Cancel' onClick={() => dispatch(setEditPanel({ name: '', data: '' }))} />
-      </ButtonContainer>
     </Wrapper>
   );
 };

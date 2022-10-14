@@ -3,10 +3,12 @@ import { backgroundSetting } from '../../../static/types'
 
 const initialState = {
   backgrounds:{
-    lastUpdate: '',
-    current: {
-      setting:0,
-      slice:0,
+    bgSetting:{
+      lastUpdate: '',
+      current: {
+        setting:0,
+        slice:0,
+      }
     },
     backgroundList: [[{
       url: "https://images.unsplash.com/photo-1662900547193-7ef6d19ffcfc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80",
@@ -22,13 +24,11 @@ const backgroundSlice = createSlice({
   initialState,
   reducers: {
     loadBackgrounds(state, { payload }) {
-      // console.log('backgrounds');
-      // console.log(payload);
       state.backgrounds = payload;
     },
     changeBackgroundRandomly(state) {
-      const index = Math.floor(Math.random() * state.backgrounds.backgroundList[state.backgrounds.current.setting].length);
-      state.backgrounds.current = {...state.backgrounds.current,slice: index}
+      const index = Math.floor(Math.random() * state.backgrounds.backgroundList[state.backgrounds.bgSetting.current.setting].length);
+      state.backgrounds.bgSetting.current = {...state.backgrounds.bgSetting.current,slice: index}
     }
   }
 })

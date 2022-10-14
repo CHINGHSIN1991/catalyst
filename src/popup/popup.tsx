@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import styled from "styled-components";
-import { ResetStyle, GlobalStyle } from "../static/globalStyle";
-// import { useState, useEffect } from "react";
 
-import { PomodoroPanel } from './PomodoroPanel';
-import { ToDoList } from './ToDoList';
+import { ResetStyle, GlobalStyle } from "../static/globalStyle";
+
+import { PageToolPanel } from './components/PageToolPanel';
+import { PomodoroPanel } from './components/PomodoroPanel';
+import { ToDoList } from './components/ToDoList';
 
 const Wrapper = styled.div`
   padding: 8px;
@@ -16,12 +17,12 @@ const Wrapper = styled.div`
   min-height: 120px;
   background-color: rgba(0,0,0,0.05);
 `;
-
 const App: React.FC<{}> = () => {
   return (
     <Wrapper>
       <ResetStyle />
       <GlobalStyle />
+      <PageToolPanel></PageToolPanel>
       <PomodoroPanel></PomodoroPanel>
       <ToDoList></ToDoList>
     </Wrapper >

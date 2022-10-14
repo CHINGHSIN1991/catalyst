@@ -2,6 +2,10 @@ import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
+import { todo } from '../../static/types';
+
+type isDone = { isDone: boolean; };
+
 const Wrapper = styled.div`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   width: 100%;
@@ -19,8 +23,8 @@ const ToDoItem = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-  color: ${(props) => { return props.isDone ? 'darkgray' : 'black'; }};
-  text-decoration: ${(props) => { return props.isDone ? 'line-through' : 'none'; }};
+  color: ${(props: isDone) => props.isDone ? 'darkgray' : 'black'};
+  text-decoration: ${(props: isDone) => props.isDone ? 'line-through' : 'none'};
 `;
 
 const CheckContainer = styled.div`
@@ -47,22 +51,12 @@ const IconContainer = styled.div`
   margin-right: 8px;
 `;
 
-interface todo {
-  workContent: string;
-  isDone: boolean;
-  id: number;
-  isSetAlert: boolean;
-  alertDate?: string;
-  alertTime?: string;
-  alertSend?: boolean;
-}
-
 export const ToDoList: React.FC<{}> = () => {
   const [workList, setWorkList] = useState(null);
 
   function changeIsDone(id: number) {
     let tempWorkList = [];
-    workList.forEach((todo) => {
+    workList.forEach((todo: todo) => {
       if (todo.id === id) {
         todo.isDone = !todo.isDone;
         tempWorkList.push(todo);
@@ -70,13 +64,13 @@ export const ToDoList: React.FC<{}> = () => {
         tempWorkList.push(todo);
       }
     });
-    chrome.storage.sync.set({ todoList: tempWorkList }, function () {
+    chrome.storage.local.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList);
     });
   }
 
   useEffect(() => {
-    chrome.storage.sync.get(['todoList'], function (result) {
+    chrome.storage.local.get(['todoList'], function (result) {
       setWorkList(result.todoList);
     });
   }, []);

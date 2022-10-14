@@ -1,56 +1,72 @@
 import React from 'react';
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 
-import { PanelBasicSetting } from '../styleSetting';
-import { serviceList } from '../../static/optionList';
+import { setEditPanel } from '../features/reducers/editSlice';
+import { getUserInfo, loadUserInfo } from '../features/reducers/userInfoSlice';
+import { getPersonalization } from '../features/reducers/optionsSlice';
+import { getServiceList, loadServiceList } from '../features/reducers/personalServiceSlice';
+
+import { PanelBasicSetting, ScrollbarContainer } from '../../static/styleSetting';
+import { personalServiceList } from '../../static/optionList';
+import { handleErrorImage } from '../../utils/functions';
+import { scheme } from '../../static/types';
+
+type src = { src: string; };
+type hover = { hover: string; };
+type backup = { backup: string; };
 
 const PersonalPanel = styled(PanelBasicSetting)`
-  /* border: solid 1px;   */
+  @media (max-width:1180px) {
+    flex-grow:1;
+  }
 `;
 
 const WelcomeMessage = styled.div`
   display: flex;
   align-items: flex-end;
+  font-weight: bold;
   font-size: 1rem;
-  padding: 4px 16px 16px 16px;
+  padding: 0px 16px 16px 0px;
 `;
 
-const ServiceLinks = styled.div`
+const ServiceLinks = styled(ScrollbarContainer)`
   max-height: 104px;
-  overflow-y: scroll;
   width: 100%;
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-    /* background: transparent;
-    border-radius: 4px; */
-  }
-  &::-webkit-scrollbar-track-piece {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0,0,0,0.4);
-    border: 1px solid slategrey
-  }
-  &::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
   @media (max-width:1580px) {
-  /* 銀幕寬度小於1200套用此區塊 */
     max-height: 72px;
+  }
+  @media (max-width:1180px) {
+    max-height: calc(100vh - 400px);
+  } 
+`;
+
+const ServiceIcon = styled.div`
+  width: 28px;
+  height: 28px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: ${(props: src) => `url(${props.src})`};  
+  /* object-fit: contain; */
+  transition: 0.2s;
+  :hover {
+    background-image: ${(props: hover & backup) => `url(${props.hover}), url(${props.backup})`};
   }
 `;
 
+const ServiceOnError = styled.img`
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+`;
+
 const ServiceLink = styled.a`
-  color: white;
+  color: ${(props: scheme) => props.theme.primary};
   padding: 8px;
   border-radius: 4px;
   margin: 0 8px;
@@ -65,47 +81,90 @@ const ServiceLink = styled.a`
 
   :hover {
     background-color: rgba(255,255,255,0.1);
+    ${ServiceIcon} {
+      background-image: ${(props: hover) => `url(${props.hover})`};
+    }
+  }
+  @media (max-width:1580px) {
+    width: 64px;
   }
 `;
 
-const ServiceIcon = styled.img`
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-`;
-
-const ServiceTitle = styled.div`
+const ServiceTitle = styled.div`  
   padding-top: 8px;
   font-size: 0.75rem;
 `;
-
-const UnderLine = styled.div`
-  background-color: #fff;
-  width: 0%;
-  height: 2px;
+const WelcomeSentence = styled.div`
+  font-weight: bold;
+  display: flex;
+  flex-shrink: 0;
 `;
 
 const UserName = styled.a`
-  color: white;
+  color: ${(props: scheme) => props.theme.primary};
   display: flex;
-  flex-direction: column;
+  flex-shrink: 1;
   align-items: center;
   cursor: pointer;
   padding-left: 8px;
   font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 2rem;
+  transition: 0.2s;
+  transform: translateY(0.4rem);
+  margin: 0;
+  overflow: hidden;  
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+
+const MoreServiceButton = styled.a`
+  display: block;
+  color: ${(props: scheme) => props.theme.primary};
+  margin: 8px 16px;
+  width: 100%;
+  height: 24px;
+  font-size: 12px;
+  line-height: 24px;
+  cursor: pointer;
+  border: solid 1px rgba(255,255,255,0.2);
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  text-align: center;
+  transition: 0.2s;
+  :hover {
+    border: solid 1px rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.2);
+  }
+`;
+
+const CreateButton = styled.div`
+position: absolute;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  right: 8px;
+  top: 8px;
   font-size: 1.5rem;
+  line-height: 20px;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(200,200,200,0.1);
+  border-radius: 50%;
   transition: 0.2s;
   :hover{
-    color: lightgray
-    ${UnderLine} {
-      width: 100%;
-    }
+    background-color: rgba(200,200,200,0.5);
   }
 `;
 
 export const PersonalServicePanel: React.FC<{}> = () => {
+  const dispatch = useDispatch();
+  const userInfo = useSelector(getUserInfo);
+  const serviceList = useSelector(getServiceList);
+  const personalization = useSelector(getPersonalization);
   const [welcomeMessage, setWelcomeMessage] = useState("Have a nice day !");
-  const [userName, setUserName] = useState("New User");
 
   function setWelcomeMsg(current: number) {
     if (current < 12) {
@@ -116,35 +175,51 @@ export const PersonalServicePanel: React.FC<{}> = () => {
       setWelcomeMessage("Good evening !");
     }
   }
+
   useEffect(() => {
     const current = (new Date()).getHours();
     setWelcomeMsg(current);
 
-    chrome.storage.sync.get();
     chrome.storage.sync.get(['userName'], function (res) {
       if ('userName' in res) {
-        setUserName(res.userName);
+        dispatch(loadUserInfo({ ...userInfo, name: res.userName }));
+      }
+    });
+
+    chrome.storage.sync.get(['serviceList'], function (res) {
+      if ('serviceList' in res) {
+        dispatch(loadServiceList(res.serviceList));
       }
     });
   }, []);
 
   return (
     <PersonalPanel>
-      <WelcomeMessage>{welcomeMessage}
+      <WelcomeMessage>
+        <WelcomeSentence>{welcomeMessage}</WelcomeSentence>
         <UserName href="https://myaccount.google.com/" target="_blank">
-          <div>{userName}</div>
-          <UnderLine></UnderLine>
+          {userInfo.name}
         </UserName>
       </WelcomeMessage>
       <ServiceLinks>
         {serviceList.map((item) => {
-          return <ServiceLink key={item.imgUrl.light} href={item.link} target="_blank">
-            <ServiceIcon src={item.imgUrl.light} />
-            <ServiceTitle>{item.name.english}</ServiceTitle>
+          return <ServiceLink key={personalServiceList[item].imgUrl.light} href={personalServiceList[item].link} hover={personalServiceList[item].imgUrl.color} target="_blank">
+            <ServiceIcon src={personalization.isDarkMode ? personalServiceList[item].imgUrl.light : personalServiceList[item].imgUrl.dark} onError={(e: Event) => handleErrorImage(e)}>
+              <ServiceOnError src='https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/onError.png?alt=media&token=3a641010-249b-4fbb-a1bd-256adfb460ea' onError={(e: Event) => handleErrorImage(e)}></ServiceOnError>
+            </ServiceIcon>
+            <ServiceTitle>{personalServiceList[item].name.english}</ServiceTitle>
           </ServiceLink>;
         })}
+        <MoreServiceButton href="https://about.google/products/" target="_blank">
+          See more services
+        </MoreServiceButton>
       </ServiceLinks>
-    </PersonalPanel>
+      <CreateButton onClick={() => dispatch(setEditPanel({ name: 'ServiceEdit' }))}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+          <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+        </svg>
+      </CreateButton>
+    </PersonalPanel >
   );
 }
 

@@ -1,52 +1,30 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+
+import { ToggleTitle, ToggleButton } from '../../static/styleSetting';
 
 const Wrapper = styled.div`
   position: absolute;
   bottom: 40px;
-  font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
-  /* border: solid 1px; */
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const ToggleTitle = styled.div`
-  /* border: solid 1px; */
-  opacity: 0;
-  transform: translateY(30px);
-  position: absolute;
-  text-align: center;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 1),  0 0 20px rgba(0, 0, 0, 0.5);
-  width: 120px;
-  transition: 0.2s;
-`;
-
-const ToggleButton = styled.div`
-  width: 48px;
-  height: 48px;
-  margin: 0 24px;
-  border-radius: 50%;
+const DesktopToggleButton = styled(ToggleButton)`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  /* border: solid 1px; */
-  cursor: pointer;
-  box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
-  border: solid 0.5px rgba(120,120,120,0.4);
-  background-color: rgba(0,0,0,0.4);
-  backdrop-filter: blur(16px);
-  :hover{
-    ${ToggleTitle} {
-      opacity: 1;
-      transform: translateY(40px);
-    }
+  @media (max-width:1180px) {
+    display: none;
   }
 `;
 
-
+const MobileToggleButton = styled(ToggleButton)`
+  display: none;
+  @media (max-width:1180px) {
+    display: flex;
+  }
+`;
 
 export const TogglePanel: React.FC<{
   setIsBoardOn: (boo: boolean) => void;
@@ -54,6 +32,7 @@ export const TogglePanel: React.FC<{
   setIsMenuOn: (boo: boolean) => void;
   centralPanel: string;
   setCentralPanel: (crp: string) => void;
+  changeMobileMenu: () => void;
 }> = (props) => {
 
   function toggleCentralPanel(target: string) {
@@ -66,7 +45,7 @@ export const TogglePanel: React.FC<{
 
   return (
     <Wrapper>
-      <ToggleButton onClick={() => { props.setIsMenuOn(!props.isMenuOn); }}>
+      <DesktopToggleButton onClick={() => { props.setIsMenuOn(!props.isMenuOn); }}>
         {props.isMenuOn && <svg xmlns="http://www.w3.org/2000/svg" style={{ rotate: "90deg" }} width="22" height="22" fill="currentColor" className="bi bi-arrows-expand" viewBox="0 0 16 16">
           <path fillRule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zM7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10z" />
         </svg>}
@@ -74,7 +53,13 @@ export const TogglePanel: React.FC<{
           <path fillRule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zm7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0zm-.5 11.707-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0v-3.793z" />
         </svg>}
         <ToggleTitle>Toggle menu</ToggleTitle>
-      </ToggleButton>
+      </DesktopToggleButton>
+      <MobileToggleButton onClick={props.changeMobileMenu}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="bi bi-code" viewBox="0 0 16 16">
+          <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z" />
+        </svg>
+        <ToggleTitle>Toggle menu</ToggleTitle>
+      </MobileToggleButton>
       <ToggleButton onClick={() => toggleCentralPanel('Pomodoro')}>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-alarm" viewBox="0 0 16 16">
           <path d="M8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5z" />

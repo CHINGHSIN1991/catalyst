@@ -10,8 +10,6 @@ const calendarSlice = createSlice({
   initialState,
   reducers: {
     loadEvents(state, { payload }) {
-      // console.log('events');
-      // console.log(payload);
       state.events = payload;
     },
   }

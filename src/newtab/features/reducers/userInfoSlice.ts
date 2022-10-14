@@ -3,6 +3,7 @@ import { userInfo } from '../../../static/types'
 
 const initialState = {
   userInfo: {
+    name: 'New User',
     email: '',
     id: '',
     authToken: '',
@@ -14,8 +15,6 @@ const userInfoSlice = createSlice({
   initialState,
   reducers: {
     loadUserInfo(state, { payload }) {
-      // console.log('userInfo');
-      // console.log(payload);
       state.userInfo = payload;
     },
   }

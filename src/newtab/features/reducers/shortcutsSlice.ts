@@ -50,14 +50,12 @@ const shortcutsSlice = createSlice({
         state.shortcuts = tempState
       }
       chrome.storage.sync.set({ shortcuts: state.shortcuts }, function () {
-        console.log('set');
       });
     },
     deleteShortcut(state, { payload }) {
       let tempState = state.shortcuts
       state.shortcuts = tempState.filter((item)=> item.id !== payload.id )
       chrome.storage.sync.set({ shortcuts: state.shortcuts }, function () {
-        console.log('set');
       });
     }
   }

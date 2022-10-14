@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getEditPanelState, setEditPanel } from '../features/reducers/editSlice';
@@ -8,11 +7,18 @@ import { getEditPanelState, setEditPanel } from '../features/reducers/editSlice'
 import { ShortcutEditPanel } from './Edit/ShortcutEdit';
 import { CalendarEditPanel } from './Edit/CalendarEdit';
 import { BackgroundEditPanel } from './Edit/BackGroundEdit';
+import { UserInfoEditPanel } from './Edit/UserInfoEdit';
+import { PronounceToolEditPanel } from './Edit/PronounceToolEdit';
+import { MenuOptionPanel } from './Edit/MenuOptionPanel';
+import { DisplayModePanel } from './Edit/DisplayModeEdit';
+import { ServiceEditPanel } from './Edit/PersonalServiceEdit';
+
+type editPanelState = { editPanelState: string; };
 
 const PanelOpenBackground = styled.div`
   width: 100vw;
-  height: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? "0vh" : "100vh"; }};
-  opacity: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? '0' : '1'; }};
+  height: ${(props: editPanelState) => props.editPanelState === '' ? "0vh" : "100vh"};
+  opacity: ${(props: editPanelState) => props.editPanelState === '' ? '0' : '1'};
   left: 0px;
   top: 0px;
   position: fixed;
@@ -26,11 +32,10 @@ const PanelOpenBackground = styled.div`
 `;
 
 const PanelContainer = styled.div`
-  /* border: solid 1px; */
-  width: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? '0vh' : '100vw'; }};
-  height: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? '0vh' : '100vh'; }};
-  transform: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? 'translateY(30%)' : 'translateY(0%)'; }};;
-  opacity: ${(props: { editPanelState: string; }) => { return props.editPanelState === '' ? '0' : '1'; }};;
+  width: ${(props: editPanelState) => props.editPanelState === '' ? '0vh' : '100vw'};
+  height: ${(props: editPanelState) => props.editPanelState === '' ? '0vh' : '100vh'};
+  transform: ${(props: editPanelState) => props.editPanelState === '' ? 'translateY(30%)' : 'translateY(0%)'};
+  opacity: ${(props: editPanelState) => props.editPanelState === '' ? '0' : '1'};
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -47,7 +52,12 @@ export const EditPanel: React.FC<{}> = () => {
       <PanelContainer editPanelState={editPanelState.name}>
         {(editPanelState.name === 'ShortcutEdit' || editPanelState.name === 'ShortcutAdd') && <ShortcutEditPanel></ShortcutEditPanel>}
         {(editPanelState.name === 'EventEdit' || editPanelState.name === 'EventAdd') && <CalendarEditPanel></CalendarEditPanel>}
-        {(editPanelState.name === 'BackgroundEdit') && <BackgroundEditPanel></BackgroundEditPanel>}
+        {editPanelState.name === 'BackgroundEdit' && <BackgroundEditPanel></BackgroundEditPanel>}
+        {editPanelState.name === 'UserInfoEdit' && <UserInfoEditPanel></UserInfoEditPanel>}
+        {editPanelState.name === 'PronounceToolEdit' && <PronounceToolEditPanel></PronounceToolEditPanel>}
+        {editPanelState.name === 'MenuOptionEdit' && <MenuOptionPanel></MenuOptionPanel>}
+        {editPanelState.name === 'DisplayModeEdit' && <DisplayModePanel></DisplayModePanel>}
+        {editPanelState.name === 'ServiceEdit' && <ServiceEditPanel></ServiceEditPanel>}
       </PanelContainer>
     </PanelOpenBackground>
   );

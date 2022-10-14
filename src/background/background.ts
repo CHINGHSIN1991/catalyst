@@ -1,128 +1,4 @@
-
-console.log("backgroundScript running!")
-
-// const todoListPort = chrome.runtime.connect({ name: "todo" });
-// console.log(todoListPort);
-// todoListPort.onMessage.addListener((res)=>{
-//   console.log(res);
-// })
-
-
-// const clientId = process.env.CLIENT_ID
-// const redirectUri = `https://${chrome.runtime.id}.chromiumapp.org/`
-// const nonce = Math.random().toString(36).substring(2, 15)
-
-// chrome.action.onClicked.addListener(function() {
-//   const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-
-//   authUrl.searchParams.set('client_id', clientId);
-//   authUrl.searchParams.set('response_type', 'id_token');
-//   authUrl.searchParams.set('redirect_uri', redirectUri);
-//   // Add the OpenID scope. Scopes allow you to access the user’s information.
-//   authUrl.searchParams.set('scope', 'openid profile email');
-//   authUrl.searchParams.set('nonce', nonce);
-//   // Show the consent screen after login.
-//   authUrl.searchParams.set('prompt', 'consent');
-
-//   chrome.identity.launchWebAuthFlow(
-//     {
-//       url: authUrl.href,
-//       interactive: true,
-//     },
-//     (redirectUrl) => {
-//       if (redirectUrl) {
-//         // The ID token is in the URL hash
-//         const urlHash = redirectUrl.split('#')[1];
-//         const params = new URLSearchParams(urlHash);
-//         const jwt = params.get('id_token');
-
-//         // Parse the JSON Web Token
-//         const base64Url = jwt.split('.')[1];
-//         const base64 = base64Url.replace('-', '+').replace('_', '/');
-//         const token = JSON.parse(atob(base64));
-
-//         console.log('token', token);
-//       }
-//     },
-//   );
-// });
-
-
-
-////////////////////////////
-interface todo {
-  workContent: string;
-  isDone: boolean;
-  id: number;
-  isSetAlert: boolean;
-  alertDate?: string;
-  alertTime?: string;
-  alertSend?: boolean;
-}
-
-chrome.alarms.create("TodoListReminder",{
-  periodInMinutes: 1/12,
-})
-
-chrome.alarms.create("PomoTimer",{
-  periodInMinutes: 1/60,
-})
-
-chrome.alarms.onAlarm.addListener((alarm)=>{
-  const now = Date.now();
-  if(alarm.name==="PomoTimer") {
-    chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)=>{
-      if (res.pomoIsRunning) {
-        let passedSeconds = res.passedSeconds +1
-        let pomoIsRunning = true
-        if (passedSeconds > res.pomoAlertTime * 60){
-          passedSeconds = 0;
-          pomoIsRunning = false
-          console.log(this);
-          // this.registration.showNotification("Pomodoro Timer",{
-          //   body: `${res.pomoAlertTime} minutes has padded!`,
-          //   icon: "CatalystLogo_128.png"
-          // })          
-        }
-        chrome.storage.local.set({passedSeconds,pomoIsRunning})
-      }
-    })
-  }
-  if(alarm.name==="TodoListReminder"){
-    chrome.storage.sync.get(['todoList'], function (result) {
-      if(result.todoList){
-        let tempList = [];
-        result.todoList.forEach((todo: todo)=>{
-          if(todo.isSetAlert && !todo.alertSend && (Date.parse(`${todo.alertDate} ${todo.alertTime}`)<now)){
-            console.log(this);
-            this.registration.showNotification("To do list reminder",{
-              body: `The set time of work item "${todo.workContent}" has passed`,
-              icon: "CatalystLogo_128.png"
-            })
-            const tempTodo = {...todo}
-            tempTodo.alertSend = true;
-            tempList.push(tempTodo)
-            // todoListPort.postMessage({msg: "update"})
-          } else {
-            tempList.push(todo);
-          }        
-        })
-        chrome.storage.sync.set({ todoList: tempList }, function () {
-          // console.log("set");
-        });
-      }
-      
-    });
-  }  
-})
-
-chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)=> {
-  chrome.storage.local.set({
-    passedSeconds: "passedSeconds" in res? res.passedSeconds : 0,
-    pomoIsRunning: "pomoIsRunning" in res? res.pomoIsRunning : false,
-    pomoAlertTime: "pomoAlertTime" in res? res.pomoAlertTime : 1
-  })
-})
+import { todo } from '../static/types' 
 
 chrome.runtime.onInstalled.addListener((details) => {
   chrome.contextMenus.create({
@@ -136,5 +12,76 @@ chrome.runtime.onInstalled.addListener((details) => {
       console.log("speak en-US");
     }
   })
-  console.log(details);
 })
+
+chrome.alarms.create("TodoListReminder",{
+  periodInMinutes: 1/60,
+})
+
+chrome.alarms.create("PomoTimer",{
+  periodInMinutes: 1/60,
+})
+
+chrome.alarms.onAlarm.addListener((alarm)=>{
+  const now = Date.now();
+  if(alarm.name==="PomoTimer") {
+    chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],function(res){
+      if (res.pomoIsRunning) {
+        let passedSeconds = res.passedSeconds +1
+        let pomoIsRunning = true
+        if(res.pomoAlertTime * 60 - passedSeconds > 60){
+          chrome.action.setBadgeBackgroundColor({color: [124, 247, 216, 1]});
+        } else {
+          chrome.action.setBadgeBackgroundColor({color: '#fcaf9a'});
+        }        
+        chrome.action.setBadgeText({text:`${`${res.pomoAlertTime - Math.ceil(res.passedSeconds / 60)}`}:${`${res.passedSeconds % 60 && 60 - res.passedSeconds % 60}`.padStart(2, "0")}`})
+        if (passedSeconds > res.pomoAlertTime * 60){
+          passedSeconds = 0;
+          pomoIsRunning = false
+          chrome.action.setBadgeText({text:''});
+          chrome.notifications.getAll((res)=>console.log(res));
+          this.registration.showNotification("Pomodoro Timer",{
+            body: `${res.pomoAlertTime} minutes has padded!`,
+            icon: "CatalystLogo_128.png"
+          })
+        }
+        chrome.storage.local.set({passedSeconds,pomoIsRunning})
+      } else {
+        chrome.action.setBadgeText({text:''});
+      }
+    })
+  }
+  if(alarm.name==="TodoListReminder"){
+    chrome.storage.local.get(['todoList'], function (result) {
+      if(result.todoList){
+        let tempList = [];
+        result.todoList.forEach((todo: todo)=>{
+          if(todo.isSetAlert && !todo.alertSend && (Date.parse(`${todo.alertDate} ${todo.alertTime}`)<now)){
+            chrome.notifications.getAll((res)=>console.log(res));
+            this.registration.showNotification("To do list reminder",{
+              body: `The set time of work item "${todo.workContent}" has passed`,
+              icon: "CatalystLogo_128.png"
+            })
+            const tempTodo = {...todo}
+            tempTodo.alertSend = true;
+            tempList.push(tempTodo)
+          } else {
+            tempList.push(todo);
+          }        
+        })
+        chrome.storage.local.set({ todoList: tempList }, function () {
+        });
+      }      
+    });
+  }  
+})
+
+chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)=> {
+  chrome.storage.local.set({
+    passedSeconds: "passedSeconds" in res? res.passedSeconds : 0,
+    pomoIsRunning: "pomoIsRunning" in res? res.pomoIsRunning : false,
+    pomoAlertTime: "pomoAlertTime" in res? res.pomoAlertTime : 1
+  })
+})
+
+

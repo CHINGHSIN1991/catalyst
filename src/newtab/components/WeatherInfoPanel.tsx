@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 
-import { fetchWeatherData, getLocationKey, fetchAccuWeatherData } from '../../utils/api';
+import { getPersonalization } from '../features/reducers/optionsSlice';
 
-import { FocusPanelTitle } from '../styleSetting';
+import { fetchWeatherData } from '../../utils/api';
+import { FocusPanelTitle } from '../../static/styleSetting';
+import { openWeatherData, scheme, centralPanel } from '../../static/types';
 
 const Wrapper = styled.div`
-  /* border: solid 1px; */
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: inline-flex;
   flex-direction: column;
@@ -18,18 +20,20 @@ const Wrapper = styled.div`
   right: 0;
   margin: 0 auto;
   border-radius: 4px;
-  /* border: solid 1px; */
-  border: solid 0.5px rgba(120,120,120,0.4);
-  background-color: rgba(0,0,0,0.4);
+  border: ${(props: scheme) => props.theme.panelBorder};
+  background-color: ${(props: scheme) => props.theme.panelBackground};
   backdrop-filter: blur(16px);
-  height: ${(props) => props.centralPanel === "Weather" ? "128px" : "0px"};
-  width: ${(props) => props.centralPanel === "Weather" ? "480px" : "0px"};
+  height: ${(props: centralPanel) => props.centralPanel === "Weather" ? "128px" : "0px"};
+  width: ${(props: centralPanel) => props.centralPanel === "Weather" ? "480px" : "0px"};
   transition: 0.1s;
   overflow: hidden;
+  @media (max-width:1180px) {
+    width: ${(props: centralPanel) => props.centralPanel === "Weather" ? "calc(100% - 48px)" : "0px"};
+    min-width: ${(props: centralPanel) => props.centralPanel === "Weather" ? "440px" : "0px"};
+  }
 `;
 
 const WeatherInfoContainer = styled.div`
-  /* border: solid 1px; */
   display: flex;
   justify-content: flex-start;
   padding: 8px 0 16px 0;
@@ -38,13 +42,11 @@ const WeatherInfoContainer = styled.div`
 `;
 
 const MainInfo = styled.div`
-  /* border: solid 1px; */
   border-right: solid 1px rgba(255,255,255,0.2);
   display: flex;
   flex-grow: 1;
   flex-direction: column;
   align-items: center;
-  /* width: 40px; */
   padding: 0 24px;
   height: 100%;
 
@@ -56,6 +58,10 @@ const MainInfo = styled.div`
 
 const MainDegree = styled.div`
   font-size: 2rem;
+  @media (max-width:1180px) {
+    line-height: 32px;
+    font-size: 1.5rem;
+  }
 `;
 
 const City = styled.div`
@@ -84,109 +90,8 @@ const InfoTitle = styled.div`
   width: 64px;
 `;
 
-interface openWeatherData {
-  coord: {
-    lon: number,
-    lat: number,
-  };
-  weather: [
-    {
-      id: number,
-      main: string,
-      description: string,
-      icon: string,
-    }
-  ],
-  base: string,
-  main: {
-    temp: number,
-    feels_like: number,
-    temp_min: number,
-    temp_max: number,
-    pressure: number,
-    humidity: number,
-    sea_level: number,
-    grnd_level: number;
-  },
-  visibility: number,
-  wind: {
-    speed: number,
-    deg: number,
-    gust: number;
-  },
-  rain: {
-    "1h": number;
-  },
-  clouds: {
-    "all": number;
-  },
-  dt: number,
-  sys: {
-    type: number,
-    id: number,
-    country: string,
-    sunrise: number,
-    sunset: number;
-  },
-  timezone: number,
-  id: number,
-  name: string,
-  cod: number;
-}
-
-type accuDayWeatherData = {
-  HasPrecipitation: boolean,
-  Icon: number,
-  IconPhrase: string,
-  LocalSource: {
-    Id: number,
-    Number: string,
-    WeatherCode: string,
-  };
-  PrecipitationIntensity: string,
-  PrecipitationType: string,
-};
-
-type accuTemperature = {
-  Value: number,
-  Unit: string,
-  UnitType: number,
-};
-type accuTemperatureSet = {
-  Maximum: accuTemperature,
-  Minimum: accuTemperature,
-};
-
-type accuWeatherData = {
-  Date: string,
-  Day: accuDayWeatherData,
-  EpochDate: number,
-  Link: string,
-  MobileLink: string,
-  Night: accuDayWeatherData,
-  Sources: string[],
-  Temperature: accuTemperatureSet,
-};
-
-type accuWeatherHeadline = {
-  Category: string,
-  EffectiveDate: string,
-  EffectiveEpochDate: Date,
-  EndDate: string,
-  EndEpochDateL: Date,
-  Link: string,
-  MobileLink: string,
-  Severity: number,
-  Text: string,
-};
-
-interface accuWeatherDataSet {
-  DailyForecasts: accuWeatherData[],
-  Headline: accuWeatherHeadline,
-  updateTime: Date,
-}
-
 export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
+  const personalization = useSelector(getPersonalization);
   const [weatherData, setWeatherData] = useState<openWeatherData>(null);
 
   function getWeatherData(currentTime: number) {
@@ -223,18 +128,6 @@ export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
         getWeatherData(currentTime);
       }
     });
-    // chrome.storage.local.get(["weatherData"], (res) => {
-    //   const currentTime = Date.now();
-    //   if (res.weatherData) {
-    //     if ((currentTime - res.weatherDate.updateTime) < 8640000) {
-    //       setWeatherData(res.weatherData);
-    //     } else {
-    //       getWeatherData(currentTime);
-    //     }
-    //   } else {
-    //     getWeatherData(currentTime);
-    //   }
-    // });
   }, []);
 
   return (
@@ -246,28 +139,24 @@ export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
           <City>{weatherData.weather[0].main}</City>
         </MainInfo>
         <MainInfo>
-          {/* <MainDegree>{`${standerToMetric(weatherData.main.temp)}℃`}{`${standerToFahrenheit(weatherData.main.temp)}℉`} </MainDegree> */}
-          <MainDegree>{`${standerToMetric(weatherData.main.temp)} ℃`}</MainDegree>
+          {!personalization.isCelsius && <MainDegree>{`${standerToFahrenheit(weatherData.main.temp)} ℉`}</MainDegree>}
+          {personalization.isCelsius && <MainDegree>{`${standerToMetric(weatherData.main.temp)} ℃`}</MainDegree>}
           <City>{weatherData.name}</City>
         </MainInfo>
         <MainInfo>
           <Info><InfoTitle>Humidity</InfoTitle>{`${weatherData.main.humidity} %`}</Info>
-          <Info><InfoTitle>Feel like</InfoTitle>{`${standerToMetric(weatherData.main.feels_like)} ℃`}</Info>
-          <Info><InfoTitle>Range</InfoTitle>{`${standerToMetric(weatherData.main.temp_min)} - ${standerToMetric(weatherData.main.temp_max)} ℃`}</Info>
+          <Info>
+            <InfoTitle>Feel like</InfoTitle>
+            {!personalization.isCelsius && `${standerToFahrenheit(weatherData.main.feels_like)} ℉`}
+            {personalization.isCelsius && `${standerToMetric(weatherData.main.feels_like)} ℃`}
+          </Info>
+          <Info>
+            <InfoTitle>Range</InfoTitle>
+            {!personalization.isCelsius && `${standerToFahrenheit(weatherData.main.temp_min)} - ${standerToFahrenheit(weatherData.main.temp_max)} ℉`}
+            {personalization.isCelsius && `${standerToMetric(weatherData.main.temp_min)} - ${standerToMetric(weatherData.main.temp_max)} ℃`}
+          </Info>
         </MainInfo>
       </WeatherInfoContainer>}
-      {/* <DailyDataContainer>
-        {weatherData && weatherData.DailyForecasts.map((item: any) => {
-          console.log(item);
-          return (
-            <DailyData key={item.Date}>
-              <WeatherIcon icon={item.Day.Icon}></WeatherIcon>
-            </DailyData>);
-        })}
-      </DailyDataContainer> */}
-      {/* {weatherData && weatherData.DailyForecasts.map((item) => {
-        return (<div key={item.Date} style={{ color: "white" }}><div>{item.Date}</div><div>{JSON.stringify(item.Temperature)}</div></div>);
-      })} */}
     </Wrapper>
   );
 };
