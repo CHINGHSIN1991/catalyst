@@ -31,7 +31,7 @@
 
 Replace new tab page with a customized dashboard to help you get focused, and keep motivated to achieve goals. Pomodoro, to-do list and link organizer help you save information and improve efficiency while browsing. Users can:
 
-* Get inspiring photos as a background on new tabs every day.
+* Get inspiring photos as backgrounds on new tabs every day.
 * Use pomodoro and to-do list with reminder.
 * Adjust personal setting panel to manage user's own backgrounds, display mode, temperature scale, and calendar display.
 * Use link organizer on page to help user post informations on notes list or bulletin board.
