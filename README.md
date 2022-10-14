@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="#key-features">Key Features</a>  • 
-  <a href="#user-flow">User Flow</a>  • 
+  <a href="#usage-scenario">Usage Scenario</a>  • 
   <a href="#install">Install</a>  • 
   <a href="#tech">Tech</a>  • 
   <a href="#related">Related</a>
@@ -31,7 +31,9 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 
 <br>
 
-## User Flow
+## Usage Scenario
+
+https://youtu.be/NQklDJnyl5g
 
 <br>
 
