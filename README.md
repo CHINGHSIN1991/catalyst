@@ -80,6 +80,8 @@ This software uses the following open source packages:
 
 ## Future Features
 - Feature to hide link organizer icon
+- Notification or sign when adding new background to collection
+- Chrome's "socket" like feature to communicate with different tabs and scripts
 - Calendar events edit feature
 - Pronounce tool
 
