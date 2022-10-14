@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="#key-features">Key Features</a>  • 
-  <a href="#how-to-use">How To Use</a>  • 
+  <a href="#user-flow">User Flow</a>  • 
   <a href="#install">Install</a>  • 
   <a href="#tech">Tech</a>  • 
   <a href="#related">Related</a>
@@ -28,6 +28,10 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 * Use link organizer on page to help user post informations on notes list or bulletin board.
 * Get local weather info. 
 * Enjoy customizable shortcut and Chrome service panel.
+
+<br>
+
+## User Flow
 
 <br>
 
@@ -69,8 +73,6 @@ This software uses the following open source packages:
 - [CodeMirror](http://codemirror.net/)
 - Emojis are taken from [here](https://github.com/arvida/emoji-cheat-sheet.com)
 - [highlight.js](https://highlightjs.org/)
-
-## Flow chart
 
 ## Demo
 
