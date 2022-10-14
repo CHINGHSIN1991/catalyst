@@ -54,6 +54,7 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 <a href="https://chrome.google.com/webstore/detail/catalyst/jhpdbbakbcmoaondmjjjbojlakgkeilo
 " target="_blank"><img alt="Chrome Web Store" src="https://img.shields.io/chrome-web-store/v/jhpdbbakbcmoaondmjjjbojlakgkeilo"></a>
 <br>
+<br>
 
 ## Tech
 
