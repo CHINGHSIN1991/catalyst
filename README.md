@@ -6,6 +6,8 @@
   <br>
   A Chrome extension of productivity tools 
   <br>
+  	/chrome-web-store/v/:jhpdbbakbcmoaondmjjjbojlakgkeilo
+  <br>
 </h3>
 
 <p align="center">
