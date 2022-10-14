@@ -86,7 +86,7 @@ This software uses the following open source packages:
 ## Version History
 - [ v1.0.0 ]  Chrome web store publishing - released @GitHub 2022/09/30 @Chrome web store 2022/10/05
 - [ v1.0.1 ]  Fixed and tested client id bug - released @GitHub 2022/10/12 @Chrome web store 2022/10/14
-- [ v1.0.2 ]  Added authorization feature and page tool hiden feature - released @GitHub 2022/10/14
+- [ v1.0.2 ]  Added authorization feature and page tool hidden feature - released @GitHub 2022/10/14
 
 <br>
 <!--
