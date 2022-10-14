@@ -32,12 +32,7 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 <br>
 
 ## Usage Scenario
-* Add a shortcut
-
-![ShortCut](https://user-images.githubusercontent.com/85145643/195750680-be06e9cc-10d9-418a-afc5-18c2db041ee5.gif)
-
-* Modify personal services
-
+[![Watch the video](https://user-images.githubusercontent.com/85145643/195755172-f9fe2565-9f9d-49cc-88cb-2b3d67cb5ba0.png)](https://www.youtube.com/watch?v=NQklDJnyl5g)
 
 <br>
 
@@ -50,28 +45,14 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 
 ## Tech
 
-Fundamentals:
+Fundamentals: HTML5 | CSS3 | JavaScript
+Tools for Development: Webpack | Webpack | TypeScript
 
-![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+Libraries: React | React-DOM | Redux | React-Redux | Redux Toolkit | Styled Components
 
-Tools for Development
-
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
-
-![Webpack](https://img.shields.io/badge/webpack-%238DD6F9.svg?style=for-the-badge&logo=webpack&logoColor=black)
-![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white)
-
-![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white)
-![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)
-
-![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
+APIs: Chrome extension API | Google calendar API
 
 This software uses the following open source packages:
-
 - [Electron](http://electron.atom.io/)
 - [Node.js](https://nodejs.org/)
 - [Marked - a markdown parser](https://github.com/chjj/marked)
