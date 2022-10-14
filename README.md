@@ -45,9 +45,9 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 
 ## Tech
 
-- Fundamentals: HTML5 | CSS3 | JavaScript
-- Tools for Development: Webpack | Webpack | TypeScript
-- Libraries: React | React-DOM | Redux | React-Redux | Redux Toolkit | Styled Components
+- Fundamentals: HTML5  |  CSS3  |  JavaScript
+- Tools for Development: Webpack  |  Webpack  |  TypeScript
+- Libraries: React  |  React-DOM  |  Redux | React-Redux  |  Redux Toolkit  |  Styled Components
 
 APIs: Chrome extension API | Google calendar API
 
