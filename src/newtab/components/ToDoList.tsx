@@ -36,7 +36,7 @@ const TextNote = styled.div`
   padding-top: 0px;
   font-size: 0.75rem;
   line-height: 1rem;
-  color: ${(props: scheme) => props.theme.fourthly};
+  color: ${(props: scheme) => props.theme.tertiary};
   text-overflow: ellipsis;
   word-break: break-all;
   overflow: hidden;
@@ -449,7 +449,7 @@ const AddToDoPanel: React.FC<{
     <AddToDoContainer isEditOn={props.isEditOn}>
       <ToDoLabel htmlFor="workContent">
         <ToDoTitle>To do</ToDoTitle>
-        <ToDoInput style={{ width: "224px" }} type="text" id="workContent" name="workContent" value={props.tempTodo.workContent} onChange={(e) => handleInputChange(e, props.tempTodo, props.setTempTodo)} />
+        <ToDoInput style={{ width: "224px" }} type="text" id="workContent" name="workContent" value={props.tempTodo.workContent} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e, props.tempTodo, props.setTempTodo)} />
         <AlarmTrigger onClick={() => props.setTempTodo({ ...props.tempTodo, isSetAlert: !props.tempTodo.isSetAlert })}>
           {!props.tempTodo.isSetAlert && <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bell-fill" viewBox="0 0 16 16">
             <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />

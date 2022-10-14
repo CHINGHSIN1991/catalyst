@@ -12,7 +12,6 @@ chrome.runtime.onInstalled.addListener((details) => {
       console.log("speak en-US");
     }
   })
-  // console.log(details);
 })
 
 chrome.alarms.create("TodoListReminder",{
@@ -66,13 +65,11 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
             const tempTodo = {...todo}
             tempTodo.alertSend = true;
             tempList.push(tempTodo)
-            // todoListPort.postMessage({msg: "update"})
           } else {
             tempList.push(todo);
           }        
         })
         chrome.storage.local.set({ todoList: tempList }, function () {
-          // console.log("set");
         });
       }      
     });

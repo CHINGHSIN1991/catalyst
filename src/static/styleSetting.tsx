@@ -63,7 +63,6 @@ export const CreateButton = styled.div`
   line-height: 20px;
   width: 24px;
   height: 24px;
-  /* border: solid 1px; */
   background-color: rgba(200,200,200,0.1);
   border-radius: 50%;
   transition: 0.2s;
@@ -93,7 +92,6 @@ export const EditPanelTitleUnderLine = styled.div`
 
 //
 export const ToggleTitle = styled.div`
-  /* border: solid 1px; */
   opacity: 0;
   transform: translateY(30px);
   color: rgba(255,255,255,1);
@@ -113,7 +111,6 @@ export const ToggleButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: solid 1px; */
   cursor: pointer;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
   border: ${(props: scheme) => props.theme.panelBorder};

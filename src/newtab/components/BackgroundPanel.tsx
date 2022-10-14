@@ -43,7 +43,7 @@ top: 0px;
 width: 100%;
 height: 32px;
 z-index: 5;
-text-shadow: 0 0 8px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${props => props.theme.primaryOpacity};
+text-shadow: 0 0 8px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${(props: scheme) => props.theme.primaryOpacity};
 `;
 
 const Photographer = styled.a`
