@@ -6,7 +6,9 @@
   <br>
   A Chrome extension of productivity tools 
   <br>
-  	/chrome-web-store/v/:jhpdbbakbcmoaondmjjjbojlakgkeilo
+  <br>
+    <img alt="Chrome Web Store" src="https://img.shields.io/chrome-web-store/v/jhpdbbakbcmoaondmjjjbojlakgkeilo">
+  <img alt="GitHub package.json version (subfolder of monorepo)" src="https://img.shields.io/github/package-json/v/CHINGHSIN1991/catalyst?color=%234AAF89&label=GitHub%20released">
   <br>
 </h3>
 
