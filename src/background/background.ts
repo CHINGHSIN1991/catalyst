@@ -76,12 +76,12 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
   }  
 })
 
-chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)=> {
-  chrome.storage.local.set({
-    passedSeconds: "passedSeconds" in res? res.passedSeconds : 0,
-    pomoIsRunning: "pomoIsRunning" in res? res.pomoIsRunning : false,
-    pomoAlertTime: "pomoAlertTime" in res? res.pomoAlertTime : 1
-  })
-})
+// chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)=> {
+//   chrome.storage.local.set({
+//     passedSeconds: "passedSeconds" in res? res.passedSeconds : 0,
+//     pomoIsRunning: "pomoIsRunning" in res? res.pomoIsRunning : false,
+//     pomoAlertTime: "pomoAlertTime" in res? res.pomoAlertTime : 1
+//   })
+// })
 
 
