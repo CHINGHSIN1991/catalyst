@@ -80,6 +80,7 @@ This software uses the following open source packages:
 <br>
 
 ## Future Features
+- [ ] Set personal Unsplash collection as backgrounds
 - [ ] Notification or sign when adding new background to collection
 - [ ] Chrome's "socket" like feature to communicate with different tabs and scripts
 - [ ] Feature to grab and sort lists in each panel (such as shortcut, to-do, inspiration notes) by React DnD
