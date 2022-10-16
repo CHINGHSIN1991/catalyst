@@ -86,7 +86,7 @@ This software uses the following open source packages:
 - [ ] Calendar events edit feature
 - [ ] Pronounce tool
 - [ ] More efficient background carousel mechanism
-- [x]Feature to hide page tool icon @v1.0.2
+- [x] Feature to hide page tool icon @v1.0.2
 
 <br>
 
