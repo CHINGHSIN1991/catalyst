@@ -94,7 +94,8 @@ This software uses the following open source packages:
 <br>
 
 ## Version History
-- [ v1.0.2 ]  Added authorization feature and page tool hidden feature <br>- released @GitHub 2022/10/14
+- [ v1.0.3 ]  Try to fix pomodoro timer bug <br>- released @GitHub 2022/10/16
+- [ v1.0.2 ]  Added authorization feature and page tool hidden feature <br>- released @GitHub 2022/10/14 @Chrome web store 2022/10/16
 - [ v1.0.1 ]  Fixed and tested client id bug <br>- released @GitHub 2022/10/12 @Chrome web store 2022/10/14
 - [ v1.0.0 ]  Chrome web store publishing <br>- released @GitHub 2022/09/30 @Chrome web store 2022/10/05
 
@@ -141,5 +142,5 @@ $ npm start
 
 Email [chinghsin4develop@gmail.com](chinghsin4develop@gmail.com) &nbsp; • &nbsp;
 GitHub [@CHINGHSIN1991](https://github.com/CHINGHSIN1991) &nbsp; • &nbsp;
-Medium [@chinghsinchen1991](https://medium.com/@chinghsinchen1991)
+<!-- Medium [@chinghsinchen1991](https://medium.com/@chinghsinchen1991) -->
 
