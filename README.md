@@ -80,12 +80,13 @@ This software uses the following open source packages:
 <br>
 
 ## Future Features
-- Feature to hide link organizer icon
-- Feature to grab and sort lists in each panel (such as shortcut, to-do, inspiration notes) by React DnD
-- Notification or sign when adding new background to collection
-- Chrome's "socket" like feature to communicate with different tabs and scripts
-- Calendar events edit feature
-- Pronounce tool
+- [ ] Notification or sign when adding new background to collection
+- [ ] Chrome's "socket" like feature to communicate with different tabs and scripts
+- [ ] Feature to grab and sort lists in each panel (such as shortcut, to-do, inspiration notes) by React DnD
+- [ ] Calendar events edit feature
+- [ ] Pronounce tool
+- [ ] More efficient background carousel mechanism
+- [x]Feature to hide page tool icon @v1.0.2
 
 <br>
 
