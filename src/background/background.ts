@@ -1,19 +1,5 @@
 import { todo } from '../static/types' 
 
-chrome.runtime.onInstalled.addListener((details) => {
-  chrome.contextMenus.create({
-    title: "Read these text(s) en-US",
-    id: "contextMenu1",
-    contexts: ["page","selection","link"]
-  })
-  chrome.contextMenus.onClicked.addListener((e)=>{
-    if(e.menuItemId === "contextMenu1"){
-      chrome.tts.speak(e.selectionText,{lang:"en-US"});
-      console.log("speak en-US");
-    }
-  })
-})
-
 chrome.alarms.create("TodoListReminder",{
   periodInMinutes: 1/60,
 })
@@ -76,12 +62,25 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
   }  
 })
 
-// chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)=> {
-//   chrome.storage.local.set({
-//     passedSeconds: "passedSeconds" in res? res.passedSeconds : 0,
-//     pomoIsRunning: "pomoIsRunning" in res? res.pomoIsRunning : false,
-//     pomoAlertTime: "pomoAlertTime" in res? res.pomoAlertTime : 1
-//   })
-// })
+chrome.storage.local.get(["passedSeconds","pomoIsRunning","pomoAlertTime"],(res)=> {
+  chrome.storage.local.set({
+    passedSeconds: "passedSeconds" in res? res.passedSeconds : 0,
+    pomoIsRunning: "pomoIsRunning" in res? res.pomoIsRunning : false,
+    pomoAlertTime: "pomoAlertTime" in res? res.pomoAlertTime : 25
+  })
+})
 
-
+chrome.runtime.onInstalled.addListener((details) => {
+  console.log(details)
+  chrome.contextMenus.create({
+    title: "Read these text(s) en-US",
+    id: "contextMenu1",
+    contexts: ["page","selection","link"]
+  })
+  chrome.contextMenus.onClicked.addListener((e)=>{
+    if(e.menuItemId === "contextMenu1"){
+      chrome.tts.speak(e.selectionText,{lang:"en-US"});
+      console.log("speak en-US");
+    }
+  })
+})
