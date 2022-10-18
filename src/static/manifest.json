@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Catalyst",
   "description": "Browser Productivity Tools",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "key":"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmKf5/H6EYwQoN/ShiB+KwH4KUd8XUwgiNsxQmiPE/1tXP20ahZl1SX7YQYdZU7tc8uw5GBiRV6NXEFU7ywtXLMvQD7EIBNZ68YKHPlCRNI7PXnqIuopD1JRwvsF/hq+O0UMU23dPN3kshZo04vo+cJ8J0Sg27kZpNdRH8x4VEuHOPQPZ7+DiNeKHpuIfT0kPbve1pTewnGiy+M45OLODn1Gr7HpkwiOu4u/mAtoi0ns6jUNIvRvh4A8ErCfheBCNeqefb/0SLi0ytygRExSmX6kPhr5ri3wADysZimhVaPBoSlffwFoZYc1qG3lT4wsUIOGIJwHETsx9jMSfdQhCSwIDAQAB",
   "icons":{
     "16": "CatalystLogo_128.png",
