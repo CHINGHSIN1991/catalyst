@@ -319,7 +319,7 @@ export type openWeatherData = {
   export type alertState = {
     title:string,
     message?:string,
-    function?:any,
+    function?:unknown,
   }
 
   export type timeData = timeNode | timeDay;

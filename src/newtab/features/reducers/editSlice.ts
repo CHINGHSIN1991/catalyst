@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  editPanelState: {name:''} as {name:string,data:any},
+  editPanelState: {name:''} as {name:string,data:unknown},
 } 
 
 const editPanelSlice = createSlice({

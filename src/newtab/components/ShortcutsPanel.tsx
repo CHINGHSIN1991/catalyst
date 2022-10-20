@@ -261,7 +261,7 @@ const LinkElement: React.FC<{ shortcut: shortcut; delShortcut: (id: number) => v
     <Shortcut key={props.shortcut.id} onMouseLeave={() => setIsEditOn(false)}>
       <LinkUrl href={props.shortcut.url} target="_blank">
         <ShortcutIconContainer>
-          <ShortcutIcon src={props.shortcut.logo} onError={(e: Event) => handleErrorImage(e)}></ShortcutIcon>
+          <ShortcutIcon src={props.shortcut.logo} onError={(e: React.ChangeEvent<HTMLImageElement>) => handleErrorImage(e)}></ShortcutIcon>
         </ShortcutIconContainer>
         <LinkTitle>{props.shortcut.name}</LinkTitle>
       </LinkUrl>

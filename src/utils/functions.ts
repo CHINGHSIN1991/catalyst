@@ -8,7 +8,7 @@ export function handleTextAreaChange(e: React.ChangeEvent<HTMLTextAreaElement>, 
   setState({ ...state, [e.target.name]: e.target.value })
 }
 
-export function handleErrorImage(e) {
+export function handleErrorImage(e:React.ChangeEvent<HTMLImageElement>) {
   e.target.src = 'PlaceHolder_128.png';
 }
 
@@ -49,6 +49,8 @@ export function getTimeStamp(data: timeData, key: timeKey) {
   return timeStamp;
 }
 
-export function deepCopy(data: any){
+export function deepCopy<T>(data: T):T{
   return JSON.parse(JSON.stringify(data));
 }
+
+// type Test<T extends string = string> = T

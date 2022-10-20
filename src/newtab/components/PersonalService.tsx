@@ -204,8 +204,8 @@ export const PersonalServicePanel: React.FC<{}> = () => {
       <ServiceLinks>
         {serviceList.map((item) => {
           return <ServiceLink key={personalServiceList[item].imgUrl.light} href={personalServiceList[item].link} hover={personalServiceList[item].imgUrl.color} target="_blank">
-            <ServiceIcon src={personalization.isDarkMode ? personalServiceList[item].imgUrl.light : personalServiceList[item].imgUrl.dark} onError={(e: Event) => handleErrorImage(e)}>
-              <ServiceOnError src='https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/onError.png?alt=media&token=3a641010-249b-4fbb-a1bd-256adfb460ea' onError={(e: Event) => handleErrorImage(e)}></ServiceOnError>
+            <ServiceIcon src={personalization.isDarkMode ? personalServiceList[item].imgUrl.light : personalServiceList[item].imgUrl.dark} onError={(e: React.ChangeEvent<HTMLImageElement>) => handleErrorImage(e)}>
+              <ServiceOnError src='https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/onError.png?alt=media&token=3a641010-249b-4fbb-a1bd-256adfb460ea' onError={(e: React.ChangeEvent<HTMLImageElement>) => handleErrorImage(e)}></ServiceOnError>
             </ServiceIcon>
             <ServiceTitle>{personalServiceList[item].name.english}</ServiceTitle>
           </ServiceLink>;
