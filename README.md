@@ -50,7 +50,7 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 ## Install
 
 <a href="https://chrome.google.com/webstore/detail/catalyst/jhpdbbakbcmoaondmjjjbojlakgkeilo
-" target="_blank">Click to enter the web store</a> and install the latest version of Catalyst on Chrome ( This extension is only available on the chrom desktop browser )
+" target="_blank">Click to enter the web store</a> and install the latest version of Catalyst ( This extension is only available on the chrom desktop browser )
 <br>
 <br>
 <a href="https://chrome.google.com/webstore/detail/catalyst/jhpdbbakbcmoaondmjjjbojlakgkeilo
