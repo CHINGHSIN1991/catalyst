@@ -327,5 +327,14 @@ export type openWeatherData = {
     function?: delEvent|clearAll|replaceFirstImage|deleteTag,
   }
 
-  export type timeData = timeNode | timeDay;
-  export type timeKey = 'start' | 'end';
+  export type timeData = timeNode | timeDay
+  export type timeKey = 'start' | 'end'
+
+  export type setNumberState = (state: number) => void
+  type timeDisplay = {
+    minutes: string,
+    seconds: string,
+  }
+  export type setTimeDisplay = (timeDisplay:timeDisplay)=>void
+  type stateValue = {value: number}
+  export type setPomoAlertTime = (value:stateValue)=>void
