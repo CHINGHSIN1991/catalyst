@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { getEvents } from '../features/reducers/calendarSlice';
 
 import { fetchCalendarData } from '../../utils/api';
-import { calendarItem, scheme, timeKey } from '../../static/types';
+import { calendarItem, timeKey } from '../../static/types';
 import { getTimeString, getTimeStamp } from '../../utils/functions';
 import { Subtitle } from '../../static/styleSetting';
 

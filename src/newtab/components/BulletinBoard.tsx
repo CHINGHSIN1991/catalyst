@@ -240,10 +240,19 @@ export const BulletinBoard: React.FC<{
     setMemos([]);
   }
 
-  useEffect(() => {
+  function takeMemos() {
     chrome.storage.local.get(['memos'], (res) => {
       if (res.memos) {
         setMemos(res.memos);
+      }
+    });
+  }
+
+  useEffect(() => {
+    takeMemos();
+    chrome.storage.onChanged.addListener(function (changes) {
+      if (changes.memos) {
+        takeMemos();
       }
     });
   }, []);

@@ -38,16 +38,21 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
     })
   }
   if(alarm.name==="TodoListReminder"){
+    const now = Date.now();
     chrome.storage.local.get(['todoList'], function (result) {
       if(result.todoList){
         let tempList = [];
         result.todoList.forEach((todo: todo)=>{
-          if(todo.isSetAlert && !todo.alertSend && (Date.parse(`${todo.alertDate} ${todo.alertTime}`)<now)){
-            chrome.notifications.getAll((res)=>console.log(res));
-            this.registration.showNotification("To do list reminder",{
-              body: `The set time of work item "${todo.workContent}" has passed`,
-              icon: "CatalystLogo_128.png"
-            })
+          const alertTime = Date.parse(`${todo.alertDate} ${todo.alertTime}`)
+          if(todo.isSetAlert && !todo.alertSend && (alertTime - now < 120000)){
+            const timeout = (alertTime - now) > 0 ? (alertTime - now) : 0;
+            setTimeout(()=>{
+              chrome.notifications.getAll((res)=>console.log(res));
+              this.registration.showNotification("To do list reminder",{
+                body: `The set time of work item "${todo.workContent}" has passed`,
+                icon: "CatalystLogo_128.png"
+              })              
+            },timeout)
             const tempTodo = {...todo}
             tempTodo.alertSend = true;
             tempList.push(tempTodo)
@@ -55,8 +60,7 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
             tempList.push(todo);
           }        
         })
-        chrome.storage.local.set({ todoList: tempList }, function () {
-        });
+        chrome.storage.local.set({ todoList: tempList });
       }      
     });
   }  

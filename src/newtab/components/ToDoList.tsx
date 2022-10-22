@@ -347,7 +347,11 @@ export const ToDoListPanel: React.FC<{}> = () => {
 
   useEffect(() => {
     getTodo();
-    setInterval(getTodo, 1200);
+    chrome.storage.onChanged.addListener(function (changes) {
+      if (changes.todoList) {
+        getTodo();
+      }
+    });
   }, []);
 
   return (

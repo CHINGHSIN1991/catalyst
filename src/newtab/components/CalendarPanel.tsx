@@ -171,8 +171,7 @@ export const CalendarPanel: React.FC<{}> = () => {
 
   function checkOauthData() {
     if (!userInfo.email || !userInfo.authToken) {
-      // @ts-ignore
-      chrome.identity.getProfileUserInfo({ 'accountStatus': 'ANY' },
+      chrome.identity.getProfileUserInfo(
         (res) => {
           chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
             dispatch(loadUserInfo({ ...userInfo, email: res.email, id: res.id, authToken: token }));
