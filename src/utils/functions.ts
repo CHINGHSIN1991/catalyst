@@ -96,7 +96,7 @@ export function triggerTimer(
     );
   }
 
-  function getPassedSeconds(start: number, stored: number) {
+  export function getPassedSeconds(start: number, stored: number) {
     const current = Date.now();
     return Math.floor((current - start + stored) / 1000);
   }
