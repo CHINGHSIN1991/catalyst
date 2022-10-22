@@ -1,14 +1,14 @@
-import { timeData, timeKey } from "../static/types";
+import {timeData, timeKey } from "../static/types";
 
-export function handleInputChange(e: React.ChangeEvent<HTMLInputElement>, state: any, setState: (state: any) => void) {
+export function handleInputChange<T>(e: React.ChangeEvent<HTMLInputElement>, state: T, setState: (state: T) => void) {
   setState({ ...state, [e.target.name]: e.target.value })
 }
 
-export function handleTextAreaChange(e: React.ChangeEvent<HTMLTextAreaElement>, state: any, setState: (state: any) => void) {
+export function handleTextAreaChange<T>(e: React.ChangeEvent<HTMLTextAreaElement>, state: T, setState: (state: T) => void) {
   setState({ ...state, [e.target.name]: e.target.value })
 }
 
-export function handleErrorImage(e) {
+export function handleErrorImage(e:React.ChangeEvent<HTMLImageElement>) {
   e.target.src = 'PlaceHolder_128.png';
 }
 
@@ -49,6 +49,8 @@ export function getTimeStamp(data: timeData, key: timeKey) {
   return timeStamp;
 }
 
-export function deepCopy(data: any){
+export function deepCopy<T>(data: T):T{
   return JSON.parse(JSON.stringify(data));
 }
+
+// type Test<T extends string = string> = T

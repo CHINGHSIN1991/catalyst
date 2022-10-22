@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { SetStateAction } from 'react';
+
+type editContent = {name: string, data?: SetStateAction<{ name: string; url: string; }>}
 
 const initialState = {
-  editPanelState: {name:''} as {name:string,data:any},
+  editPanelState: {name:''} as editContent,
 } 
 
 const editPanelSlice = createSlice({
@@ -18,5 +21,5 @@ const editPanelSlice = createSlice({
 })
 
 export const {setEditPanel} = editPanelSlice.actions
-export const getEditPanelState = (state: { editPanelState: { editPanelState: {name: string, data?:any} }; }) => state.editPanelState.editPanelState
+export const getEditPanelState = (state: { editPanelState: { editPanelState: editContent }; }) => state.editPanelState.editPanelState
 export default editPanelSlice.reducer

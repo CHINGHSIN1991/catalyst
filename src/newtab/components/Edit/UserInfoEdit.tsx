@@ -41,6 +41,15 @@ const Content = styled.div`
   word-break: break-all;
 `;
 
+const StatusContent = styled.div`
+  padding-left: 8px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  line-height: 28px;
+  word-break: break-all;
+`;
+
 const Input = styled.input`
   font-size: 1rem;
   width: calc(100% - 56px);
@@ -61,8 +70,8 @@ const CheckBtn = styled.div`
   cursor: pointer;
   text-align: center;
   font-size: 0.75rem;
-  margin-left: 60px;
-  width: calc(100% - 60px);
+  /* margin-left: 60px; */
+  /* width: calc(100% - 160px); */
   height: 28px;
   line-height: 20px;
   border: solid 1px lightgrey;
@@ -95,11 +104,19 @@ export const UserInfoEditPanel: React.FC<{}> = () => {
 
   function checkOauthData() {
     if (!userInfo.authToken) {
-      chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+      chrome.identity.getAuthToken({ 'interactive': true, 'account': { id: userInfo.id } }, function (token) {
         dispatch(loadUserInfo({ ...userInfo, authToken: token }));
       });
     }
   }
+
+  function removeCachedAuthToken() {
+    chrome.identity.clearAllCachedAuthTokens(() => {
+      chrome.identity.removeCachedAuthToken({ 'token': userInfo.authToken },
+        () => dispatch(loadUserInfo({ ...userInfo, authToken: '' }))
+      );
+    });
+  };
 
   useEffect(() => {
     chrome.storage.sync.get(['userName'], function (res) {
@@ -135,9 +152,10 @@ export const UserInfoEditPanel: React.FC<{}> = () => {
       </InfoContainer>
       <InfoContainer>
         <Title>Status</Title>
-        <Content>{userInfo.authToken ? 'Authorized' : 'Unauthorized'}</Content>
+        <StatusContent>{userInfo.authToken ? 'Authorized' : 'Unauthorized'}</StatusContent>
+        {!userInfo.authToken && <CheckBtn onClick={checkOauthData}>Click to authorize</CheckBtn>}
+        {userInfo.authToken && <CheckBtn onClick={removeCachedAuthToken}>Reset authorization</CheckBtn>}
       </InfoContainer>
-      {!userInfo.authToken && <CheckBtn onClick={checkOauthData}>Click to authorize</CheckBtn>}
       <ButtonContainer>
         <PanelButton name="Save" width={80} disabled={!userName.name} onClick={() => editUserNameProcess(userName)}></PanelButton>
         <PanelButton name="Cancel" width={80} onClick={cancelProcess}></PanelButton>

@@ -59,7 +59,7 @@ const TimeBlock = styled.div`
 export const TimePanel: React.FC<{}> = () => {
   const week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const personalization = useSelector(getPersonalization);
-  const timerID: React.MutableRefObject<any> = useRef();
+  const timerID = useRef(null);
   const [currentClock, setCurrentClock] = useState({
     hour24: '',
     hour12: '',

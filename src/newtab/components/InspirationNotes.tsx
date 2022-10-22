@@ -339,10 +339,19 @@ export const InspirationNotePanel: React.FC<{}> = () => {
     });
   }
 
-  useEffect(() => {
+  function loadNotes() {
     chrome.storage.sync.get(['inspirationNotes', 'noteCategories'], (result) => {
       setInspirationNotes(result.inspirationNotes);
       setNoteCategories(result.noteCategories);
+    });
+  }
+
+  useEffect(() => {
+    loadNotes();
+    chrome.storage.onChanged.addListener(function (changes) {
+      if (changes.inspirationNotes) {
+        loadNotes();
+      }
     });
   }, []);
 
@@ -393,7 +402,7 @@ const TempLinkElement: React.FC<{
     <TempLink key={props.note.id} onMouseLeave={() => { setIsEditOn(false); }}>
       <LinkContent>
         <IconContainer>
-          <NoteLinkIcon src={props.note.logo} onError={(e: Event) => handleErrorImage(e)}></NoteLinkIcon>
+          <NoteLinkIcon src={props.note.logo} onError={(e: React.ChangeEvent<HTMLImageElement>) => handleErrorImage(e)}></NoteLinkIcon>
         </IconContainer>
         {props.tempNote.id !== props.note.id && <TextContent href={props.note.url} target="_blank">
           <TextTitle>{props.note.title}</TextTitle>

@@ -216,12 +216,21 @@ export const ShortcutsPanel: React.FC<{}> = () => {
     }
   };
 
-  useEffect(() => {
+  function takeShortcuts() {
     chrome.storage.sync.get(['shortcuts'], function (res) {
       if (res.shortcuts) {
         dispatch(loadShortcuts(res.shortcuts));
       } else {
         dispatch(loadShortcuts([]));
+      }
+    });
+  }
+
+  useEffect(() => {
+    takeShortcuts();
+    chrome.storage.onChanged.addListener(function (changes) {
+      if (changes.shortcuts) {
+        takeShortcuts();
       }
     });
   }, []);
@@ -261,7 +270,7 @@ const LinkElement: React.FC<{ shortcut: shortcut; delShortcut: (id: number) => v
     <Shortcut key={props.shortcut.id} onMouseLeave={() => setIsEditOn(false)}>
       <LinkUrl href={props.shortcut.url} target="_blank">
         <ShortcutIconContainer>
-          <ShortcutIcon src={props.shortcut.logo} onError={(e: Event) => handleErrorImage(e)}></ShortcutIcon>
+          <ShortcutIcon src={props.shortcut.logo} onError={(e: React.ChangeEvent<HTMLImageElement>) => handleErrorImage(e)}></ShortcutIcon>
         </ShortcutIconContainer>
         <LinkTitle>{props.shortcut.name}</LinkTitle>
       </LinkUrl>
