@@ -216,12 +216,21 @@ export const ShortcutsPanel: React.FC<{}> = () => {
     }
   };
 
-  useEffect(() => {
+  function takeShortcuts() {
     chrome.storage.sync.get(['shortcuts'], function (res) {
       if (res.shortcuts) {
         dispatch(loadShortcuts(res.shortcuts));
       } else {
         dispatch(loadShortcuts([]));
+      }
+    });
+  }
+
+  useEffect(() => {
+    takeShortcuts();
+    chrome.storage.onChanged.addListener(function (changes) {
+      if (changes.shortcuts) {
+        takeShortcuts();
       }
     });
   }, []);

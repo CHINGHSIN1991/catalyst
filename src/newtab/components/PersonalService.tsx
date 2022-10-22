@@ -176,6 +176,14 @@ export const PersonalServicePanel: React.FC<{}> = () => {
     }
   }
 
+  function takeServiceList() {
+    chrome.storage.sync.get(['serviceList'], function (res) {
+      if ('serviceList' in res) {
+        dispatch(loadServiceList(res.serviceList));
+      }
+    });
+  }
+
   useEffect(() => {
     const current = (new Date()).getHours();
     setWelcomeMsg(current);
@@ -185,12 +193,13 @@ export const PersonalServicePanel: React.FC<{}> = () => {
         dispatch(loadUserInfo({ ...userInfo, name: res.userName }));
       }
     });
-
-    chrome.storage.sync.get(['serviceList'], function (res) {
-      if ('serviceList' in res) {
-        dispatch(loadServiceList(res.serviceList));
+    takeServiceList();
+    chrome.storage.onChanged.addListener(function (changes) {
+      if (changes.serviceList) {
+        takeServiceList();
       }
     });
+
   }, []);
 
   return (

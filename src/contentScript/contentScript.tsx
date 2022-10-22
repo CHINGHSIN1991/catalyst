@@ -139,12 +139,21 @@ const App: React.FC<{}> = () => {
   const [isMemo, setIsMemo] = useState(false);
   const [isPageToolShow, setIsPageToolShow] = useState(true);
 
-  useEffect(() => {
+  function takePersonalization() {
     chrome.storage.sync.get(['personalization'], (res) => {
       if (res.personalization) {
         setIsPageToolShow(res.personalization.isPageToolShow);
       } else {
         setIsPageToolShow(true);
+      }
+    });
+  }
+
+  useEffect(() => {
+    takePersonalization();
+    chrome.storage.onChanged.addListener(function (changes) {
+      if (changes.personalization) {
+        takePersonalization();
       }
     });
   }, []);

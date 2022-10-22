@@ -316,10 +316,15 @@ export type openWeatherData = {
     centralPanel: 'Pomodoro'|'Weather'
   }
 
+  type delEvent = (item:calendarItem)=>void
+  type clearAll = ()=>void
+  type replaceFirstImage = (image:background, collection:number)=>void
+  type deleteTag = (deletedTag:string)=>void
+
   export type alertState = {
-    title:string,
-    message?:string,
-    function?:unknown,
+    title: string,
+    message?: string,
+    function?: delEvent|clearAll|replaceFirstImage|deleteTag,
   }
 
   export type timeData = timeNode | timeDay;
