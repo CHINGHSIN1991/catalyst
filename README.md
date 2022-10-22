@@ -84,17 +84,21 @@ This software uses the following open source packages:
 ## Future Features
 - [ ] Set personal Unsplash collection as backgrounds
 - [ ] Notification or sign when adding new background to collection
-- [ ] Chrome's "socket" like feature to communicate with different tabs and scripts
 - [ ] Feature to grab and sort lists in each panel (such as shortcut, to-do, inspiration notes) by React DnD
 - [ ] Calendar events edit feature
-- [ ] Pronounce tool
 - [ ] More efficient background carousel mechanism
+- [x] Pronounce tool (unstable) @v1.0.5
+- [x] Chrome's "socket" like feature to communicate with different tabs and scripts @v1.0.5
 - [x] Feature to hide page tool icon @v1.0.2
 
 <br>
 
 ## Version History
-- [ v1.0.3 ]  Try to fix pomodoro timer bug <br>- released @GitHub 2022/10/16
+- [ v1.0.5 ]  Write Pomodoro functionality with new logic to resolve errors caused by Chrome.alarm operation limit. 
+Use chrome.storage API to implement page communication function. 
+Pronunciation tool function (not yet stable)<br>- released @GitHub 2022/10/22
+- [ v1.0.4 ]  Try to fix pomodoro timer bug <br>- released @GitHub 2022/10/20 @Chrome web store 2022/10/22
+- [ v1.0.3 ]  Try to fix pomodoro timer bug <br>- released @GitHub 2022/10/16 @Chrome web store 2022/10/19
 - [ v1.0.2 ]  Added authorization feature and page tool hidden feature <br>- released @GitHub 2022/10/14 @Chrome web store 2022/10/16
 - [ v1.0.1 ]  Fixed and tested client id bug <br>- released @GitHub 2022/10/12 @Chrome web store 2022/10/14
 - [ v1.0.0 ]  Chrome web store publishing <br>- released @GitHub 2022/09/30 @Chrome web store 2022/10/05
