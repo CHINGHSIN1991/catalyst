@@ -95,8 +95,7 @@ This software uses the following open source packages:
 
 ## Version History
 - [ v1.0.5 ]  Write Pomodoro functionality with new logic to resolve errors caused by Chrome.alarm operation limit. 
-Use chrome.storage API to implement page communication function. Reset authorization button
-Pronunciation tool (not yet stable)<br>- released @GitHub 2022/10/22
+Use chrome.storage API to implement page communication function. Features to reset authorization button, use pronunciation tool (not yet stable)<br>- released @GitHub 2022/10/22
 - [ v1.0.4 ]  Try to fix pomodoro timer bug <br>- released @GitHub 2022/10/20 @Chrome web store 2022/10/22
 - [ v1.0.3 ]  Try to fix pomodoro timer bug <br>- released @GitHub 2022/10/16 @Chrome web store 2022/10/19
 - [ v1.0.2 ]  Added authorization feature and page tool hidden feature <br>- released @GitHub 2022/10/14 @Chrome web store 2022/10/16
