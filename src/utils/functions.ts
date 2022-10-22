@@ -1,4 +1,4 @@
-import {timeData, timeKey } from "../static/types";
+import {timeData, timeKey, setNumberState, setTimeDisplay, setPomoAlertTime } from "../static/types";
 
 export function handleInputChange<T>(e: React.ChangeEvent<HTMLInputElement>, state: T, setState: (state: T) => void) {
   setState({ ...state, [e.target.name]: e.target.value })
@@ -53,4 +53,74 @@ export function deepCopy<T>(data: T):T{
   return JSON.parse(JSON.stringify(data));
 }
 
-// type Test<T extends string = string> = T
+
+
+export function triggerTimer(
+  pomoStartTime: number,
+  setPomoStartTime: setNumberState,
+  pomoStoredTime: number,
+  setPomoStoredTime: setNumberState
+) {
+    const current = Date.now();
+    if (pomoStartTime) {
+      const accumulation = current - pomoStartTime;
+      chrome.storage.local.set({ pomoStartTime: 0, pomoStoredTime: pomoStoredTime + accumulation },
+        () => { setPomoStartTime(0); setPomoStoredTime(pomoStoredTime + accumulation); }
+      );
+    } else {
+      chrome.storage.local.set({ pomoStartTime: current },
+        () => { setPomoStartTime(current); }
+      );
+    }
+  }
+
+  
+
+  export function clearTimer(
+    setPomoStartTime: setNumberState,
+    setPomoStoredTime: setNumberState,
+    setPomoTimer: setTimeDisplay,
+    setPomoAlertTime: setPomoAlertTime
+  ) {
+    chrome.storage.local.set({ pomoStartTime: 0, pomoStoredTime: 0 },
+      () => {
+        setPomoStartTime(0);
+        setPomoStoredTime(0);
+        setPomoTimer({ minutes: '00', seconds: '00' });
+        chrome.storage.local.get(["pomoAlertTime"], (res) => {
+          if (res.pomoAlertTime) {
+            setPomoAlertTime({ value: res.pomoAlertTime });
+          }
+        });
+      }
+    );
+  }
+
+  function getPassedSeconds(start: number, stored: number) {
+    const current = Date.now();
+    return Math.floor((current - start + stored) / 1000);
+  }
+
+  export function updateTime(
+    setPomoStartTime: setNumberState,
+    setPomoStoredTime: setNumberState,
+    setPomoTimer: setTimeDisplay,
+    setPomoAlertTime: setPomoAlertTime
+  ) {
+    chrome.storage.local.get(['pomoStartTime', 'pomoAlertTime', 'pomoStoredTime'], (res) => {
+      let passedSeconds = 0;
+      if (res.pomoStartTime) {
+        passedSeconds = getPassedSeconds(res.pomoStartTime, res.pomoStoredTime);
+      } else if (res.pomoStoredTime) {
+        passedSeconds = Math.floor(res.pomoStoredTime / 1000);
+      }
+      if (passedSeconds >= res.pomoAlertTime * 60) {
+        clearTimer(setPomoStartTime, setPomoStoredTime, setPomoTimer, setPomoAlertTime);
+      }
+      const minutes = `${res.pomoAlertTime - Math.ceil(passedSeconds / 60)}`.padStart(2, "0");
+      const seconds = `${passedSeconds % 60 && 60 - passedSeconds % 60}`.padStart(2, "0");
+      setPomoStoredTime(res.pomoStoredTime);
+      setPomoTimer({ minutes, seconds });
+      setPomoStartTime(res.pomoStartTime);
+    });
+  }
