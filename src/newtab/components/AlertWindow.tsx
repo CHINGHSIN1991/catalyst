@@ -56,7 +56,7 @@ const InfoContainer = styled.div`
   width: 100%;
 `;
 
-export const AlertWindow: React.FC<{}> = () => {
+const AlertWindow: React.FC<{}> = () => {
   const [alertState, setAlertState] = useContext(AlertContext);
 
 
@@ -93,7 +93,6 @@ const AlertPanel: React.FC<{}> = () => {
       <PanelButton width={96} name='Cancel' onClick={() => setAlertState({ title: '' })} />
     </ButtonContainer>}
   </Wrapper>);
-}
+};
 
-
-
+export const MemoizedAlertWindow = React.memo(AlertWindow);

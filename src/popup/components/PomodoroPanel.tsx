@@ -100,7 +100,6 @@ export const PomodoroPanel: React.FC<{}> = () => {
     chrome.storage.local.set({ pomoAlertTime: pomoAlertTime.value });
   }, [pomoAlertTime]);
 
-
   return (
     <PomodoroContainer>
       <Title>Pomodoro timer</Title>

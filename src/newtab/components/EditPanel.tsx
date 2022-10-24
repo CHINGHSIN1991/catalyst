@@ -44,9 +44,10 @@ const PanelContainer = styled.div`
   transition-delay: 0.1s;
 `;
 
-export const EditPanel: React.FC<{}> = () => {
+const EditPanel: React.FC<{}> = () => {
   const editPanelState = useSelector(getEditPanelState);
   const dispatch = useDispatch();
+
   return (
     <PanelOpenBackground editPanelState={editPanelState.name} onClick={() => dispatch(setEditPanel({ name: '', data: '' }))}>
       <PanelContainer editPanelState={editPanelState.name}>
@@ -63,3 +64,4 @@ export const EditPanel: React.FC<{}> = () => {
   );
 };
 
+export const MemoizedEditPanel = React.memo(EditPanel);

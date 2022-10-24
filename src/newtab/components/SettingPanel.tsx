@@ -42,7 +42,7 @@ const ButtonArea = styled.div`
   }
 `;
 
-export const SettingPanel: React.FC<{}> = () => {
+const SettingPanel: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const backgroundSetting = useSelector(getBackgrounds);
 
@@ -83,3 +83,5 @@ export const SettingPanel: React.FC<{}> = () => {
     </SettingPanelWrapper>
   );
 };
+
+export const MemoizedSettingPanel = React.memo(SettingPanel);

@@ -73,7 +73,6 @@ export async function getBackgroundImg(query?: string) {
     const data = await res.json()
     return data
   } else {
-    console.log('no query');
     const res = await fetch(`https://api.unsplash.com/photos/?client_id=${process.env.UNSPLASH_API_KEY}&page=${page}`)
     if(! res.ok) {
       throw new Error ('can not get image')
