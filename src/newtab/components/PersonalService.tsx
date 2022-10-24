@@ -159,7 +159,7 @@ position: absolute;
   }
 `;
 
-export const PersonalServicePanel: React.FC<{}> = () => {
+const PersonalServicePanel: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector(getUserInfo);
   const serviceList = useSelector(getServiceList);
@@ -230,5 +230,6 @@ export const PersonalServicePanel: React.FC<{}> = () => {
       </CreateButton>
     </PersonalPanel >
   );
-}
+};
 
+export const MemoizedPersonalServicePanel = React.memo(PersonalServicePanel);

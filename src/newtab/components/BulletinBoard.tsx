@@ -172,7 +172,7 @@ const CreateAt = styled.a`
   }
 `;
 
-export const BulletinBoard: React.FC<{
+const BulletinBoard: React.FC<{
   setIsBoardOn: (boo: boolean) => void;
 }> = (props) => {
   const [alertState, setAlertState] = useContext(AlertContext);
@@ -330,3 +330,5 @@ const ColorElement: React.FC<{
     </ColorBorder>
   );
 };
+
+export const MemoizedBulletinBoard = React.memo(BulletinBoard);

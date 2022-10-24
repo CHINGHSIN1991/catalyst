@@ -11,21 +11,21 @@ import { ResetStyle, GlobalStyle } from "../static/globalStyle";
 import { colorScheme } from '../static/optionList';
 import { scheme, alertState } from '../static/types';
 
-import { ShortcutsPanel } from './components/ShortcutsPanel';
-import { InspirationNotePanel } from './components/InspirationNotes';
+import { MemoizedShortcutsPanel } from './components/ShortcutsPanel';
+import { MemoizedInspirationNotePanel } from './components/InspirationNotes';
 import { TimePanel } from './components/TimePanel';
-import { ToDoListPanel } from './components/ToDoList';
-import { PersonalServicePanel } from './components/PersonalService';
+import { MemoizedToDoListPanel } from './components/ToDoList';
+import { MemoizedPersonalServicePanel } from './components/PersonalService';
 import { CalendarPanel } from './components/CalendarPanel';
-import { WeatherPanel } from './components/WeatherInfoPanel';
-import { SettingPanel } from './components/SettingPanel';
+import { MemoizedWeatherPanel } from './components/WeatherInfoPanel';
+import { MemoizedSettingPanel } from './components/SettingPanel';
 import { PomodoroPanel } from './components/PomodoroPanel';
-import { BulletinBoard } from './components/BulletinBoard';
+import { MemoizedBulletinBoard } from './components/BulletinBoard';
 import { CurrentFocusPanel } from './components/CurrentFocusPanel';
-import { EditPanel } from './components/EditPanel';
-import { BackgroundComponent, PhotographerInfo } from './components/BackgroundPanel';
-import { TogglePanel } from './components/TogglePanel';
-import { AlertWindow } from './components/AlertWindow';
+import { MemoizedEditPanel } from './components/EditPanel';
+import { MemoizedBackgroundComponent, MemoizedPhotographerInfo } from './components/BackgroundPanel';
+import { MemoizedTogglePanel } from './components/TogglePanel';
+import { MemoizedAlertWindow } from './components/AlertWindow';
 
 type isBoardOn = { isBoardOn: boolean; };
 type isMenuOn = { isMenuOn: boolean; };
@@ -232,64 +232,64 @@ const NewTab: React.FC<{}> = () => {
   return (
     <ThemeProvider theme={theme}>
       <Wrapper>
-        <BackgroundComponent></BackgroundComponent>
+        <MemoizedBackgroundComponent />
         <Container isBoardOn={isBoardOn}>
           <MainBoard>
             <MenuContainerLeft isMenuOn={isMenuOn}>
               <HeightLimiter>
-                <ShortcutsPanel></ShortcutsPanel>
-                <InspirationNotePanel></InspirationNotePanel>
+                <MemoizedShortcutsPanel />
+                <MemoizedInspirationNotePanel />
               </HeightLimiter>
-              <SettingPanel></SettingPanel>
+              <MemoizedSettingPanel />
             </MenuContainerLeft>
             <FocusPanel>
-              <PhotographerInfo></PhotographerInfo>
+              <MemoizedPhotographerInfo />
               <MobileMenuList>
                 <MobileMenuContainer mobileToggle={mobileToggle}>
                   <MobileMenuItem>
-                    <TimePanel></TimePanel>
-                    <CurrentFocusPanel></CurrentFocusPanel>
+                    <TimePanel />
+                    <CurrentFocusPanel />
                   </MobileMenuItem>
                   {mobileToggle !== 0 && <MobileMenuItem>
-                    <PersonalServicePanel></PersonalServicePanel>
-                    <SettingPanel></SettingPanel>
+                    <MemoizedPersonalServicePanel />
+                    <MemoizedSettingPanel />
                   </MobileMenuItem>}
                   {mobileToggle !== 0 && <MobileMenuItem>
-                    <ShortcutsPanel></ShortcutsPanel>
+                    <MemoizedShortcutsPanel />
                   </MobileMenuItem>}
                   {mobileToggle !== 0 && <MobileMenuItem>
-                    <CalendarPanel></CalendarPanel>
+                    <CalendarPanel />
                   </MobileMenuItem>}
                   {mobileToggle !== 0 && <MobileMenuItem>
-                    <InspirationNotePanel></InspirationNotePanel>
+                    <MemoizedInspirationNotePanel />
                   </MobileMenuItem>}
                   {mobileToggle !== 0 && <MobileMenuItem>
-                    <ToDoListPanel></ToDoListPanel>
+                    <MemoizedToDoListPanel />
                   </MobileMenuItem>}
                 </MobileMenuContainer>
               </MobileMenuList>
-              <PomodoroPanel centralPanel={centralPanel}></PomodoroPanel>
-              <WeatherPanel centralPanel={centralPanel}></WeatherPanel>
-              <TogglePanel
+              <PomodoroPanel centralPanel={centralPanel} />
+              <MemoizedWeatherPanel centralPanel={centralPanel} />
+              <MemoizedTogglePanel
                 setIsBoardOn={setIsBoardOn}
                 isMenuOn={isMenuOn}
                 setIsMenuOn={setIsMenuOn}
                 centralPanel={centralPanel}
                 setCentralPanel={setCentralPanel}
                 changeMobileMenu={changeMobileMenu}
-              ></TogglePanel>
+              />
             </FocusPanel>
             <MenuContainerRight isMenuOn={isMenuOn}>
-              <PersonalServicePanel></PersonalServicePanel>
-              <CalendarPanel></CalendarPanel>
-              <ToDoListPanel></ToDoListPanel>
+              <MemoizedPersonalServicePanel />
+              <CalendarPanel />
+              <MemoizedToDoListPanel />
             </MenuContainerRight>
           </MainBoard>
-          <BulletinBoard setIsBoardOn={setIsBoardOn}></BulletinBoard>
+          <MemoizedBulletinBoard setIsBoardOn={setIsBoardOn} />
         </Container>
       </Wrapper>
-      <EditPanel></EditPanel>
-      <AlertWindow></AlertWindow>
+      <MemoizedEditPanel />
+      <MemoizedAlertWindow />
     </ThemeProvider>
   );
 };
@@ -299,4 +299,4 @@ const rootElement = document.createElement('div');
 document.body.appendChild(rootElement);
 const root = ReactDOM.createRoot(rootElement);
 
-root.render(<App />);;;
+root.render(<App />);

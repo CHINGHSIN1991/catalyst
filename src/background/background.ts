@@ -78,17 +78,14 @@ chrome.storage.sync.get(['personalization'], (res) => {
     pronounce = 'zh-TW'
   }
   chrome.runtime.onInstalled.addListener((details) => {
-    console.log(details)
     chrome.contextMenus.create({
       title: `Read these text(s) ${pronounce}`,
       id: "contextMenu1",
       contexts: ["page","selection","link"]
     })
     chrome.contextMenus.onClicked.addListener((e)=>{
-      console.log(e);
       if(e.menuItemId === "contextMenu1"){
         chrome.tts.speak(e.selectionText,{lang:pronounce});
-        console.log(pronounce);
       }
     })
   })
