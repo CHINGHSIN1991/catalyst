@@ -26,7 +26,7 @@ const MobileToggleButton = styled(ToggleButton)`
   }
 `;
 
-export const TogglePanel: React.FC<{
+const TogglePanel: React.FC<{
   setIsBoardOn: (boo: boolean) => void;
   isMenuOn: boolean;
   setIsMenuOn: (boo: boolean) => void;
@@ -83,3 +83,5 @@ export const TogglePanel: React.FC<{
     </Wrapper>
   );
 };
+
+export const MemoizedTogglePanel = React.memo(TogglePanel);

@@ -286,3 +286,5 @@ const LinkElement: React.FC<{ shortcut: shortcut; delShortcut: (id: number) => v
     </Shortcut >
   );
 };
+
+export const MemoizedShortcutsPanel = React.memo(ShortcutsPanel);

@@ -83,11 +83,8 @@ export const PageToolPanel: React.FC<{}> = () => {
   }, []);
 
   useEffect(() => {
-    chrome.storage.sync.set({ personalization }, () => {
-      console.log(personalization);
-    });
+    chrome.storage.sync.set({ personalization });
   }, [personalization]);
-
 
   return (
     <PageToolContainer>

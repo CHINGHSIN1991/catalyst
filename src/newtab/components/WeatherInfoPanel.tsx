@@ -90,7 +90,7 @@ const InfoTitle = styled.div`
   width: 64px;
 `;
 
-export const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
+const WeatherPanel: React.FC<{ centralPanel: string; }> = (props) => {
   const personalization = useSelector(getPersonalization);
   const [weatherData, setWeatherData] = useState<openWeatherData>(null);
 
@@ -226,3 +226,5 @@ const WeatherIcon: React.FC<{ icon: string; }> = (props) => {
     </IconImage>
   );
 };
+
+export const MemoizedWeatherPanel = React.memo(WeatherPanel);

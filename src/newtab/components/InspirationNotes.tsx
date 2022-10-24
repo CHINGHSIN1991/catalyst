@@ -443,3 +443,5 @@ const TempLinkElement: React.FC<{
     </TempLink>
   );
 };
+
+export const MemoizedInspirationNotePanel = React.memo(InspirationNotePanel);

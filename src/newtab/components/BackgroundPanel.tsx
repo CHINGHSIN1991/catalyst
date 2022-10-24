@@ -64,7 +64,7 @@ height: 20px;
 cursor: pointer;
 `;
 
-export const BackgroundComponent: React.FC<{}> = () => {
+const BackgroundComponent: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const backgroundSetting = useSelector(getBackgrounds);
   const timeIntervalId = useRef(null);
@@ -149,7 +149,7 @@ export const BackgroundComponent: React.FC<{}> = () => {
   );
 };
 
-export const PhotographerInfo: React.FC<{}> = () => {
+const PhotographerInfo: React.FC<{}> = () => {
   const backgroundSetting = useSelector(getBackgrounds);
 
   return (
@@ -169,3 +169,6 @@ export const PhotographerInfo: React.FC<{}> = () => {
     </BackgroundInfo>
   );
 };
+
+export const MemoizedBackgroundComponent = React.memo(BackgroundComponent);
+export const MemoizedPhotographerInfo = React.memo(PhotographerInfo);

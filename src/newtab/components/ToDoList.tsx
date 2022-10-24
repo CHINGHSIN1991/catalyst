@@ -261,7 +261,7 @@ const ToDoContainer = styled(ScrollbarContainer)`
   }
 `;
 
-export const ToDoListPanel: React.FC<{}> = () => {
+const ToDoListPanel: React.FC<{}> = () => {
   const [workList, setWorkList] = useState(null);
   const [tempTodo, setTempTodo] = useState<todo>({
     id: 0,
@@ -475,3 +475,5 @@ const AddToDoPanel: React.FC<{
     </AddToDoContainer>
   );
 };
+
+export const MemoizedToDoListPanel = React.memo(ToDoListPanel);

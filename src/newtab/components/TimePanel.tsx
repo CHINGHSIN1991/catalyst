@@ -22,7 +22,6 @@ const DateBlock = styled(Subtitle)`
   font-weight: bold;
   color: ${(props: scheme) => props.theme.primary};
   padding-bottom: 32px;
-  /* transform: translateY(-80px); */
   text-shadow: 0 0 5px ${(props: scheme) => props.theme.inversePrimary},  0 0 8px ${(props: scheme) => props.theme.primaryOpacity};
   @media (max-width:1580px) {
     font-size: 1.75rem;
@@ -43,7 +42,6 @@ const TimeBlock = styled.div`
   font-weight: normal;
   padding-bottom: 32px;
   color: ${(props: scheme) => props.theme.primary};
-  /* transform: translateY(-80px); */
   text-shadow: 0 0 16px ${(props: scheme) => props.theme.inversePrimary},  0 0 20px ${(props: scheme) => props.theme.primaryOpacity};
   @media (max-width:1580px) {
     font-size: 6rem;
