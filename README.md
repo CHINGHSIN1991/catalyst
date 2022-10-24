@@ -1,6 +1,6 @@
 <h3 align="center">
   <br>
-  <a href="http://www.amitmerchant.com/electron-markdownify"><img src="https://user-images.githubusercontent.com/85145643/195566642-7b43d613-d144-47c2-b891-06ccdf97599b.jpg" alt="Catalyst" width="100%"></a>
+  <a href="https://chrome.google.com/webstore/detail/catalyst/jhpdbbakbcmoaondmjjjbojlakgkeilo" target="_blank"><img src="https://user-images.githubusercontent.com/85145643/195566642-7b43d613-d144-47c2-b891-06ccdf97599b.jpg" alt="Catalyst" width="100%"></a>
   <br>
   <br>
   A Chrome extension of productivity tools 
