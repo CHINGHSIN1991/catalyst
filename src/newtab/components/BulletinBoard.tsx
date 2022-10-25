@@ -177,7 +177,7 @@ const BulletinBoard: React.FC<{
 }> = (props) => {
   const [alertState, setAlertState] = useContext(AlertContext);
   const [tempMemo, setTempMemo] = useState({ memo: "", color: memoColorList[0] });
-  const [memos, setMemos] = useState<memo[]>([]);
+  const [memos, setMemos] = useState<memo[]>(null);
 
   function addMemoByEnter(e: KeyboardEvent) {
     if (tempMemo.memo) {
@@ -258,13 +258,15 @@ const BulletinBoard: React.FC<{
   }, []);
 
   useEffect(() => {
-    chrome.storage.local.set({ memos });
+    if (memos) {
+      chrome.storage.local.set({ memos });
+    }
   }, [memos]);
 
   return (
     <Wrapper>
       <MemoContainer>
-        {memos.map((item, index: number) => {
+        {memos && memos.map((item, index: number) => {
           return (
             <Draggable
               key={item.id}
