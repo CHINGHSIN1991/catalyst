@@ -94,7 +94,7 @@ This software uses the following open source packages:
 <br>
 
 ## Version History
-- [ v1.0.7 ]  Fixed the bulletin board bug.<br>- released @GitHub 2022/10/25
+- [ v1.0.7 ]  Fixed the bulletin board bug.<br>- released @GitHub 2022/10/25 @Chrome web store 2022/10/26
 - [ v1.0.6 ]  Use react memo to avoid unnecessary rendering to improve the user experience.<br>- released @GitHub 2022/10/24 @Chrome web store 2022/10/25
 - [ v1.0.5 ]  Write Pomodoro functionality with new logic to resolve errors caused by Chrome.alarm operation limit. 
 Use chrome.storage API to implement page communication function. Features to reset authorization button, use pronunciation tool (not yet stable)<br>- released @GitHub 2022/10/22  @Chrome web store 2022/10/24
