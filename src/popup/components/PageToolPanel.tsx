@@ -33,20 +33,20 @@ const PublicOptionSet = styled.div`
   border-radius: 12px;
 `
 
-const PublicOption = styled.div`
+const PublicOption = styled.div<bol>`
   font-size: 14px;
   line-height: 18px;
   font-size: 12px;
   width: 50%;
   text-align: center;
-  font-weight: ${(props: bol) => (props.bol ? 'bold' : 'normal')};
-  color: ${(props: bol) => (props.bol ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.3)')};
+  font-weight: ${(props) => (props.bol ? 'bold' : 'normal')};
+  color: ${(props) => (props.bol ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.3)')};
   transition: 0.2s;
 `
 
-const PublicOptionBg = styled.div`
+const PublicOptionBg = styled.div<bol>`
   position: absolute;
-  left: ${(props: bol) => (props.bol ? '4px' : 'calc(50% + 4px)')};
+  left: ${(props) => (props.bol ? '4px' : 'calc(50% + 4px)')};
   transition: 0.2s;
   width: calc(50% - 8px);
   height: 18px;

@@ -56,7 +56,7 @@ export const ShortcutEditPanel: React.FC<{}> = () => {
   }, [editPanelState])
 
   return (
-    <Wrapper onClick={(e: Event) => e.stopPropagation()}>
+    <Wrapper onClick={(e) => e.stopPropagation()}>
       <EditPanelTitle>
         <EditPanelTitleText>
           {editPanelState.name === 'ShortcutEdit' && 'Edit shortcut'}
@@ -68,17 +68,13 @@ export const ShortcutEditPanel: React.FC<{}> = () => {
         name="name"
         title="Name"
         value={shortcut.name}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleInputChange(e, shortcut, setShortcut)
-        }
+        onChange={(e) => handleInputChange(e, shortcut, setShortcut)}
       ></InputComponent>
       <InputComponent
         name="url"
         title="URL"
         value={shortcut.url}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleInputChange(e, shortcut, setShortcut)
-        }
+        onChange={(e) => handleInputChange(e, shortcut, setShortcut)}
       ></InputComponent>
       <ButtonContainer>
         <PanelButton

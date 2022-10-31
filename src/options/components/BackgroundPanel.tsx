@@ -73,21 +73,20 @@ const BackgroundListPanel = styled.div`
   }
 `
 
-const BackgroundListOption = styled.div`
+const BackgroundListOption = styled.div<currentComparison>`
   cursor: pointer;
   border-radius: 8px 0px 0px 8px;
   display: flex;
   flex-direction: column;
   margin-bottom: 3px;
   line-height: 24px;
-  width: ${(props: currentComparison) =>
-    props.index === props.current ? '120px' : '104px'};
+  width: ${(props) => (props.index === props.current ? '120px' : '104px')};
   height: 60px;
-  background-color: ${(props: currentComparison) =>
+  background-color: ${(props) =>
     props.index === props.current ? 'lightgray' : 'gray'};
   transition: 0.2s;
   :hover {
-    background-color: ${(props: currentComparison) =>
+    background-color: ${(props) =>
       props.index === props.current ? 'lightgray' : 'darkgray'};
   }
   :last-child {
@@ -95,8 +94,7 @@ const BackgroundListOption = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: ${(props: currentComparison) =>
-      props.index === props.current ? '90px' : '80px'};
+    width: ${(props) => (props.index === props.current ? '90px' : '80px')};
   }
 `
 
@@ -110,14 +108,14 @@ const BackgroundListOptionTitle = styled.div`
   }
 `
 
-const BackgroundImage = styled.div`
+const BackgroundImage = styled.div<bg>`
   cursor: pointer;
   border: solid 1px gray;
   border-radius: 4px;
   margin: 8px;
   width: 152px;
   height: 96px;
-  background-image: url(${(props: bg) => props.bg});
+  background-image: url(${(props) => props.bg});
   background-position: center;
   background-size: cover;
   overflow: hidden;
@@ -228,27 +226,25 @@ const BackgroundPanel = styled.div`
   height: auto;
 `
 
-const ApplyButton = styled.div`
+const ApplyButton = styled.div<appliedComparison>`
   border-radius: 12px;
   font-size: 12px;
   font-weight: bold;
   line-height: 20px;
-  width: ${(props: appliedComparison) =>
-    props.applied === props.index ? '72px' : '56px'};
+  width: ${(props) => (props.applied === props.index ? '72px' : '56px')};
   margin: 2px 0 8px 16px;
   text-align: center;
-  color: ${(props: appliedComparison) =>
+  color: ${(props) =>
     props.applied === props.index ? 'rgb(80,80,80)' : 'rgb(80,80,80)'};
-  background-color: ${(props: appliedComparison) =>
+  background-color: ${(props) =>
     props.applied === props.index ? 'rgb(173, 255, 218)' : 'rgb(184,184,184)'};
   white-space: nowrap;
   overflow: hidden;
   transition: 0.2s;
-  /* padding: 4px 0 0 16px; */
   :hover {
-    background-color: ${(props: appliedComparison) =>
+    background-color: ${(props) =>
       props.applied === props.index ? 'rgb(173, 255, 218)' : 'rgb(40,40,40)'};
-    color: ${(props: appliedComparison) =>
+    color: ${(props) =>
       props.applied === props.index ? 'rgb(80,80,80)' : 'rgb(240,240,240)'};
   }
   @media (max-width: 768px) {
@@ -333,7 +329,7 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
   }, [tempBackgroundSetting])
 
   return (
-    <Wrapper onClick={(e: Event) => e.stopPropagation()}>
+    <Wrapper onClick={(e) => e.stopPropagation()}>
       <EditPanelTitle>
         <EditPanelTitleText>Background setting</EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
@@ -359,9 +355,6 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
                   current={current}
                   index={number}
                   onClick={() => setCurrentSet(number)}
-                  currentApplied={
-                    tempBackgroundSetting.bgSetting.current.setting
-                  }
                 >
                   <BackgroundListOptionTitle>
                     {number === 0 ? 'Random' : `Collection ${number}`}
@@ -373,7 +366,6 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
                       onClick={() => applyCollection(number)}
                       applied={tempBackgroundSetting.bgSetting.current.setting}
                       index={number}
-                      current={current}
                     >
                       {tempBackgroundSetting.bgSetting.current.setting ===
                         number && 'Current'}

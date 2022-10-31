@@ -7,7 +7,7 @@ import { triggerTimer, clearTimer, updateTime } from '../../utils/functions'
 import { FocusPanelTitle } from '../../static/styleSetting'
 import { scheme, centralPanel } from '../../static/types'
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<scheme & centralPanel>`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: flex;
   flex-direction: column;
@@ -18,19 +18,17 @@ const Wrapper = styled.div`
   right: 0;
   margin: 0 auto;
   border-radius: 4px;
-  border: ${(props: scheme) => props.theme.panelBorder};
-  background-color: ${(props: scheme) => props.theme.panelBackground};
+  border: ${(props) => props.theme.panelBorder};
+  background-color: ${(props) => props.theme.panelBackground};
   backdrop-filter: blur(16px);
-  height: ${(props: centralPanel) =>
-    props.centralPanel === 'Pomodoro' ? '128px' : '0px'};
-  width: ${(props: centralPanel) =>
-    props.centralPanel === 'Pomodoro' ? '400px' : '0px'};
+  height: ${(props) => (props.centralPanel === 'Pomodoro' ? '128px' : '0px')};
+  width: ${(props) => (props.centralPanel === 'Pomodoro' ? '400px' : '0px')};
   transition: 0.1s;
   overflow: hidden;
   @media (max-width: 1180px) {
-    width: ${(props: centralPanel) =>
+    width: ${(props) =>
       props.centralPanel === 'Pomodoro' ? 'calc(100% - 48px)' : '0px'};
-    min-width: ${(props: centralPanel) =>
+    min-width: ${(props) =>
       props.centralPanel === 'Pomodoro' ? '280px' : '0px'};
   }
 `
@@ -43,13 +41,13 @@ const PomodoroContainer = styled.div`
   width: 100%;
 `
 
-const TimerInput = styled.input`
+const TimerInput = styled.input<scheme>`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   background-color: rgba(255, 255, 255, 0);
   border: none;
-  border-bottom: solid 2px ${(props: scheme) => props.theme.secondary};
+  border-bottom: solid 2px ${(props) => props.theme.secondary};
   outline: none;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   text-align: end;
   font-size: 2.5rem;
   width: 48px;
@@ -77,7 +75,7 @@ const Btn = styled.div`
   cursor: pointer;
 `
 
-export const PomodoroPanel: React.FC<{ centralPanel: string }> = (props) => {
+export const PomodoroPanel: React.FC<centralPanel> = (props) => {
   const [alertState, setAlertState] = useContext(AlertContext)
   const [pomoTimer, setPomoTimer] = useState({ minutes: '00', seconds: '00' })
   const [pomoStoredTime, setPomoStoredTime] = useState(0)
@@ -149,9 +147,7 @@ export const PomodoroPanel: React.FC<{ centralPanel: string }> = (props) => {
               max={60}
               min={1}
               value={pomoAlertTime.value}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                checkInputTime(e)
-              }
+              onChange={(e) => checkInputTime(e)}
             ></TimerInput>
           )}
           {(pomoStartTime || pomoStoredTime !== 0) && pomoTimer.minutes}:

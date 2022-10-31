@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 type isProcess = { isProcess: boolean }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<isProcess>`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -15,13 +15,13 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100%;
   transition: 0.1s;
-  height: ${(props: isProcess) => (props.isProcess ? '232px' : '0px')};
+  height: ${(props) => (props.isProcess ? '232px' : '0px')};
 `
 
-const StatusContainer = styled.div`
+const StatusContainer = styled.div<isProcess>`
   position: relative;
   width: 100%;
-  height: ${(props: isProcess) => (props.isProcess ? '224px' : '0px')};
+  height: ${(props) => (props.isProcess ? '224px' : '0px')};
   background-color: rgb(240, 240, 240);
   left: 0px;
   top: 0px;

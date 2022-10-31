@@ -16,14 +16,14 @@ const Wrapper = styled.div`
   align-items: center;
 `
 
-const DateBlock = styled(Subtitle)`
+const DateBlock = styled(Subtitle)<scheme>`
   font-size: 2rem;
   text-align: center;
   font-weight: bold;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   padding-bottom: 32px;
-  text-shadow: 0 0 5px ${(props: scheme) => props.theme.inversePrimary},
-    0 0 8px ${(props: scheme) => props.theme.primaryOpacity};
+  text-shadow: 0 0 5px ${(props) => props.theme.inversePrimary},
+    0 0 8px ${(props) => props.theme.primaryOpacity};
   @media (max-width: 1580px) {
     font-size: 1.75rem;
   }
@@ -35,16 +35,16 @@ const DateBlock = styled(Subtitle)`
   }
 `
 
-const TimeBlock = styled.div`
+const TimeBlock = styled.div<scheme>`
   display: flex;
   align-items: flex-end;
   font-size: 7rem;
   text-align: center;
   font-weight: normal;
   padding-bottom: 32px;
-  color: ${(props: scheme) => props.theme.primary};
-  text-shadow: 0 0 16px ${(props: scheme) => props.theme.inversePrimary},
-    0 0 20px ${(props: scheme) => props.theme.primaryOpacity};
+  color: ${(props) => props.theme.primary};
+  text-shadow: 0 0 16px ${(props) => props.theme.inversePrimary},
+    0 0 20px ${(props) => props.theme.primaryOpacity};
   @media (max-width: 1580px) {
     font-size: 6rem;
   }

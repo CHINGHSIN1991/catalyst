@@ -1,3 +1,4 @@
+import { SyntheticEvent } from "react";
 import {timeData, timeKey, setNumberState, setTimeDisplay, setPomoAlertTime } from "../static/types";
 
 export function handleInputChange<T>(e: React.ChangeEvent<HTMLInputElement>, state: T, setState: (state: T) => void) {
@@ -8,7 +9,9 @@ export function handleTextAreaChange<T>(e: React.ChangeEvent<HTMLTextAreaElement
   setState({ ...state, [e.target.name]: e.target.value })
 }
 
-export function handleErrorImage(e:React.ChangeEvent<HTMLImageElement>) {
+export function handleErrorImage(e: SyntheticEvent<HTMLImageElement, Event>) {
+  // fixed
+  // @ts-ignore
   e.target.src = 'PlaceHolder_128.png';
 }
 

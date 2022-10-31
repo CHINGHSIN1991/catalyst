@@ -10,16 +10,16 @@ type isOpen = { isOpen: boolean }
 type isMemo = { isMemo: boolean }
 type isPageToolShow = { isPageToolShow: boolean }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<isOpen & isPageToolShow>`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   letter-spacing: 0px;
   box-sizing: border-box;
   position: fixed;
   right: 24px;
   bottom: 16px;
-  width: ${(props: isOpen) => (props.isOpen ? '248px' : '56px')};
-  height: ${(props: isOpen) => (props.isOpen ? '320px' : '56px')};
-  border-radius: ${(props: isOpen) =>
+  width: ${(props) => (props.isOpen ? '248px' : '56px')};
+  height: ${(props) => (props.isOpen ? '320px' : '56px')};
+  border-radius: ${(props) =>
     props.isOpen ? '12px 12px 4px 12px' : '50% 50% 2px 50%'};
   overflow: hidden;
   background-color: rgb(240, 240, 240);
@@ -27,11 +27,10 @@ const Wrapper = styled.div`
   box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
   color: black;
   z-index: 99999;
-  padding: ${(props: isOpen) => (props.isOpen ? '24px' : '8px')};
+  padding: ${(props) => (props.isOpen ? '24px' : '8px')};
   cursor: pointer;
   transition: 0.2s;
-  display: ${(props: isPageToolShow) =>
-    props.isPageToolShow ? 'flex' : 'none'};
+  display: ${(props) => (props.isPageToolShow ? 'flex' : 'none')};
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -69,13 +68,13 @@ const Panel = styled.div`
   font-weight: normal;
 `
 
-const Container = styled.div`
+const Container = styled.div<isMemo>`
   position: absolute;
   display: flex;
   width: 496px;
   height: 232px;
   transition: 0.2s;
-  left: ${(props: isMemo) => (props.isMemo ? '-200px' : '0px')};
+  left: ${(props) => (props.isMemo ? '-200px' : '0px')};
   top: 0px;
   margin: 0px;
   padding: 0px;
@@ -95,15 +94,15 @@ const TogglePanel = styled.div`
   font-weight: normal;
 `
 
-const OptionContainer = styled.div`
-  width: ${(props: isMemo) => {
+const OptionContainer = styled.div<isMemo>`
+  width: ${(props) => {
     return props.isMemo ? '160px' : '28px'
   }};
   display: flex;
   align-items: center;
   overflow: hidden;
   height: 28px;
-  background-color: ${(props: isMemo) => {
+  background-color: ${(props) => {
     return props.isMemo ? 'rgb(80,80,80)' : 'rgb(120,120,120)'
   }};
   border-radius: 14px;
@@ -113,8 +112,8 @@ const OptionContainer = styled.div`
   font-weight: normal;
 `
 
-const OptionIconContainer = styled.div`
-  color: ${(props: isMemo) => {
+const OptionIconContainer = styled.div<isMemo>`
+  color: ${(props) => {
     return props.isMemo ? 'rgb(255,255,255)' : 'rgb(160,160,160)'
   }};
   width: 28px;
@@ -128,13 +127,13 @@ const OptionIconContainer = styled.div`
   padding: 0px;
 `
 
-const OptionTitle = styled.div`
+const OptionTitle = styled.div<isMemo>`
   font-size: 16px;
   letter-spacing: 0px;
-  color: ${(props: isMemo) => {
+  color: ${(props) => {
     return props.isMemo ? 'rgba(255,255,255,1)' : 'rgba(160,160,160,0)'
   }};
-  width: ${(props: isMemo) => {
+  width: ${(props) => {
     return props.isMemo ? '132px' : '0px'
   }};
   transition: 0.4s;
@@ -174,14 +173,14 @@ const App: React.FC<{}> = () => {
     <Wrapper
       isOpen={isOpen}
       isPageToolShow={isPageToolShow}
-      onClick={(e: Event) => {
+      onClick={(e) => {
         e.stopPropagation()
         setIsOpen(!isOpen)
       }}
     >
       {isOpen && (
         <CtrlPanel
-          onClick={(e: Event) => {
+          onClick={(e) => {
             e.stopPropagation()
             setIsMemo(!isMemo)
           }}

@@ -17,11 +17,10 @@ import {
 
 type panelState = { editPanelState: string }
 
-const PanelOpenBackground = styled.div`
+const PanelOpenBackground = styled.div<panelState>`
   width: 100vw;
-  height: ${(props: panelState) =>
-    props.editPanelState === '' ? '0vh' : '100vh'};
-  opacity: ${(props: panelState) => (props.editPanelState === '' ? '0' : '1')};
+  height: ${(props) => (props.editPanelState === '' ? '0vh' : '100vh')};
+  opacity: ${(props) => (props.editPanelState === '' ? '0' : '1')};
   left: 0px;
   top: 0px;
   position: fixed;
@@ -34,14 +33,12 @@ const PanelOpenBackground = styled.div`
   z-index: 100;
 `
 
-const PanelContainer = styled.div`
-  width: ${(props: panelState) =>
-    props.editPanelState === '' ? '0vh' : '100vw'};
-  height: ${(props: panelState) =>
-    props.editPanelState === '' ? '0vh' : '100vh'};
-  transform: ${(props: panelState) =>
+const PanelContainer = styled.div<panelState>`
+  width: ${(props) => (props.editPanelState === '' ? '0vh' : '100vw')};
+  height: ${(props) => (props.editPanelState === '' ? '0vh' : '100vh')};
+  transform: ${(props) =>
     props.editPanelState === '' ? 'translateY(30%)' : 'translateY(0%)'};
-  opacity: ${(props: panelState) => (props.editPanelState === '' ? '0' : '1')};
+  opacity: ${(props) => (props.editPanelState === '' ? '0' : '1')};
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -89,7 +86,7 @@ const AlertPanel: React.FC<{}> = () => {
 
   return (
     <Wrapper
-      onClick={(e: Event) => {
+      onClick={(e) => {
         e.stopPropagation()
       }}
     >

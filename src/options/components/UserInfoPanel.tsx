@@ -127,7 +127,7 @@ export const UserInfoPanel: React.FC<{}> = () => {
   }, [])
 
   return (
-    <Wrapper onClick={(e: Event) => e.stopPropagation()}>
+    <Wrapper onClick={(e) => e.stopPropagation()}>
       <EditPanelTitle>
         <EditPanelTitleText>User information</EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
@@ -168,9 +168,7 @@ export const UserInfoPanel: React.FC<{}> = () => {
               name="name"
               title="Name"
               value={userName.name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                handleInputChange(e, userName, setUserName)
-              }
+              onChange={(e) => handleInputChange(e, userName, setUserName)}
               type="text"
             ></Input>
             <EditBtn onClick={editUserNameProcess}>

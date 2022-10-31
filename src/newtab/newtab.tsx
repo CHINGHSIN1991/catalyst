@@ -12,7 +12,7 @@ import AlertContext from './features/alertContext'
 
 import { ResetStyle, GlobalStyle } from '../static/globalStyle'
 import { colorScheme } from '../static/optionList'
-import { scheme, alertState } from '../static/types'
+import { scheme, alertState, centralPanel } from '../static/types'
 
 import { MemoizedShortcutsPanel } from './components/ShortcutsPanel'
 import { MemoizedInspirationNotePanel } from './components/InspirationNotes'
@@ -38,7 +38,7 @@ type isMenuOn = { isMenuOn: boolean }
 type bg = { currentBackground: string }
 type mobileToggle = { mobileToggle: number }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<bg>`
   font-family: 'Noto Sans';
   position: fixed;
   left: 0;
@@ -46,7 +46,7 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  background-image: url(${(props: bg) => props.currentBackground});
+  background-image: url(${(props) => props.currentBackground});
   background-position: center;
   background-size: cover;
   transition: 0.5s;
@@ -61,8 +61,8 @@ const HeightLimiter = styled.div`
   margin-bottom: -8px;
 `
 
-const Container = styled.div`
-  left: ${(props: isBoardOn) => (props.isBoardOn ? '-100vw' : '0')};
+const Container = styled.div<isBoardOn>`
+  left: ${(props) => (props.isBoardOn ? '-100vw' : '0')};
   top: 0;
   display: flex;
   width: 200vw;
@@ -72,11 +72,11 @@ const Container = styled.div`
   z-index: 2;
 `
 
-const MenuContainer = styled.div`
+const MenuContainer = styled.div<scheme>`
   position: absolute;
   font-family: 'Noto Sans', 'Microsoft JhengHei';
   width: 360px;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -89,18 +89,18 @@ const MenuContainer = styled.div`
   }
 `
 
-const MenuContainerLeft = styled(MenuContainer)`
-  left: ${(props: isMenuOn) => (props.isMenuOn ? '0px' : '-400px')};
+const MenuContainerLeft = styled(MenuContainer)<isMenuOn>`
+  left: ${(props) => (props.isMenuOn ? '0px' : '-400px')};
   top: 0px;
 `
 
-const MenuContainerRight = styled(MenuContainer)`
-  right: ${(props: isMenuOn) => (props.isMenuOn ? '0px' : '-400px')};
+const MenuContainerRight = styled(MenuContainer)<isMenuOn>`
+  right: ${(props) => (props.isMenuOn ? '0px' : '-400px')};
   top: 0px;
 `
 
-const FocusPanel = styled.div`
-  color: ${(props: scheme) => props.theme.primary};
+const FocusPanel = styled.div<scheme>`
+  color: ${(props) => props.theme.primary};
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -141,7 +141,7 @@ const MobileMenuList = styled.div`
   }
 `
 
-const MobileMenuContainer = styled.div`
+const MobileMenuContainer = styled.div<mobileToggle>`
   position: absolute;
   width: calc(100vw - 720px);
   height: 100%;
@@ -156,7 +156,7 @@ const MobileMenuContainer = styled.div`
   }
   @media (max-width: 1180px) {
     width: 600vw;
-    left: ${(props: mobileToggle) => `-${props.mobileToggle * 100}vw`};
+    left: ${(props) => `-${props.mobileToggle * 100}vw`};
   }
 `
 
@@ -195,7 +195,7 @@ const NewTab: React.FC<{}> = () => {
   const personalization = useSelector(getPersonalization)
   const [isMenuOn, setIsMenuOn] = useState(false)
   const [isBoardOn, setIsBoardOn] = useState(false)
-  const [centralPanel, setCentralPanel] = useState('')
+  const [centralPanel, setCentralPanel] = useState(null)
   const [theme, setTheme] = useState(colorScheme.dark)
   const [mobileToggle, setMobileToggle] = useState(0)
 
@@ -242,6 +242,8 @@ const NewTab: React.FC<{}> = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      {/* fixed */}
+      {/* @ts-ignore */}
       <Wrapper>
         <MemoizedBackgroundComponent />
         <Container isBoardOn={isBoardOn}>

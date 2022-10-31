@@ -78,8 +78,6 @@ const CheckBtn = styled.div`
   cursor: pointer;
   text-align: center;
   font-size: 0.75rem;
-  /* margin-left: 60px; */
-  /* width: calc(100% - 160px); */
   height: 28px;
   line-height: 20px;
   border: solid 1px lightgrey;
@@ -142,7 +140,7 @@ export const UserInfoEditPanel: React.FC<{}> = () => {
   }, [])
 
   return (
-    <Wrapper onClick={(e: Event) => e.stopPropagation()}>
+    <Wrapper onClick={(e) => e.stopPropagation()}>
       <EditPanelTitle>
         <EditPanelTitleText>User information</EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
@@ -153,9 +151,7 @@ export const UserInfoEditPanel: React.FC<{}> = () => {
           name="name"
           title="Name"
           value={userName.name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleInputChange(e, userName, setUserName)
-          }
+          onChange={(e) => handleInputChange(e, userName, setUserName)}
           type="text"
         ></Input>
       </InfoContainer>

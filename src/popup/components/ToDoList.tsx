@@ -89,7 +89,6 @@ export const ToDoList: React.FC<{}> = () => {
             ></ToDoElement>
           )
         })}
-      {/* {workList && workList.map((item: todo) => { return <ToDoItem key={item.id}><input type="checkbox" checked={item.isDone} onClick={(e) => { e.stopPropagation(); }} onChange={() => { changeIsDone(item.id); }} />{item.workContent}</ToDoItem>; })} */}
     </Wrapper>
   )
 }

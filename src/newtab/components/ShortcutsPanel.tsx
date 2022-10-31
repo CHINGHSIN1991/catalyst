@@ -28,17 +28,17 @@ const SearchPanel = styled.div`
   display: flex;
 `
 
-const SearchInput = styled.input`
+const SearchInput = styled.input<scheme>`
   background-color: rgba(255, 255, 255, 0);
   width: 100%;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   height: 36px;
   padding: 8px 34px 8px 8px;
   margin: 2px 2px 16px 2px;
   transition: 0.2s;
   display: block;
   border: none;
-  border-bottom: 1px solid ${(props: scheme) => props.theme.primary};
+  border-bottom: 1px solid ${(props) => props.theme.primary};
   :focus {
     background-color: rgba(255, 255, 255, 0.2);
     outline: none;
@@ -47,9 +47,9 @@ const SearchInput = styled.input`
   }
 `
 
-const SearchIcon = styled.div`
+const SearchIcon = styled.div<query & scheme>`
   position: absolute;
-  color: ${(props: query) =>
+  color: ${(props) =>
     props.searchQuery === ''
       ? 'rgba(255,255,255,0.3)'
       : 'rgba(255,255,255,0.7)'};
@@ -61,7 +61,7 @@ const SearchIcon = styled.div`
   transition: 0.3s;
 
   :hover {
-    color: ${(props: scheme) => props.theme.primary};
+    color: ${(props) => props.theme.primary};
   }
 `
 
@@ -79,7 +79,7 @@ const ShortcutsList = styled(ScrollbarList)`
   }
 `
 
-const EditOptionContainer = styled.div`
+const EditOptionContainer = styled.div<isEditOn>`
   position: absolute;
   left: 0px;
   top: 0px;
@@ -88,9 +88,9 @@ const EditOptionContainer = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  padding: ${(props: isEditOn) => (props.isEditOn ? '8px' : '0px')};
+  padding: ${(props) => (props.isEditOn ? '8px' : '0px')};
   width: 100%;
-  height: ${(props: isEditOn) => (props.isEditOn ? '100%' : '0%')};
+  height: ${(props) => (props.isEditOn ? '100%' : '0%')};
   transition-delay: opacity 0.3s;
   transition: 0.05s;
   background-color: rgba(80, 80, 80, 0.5);
@@ -98,11 +98,11 @@ const EditOptionContainer = styled.div`
   overflow: hidden;
 `
 
-const EditOption = styled.div`
-  padding: ${(props: isEditOn) => (props.isEditOn ? '4px' : '0px')};
-  margin: ${(props: isEditOn) => (props.isEditOn ? '3px' : '0px')};
-  opacity: ${(props: isEditOn) => (props.isEditOn ? 1 : 0)};
-  transform: ${(props: isEditOn) =>
+const EditOption = styled.div<isEditOn>`
+  padding: ${(props) => (props.isEditOn ? '4px' : '0px')};
+  margin: ${(props) => (props.isEditOn ? '3px' : '0px')};
+  opacity: ${(props) => (props.isEditOn ? 1 : 0)};
+  transform: ${(props) =>
     props.isEditOn ? 'translateY(30%)' : 'translateY(80%)'};
   transition: 0.2s;
   font-size: 0.75rem;
@@ -127,13 +127,13 @@ const EditOption2 = styled(EditOption)`
 
 const EditIcon = styled.div`
   position: absolute;
-  right: 2px;
-  top: 2px;
+  right: 0px;
+  top: 0px;
   width: 16px;
   height: 24px;
   border-radius: 8px;
   transition: 0.1s;
-  transition-delay: 0.9s;
+  transition-delay: 0.6s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -159,12 +159,12 @@ const Shortcut = styled.li`
     }
   }
   @media (max-width: 1580px) {
-    width: 86px;
+    width: 63px;
   }
 `
 
-const LinkUrl = styled.a`
-  color: ${(props: scheme) => props.theme.primary};
+const LinkUrl = styled.a<scheme>`
+  color: ${(props) => props.theme.primary};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -180,6 +180,15 @@ const LinkTitle = styled.p`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  @media (max-width: 1580px) {
+    width: 60px;
+  }
+`
+
+const Shorthand = styled.span`
+  @media (max-width: 1580px) {
+    display: none;
+  }
 `
 
 const ShortcutIconContainer = styled.div`
@@ -219,7 +228,7 @@ export const ShortcutsPanel: React.FC<{}> = () => {
     )
   }
 
-  function searchByEnter(e: KeyboardEvent) {
+  function searchByEnter(e) {
     const code = e.code || e.key
     if (code === 'Enter') {
       search()
@@ -251,10 +260,8 @@ export const ShortcutsPanel: React.FC<{}> = () => {
         <SearchInput
           type="text"
           name="text"
-          onKeyPress={(e: KeyboardEvent) => searchByEnter(e)}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleInputChange(e, searchQuery, setSearchQuery)
-          }
+          onKeyPress={(e) => searchByEnter(e)}
+          onChange={(e) => handleInputChange(e, searchQuery, setSearchQuery)}
         />
         <SearchIcon searchQuery={searchQuery.text} onClick={search}>
           <svg
@@ -302,7 +309,9 @@ export const ShortcutsPanel: React.FC<{}> = () => {
               />
             </svg>
           </ShortcutIconContainer>
-          <LinkTitle>Add shortcut</LinkTitle>
+          <LinkTitle>
+            Add <Shorthand>shortcut</Shorthand>
+          </LinkTitle>
         </Shortcut>
       </ShortcutsList>
     </OrgFunctionPanel>
@@ -322,9 +331,7 @@ const LinkElement: React.FC<{
         <ShortcutIconContainer>
           <ShortcutIcon
             src={props.shortcut.logo}
-            onError={(e: React.ChangeEvent<HTMLImageElement>) =>
-              handleErrorImage(e)
-            }
+            onError={(e) => handleErrorImage(e)}
           ></ShortcutIcon>
         </ShortcutIconContainer>
         <LinkTitle>{props.shortcut.name}</LinkTitle>

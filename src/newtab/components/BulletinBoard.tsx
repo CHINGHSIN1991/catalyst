@@ -24,10 +24,10 @@ const Wrapper = styled(ScrollbarContainer)`
   height: 100vh;
 `
 
-const CreatePanel = styled.div`
+const CreatePanel = styled.div<scheme>`
   border-radius: 8px;
-  border: ${(props: scheme) => props.theme.panelBorder};
-  background-color: ${(props: scheme) => props.theme.panelBackground};
+  border: ${(props) => props.theme.panelBorder};
+  background-color: ${(props) => props.theme.panelBackground};
   position: absolute;
   top: 16px;
   left: 50%;
@@ -40,13 +40,13 @@ const CreatePanel = styled.div`
   align-items: center;
 `
 
-const MemoInput = styled(ScrollbarTextArea)`
+const MemoInput = styled(ScrollbarTextArea)<color>`
   border-radius: 6px;
   padding: 8px;
   resize: none;
   width: 332px;
   height: 64px;
-  background-color: ${(props: color) => props.color};
+  background-color: ${(props) => props.color};
   transition: 0.2s;
   opacity: 0.8;
   border: solid rgb(160, 160, 160) 1px;
@@ -64,7 +64,7 @@ const OptionContainer = styled.div`
   z-index: 3;
 `
 
-const ColorBorder = styled.div`
+const ColorBorder = styled.div<colorComparison>`
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -74,21 +74,21 @@ const ColorBorder = styled.div`
   margin: 4px 12px 4px 4px;
   border-radius: 7px;
   border: solid 2px
-    ${(props: colorComparison) =>
+    ${(props) =>
       props.color === props.tempColor
         ? 'rgba(255,255,255,1)'
         : 'rgba(255,255,255,0)'};
-  box-shadow: ${(props: colorComparison) =>
+  box-shadow: ${(props) =>
     props.color === props.tempColor
       ? '2px 2px 2px 1px rgba(0, 0, 0, 0.2)'
       : 'none'};
 `
 
-const ColorContent = styled.div`
+const ColorContent = styled.div<color>`
   width: 100%;
   height: 100%;
   border-radius: 4px;
-  background-color: ${(props: color) => props.color};
+  background-color: ${(props) => props.color};
 `
 
 const CreateBtn = styled.div`
@@ -130,7 +130,7 @@ const Memo = styled.div`
   box-shadow: 2px 2px 8px 1px rgba(0, 0, 0, 0.3);
 `
 
-const MemoWrapper = styled.div`
+const MemoWrapper = styled.div<color>`
   position: absolute;
   border-radius: 4px;
   left: 0px;
@@ -138,7 +138,7 @@ const MemoWrapper = styled.div`
   opacity: 0.85;
   width: 100%;
   height: 100%;
-  background-color: ${(props: color) => props.color};
+  background-color: ${(props) => props.color};
 `
 
 const MemoContent = styled(ScrollbarContainer)`
@@ -192,7 +192,7 @@ const BulletinBoard: React.FC<{
   })
   const [memos, setMemos] = useState<memo[]>(null)
 
-  function addMemoByEnter(e: KeyboardEvent) {
+  function addMemoByEnter(e) {
     if (tempMemo.memo) {
       const code = e.code || e.key
       if (code === 'Enter') {
@@ -321,17 +321,12 @@ const BulletinBoard: React.FC<{
             )
           })}
       </MemoContainer>
-      <CreatePanel
-        panelBackground={colorScheme.light.panelBackground}
-        panelBorder={colorScheme.light.panelBorder}
-      >
+      <CreatePanel>
         <MemoInput
           name="memo"
           value={tempMemo.memo}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            handleTextAreaChange(e, tempMemo, setTempMemo)
-          }
-          onKeyPress={(e: KeyboardEvent) => addMemoByEnter(e)}
+          onChange={(e) => handleTextAreaChange(e, tempMemo, setTempMemo)}
+          onKeyPress={(e) => addMemoByEnter(e)}
           color={tempMemo.color}
         ></MemoInput>
         <OptionContainer>

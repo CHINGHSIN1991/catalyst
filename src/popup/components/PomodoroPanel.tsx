@@ -132,9 +132,7 @@ export const PomodoroPanel: React.FC<{}> = () => {
             max="60"
             min="1"
             value={pomoAlertTime.value}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              checkInputTime(e)
-            }
+            onChange={(e) => checkInputTime(e)}
           ></TimerInput>
         )}
         {(pomoStartTime || pomoStoredTime !== 0) && pomoTimer.minutes}:

@@ -65,7 +65,7 @@ export const PronounceToolEditPanel: React.FC<{}> = () => {
   }, [])
 
   return (
-    <Wrapper onClick={(e: Event) => e.stopPropagation()}>
+    <Wrapper onClick={(e) => e.stopPropagation()}>
       <EditPanelTitle>
         <EditPanelTitleText>Pronounce tool setting</EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
@@ -73,9 +73,7 @@ export const PronounceToolEditPanel: React.FC<{}> = () => {
       <div style={{ color: 'red' }}>*feature in development</div>
       <SelectInput
         value={language}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-          setLanguage(e.target.value)
-        }
+        onChange={(e) => setLanguage(e.target.value)}
       >
         {languageList.map((item) => {
           return (

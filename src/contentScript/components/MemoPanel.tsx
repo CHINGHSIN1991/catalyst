@@ -34,12 +34,12 @@ const Title = styled.div`
   text-align: start;
 `
 
-const NoteArea = styled(ScrollbarTextArea)`
+const NoteArea = styled(ScrollbarTextArea)<bgColor>`
   color: rgba(40, 40, 40, 1);
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   box-sizing: border-box;
   width: 200px !important;
-  background-color: ${(props: bgColor) => props.bgColor};
+  background-color: ${(props) => props.bgColor};
   height: 108px;
   border: solid 1px rgb(200, 200, 200);
   border-radius: 4px;
@@ -47,12 +47,12 @@ const NoteArea = styled(ScrollbarTextArea)`
   margin: 0;
   resize: none;
   :hover {
-    background-color: ${(props: bgColor) => props.bgColor};
+    background-color: ${(props) => props.bgColor};
     border: solid 1px rgb(200, 200, 200);
   }
   :focus {
     outline: none;
-    background-color: ${(props: bgColor) => props.bgColor};
+    background-color: ${(props) => props.bgColor};
     border: solid 1px rgb(200, 200, 200);
   }
 `
@@ -84,12 +84,12 @@ const ColorPanel = styled.div`
   height: 24px;
 `
 
-const ColorContainer = styled.div`
+const ColorContainer = styled.div<codeComparison>`
   box-sizing: border-box;
-  border-radius: ${(props: codeComparison) =>
+  border-radius: ${(props) =>
     props.code === props.currentColor ? '6px' : '5px'};
   border: solid
-    ${(props: codeComparison) =>
+    ${(props) =>
       props.code === props.currentColor
         ? '2px rgba(120,120,120,1)'
         : '1px rgba(184,184,184,0.8)'};
@@ -98,11 +98,11 @@ const ColorContainer = styled.div`
   margin-right: 8px;
 `
 
-const Color = styled.div`
+const Color = styled.div<code>`
   width: 100%;
   height: 100%;
   border-radius: 4px;
-  background-color: ${(props: code) => props.code};
+  background-color: ${(props) => props.code};
 `
 
 export const MemoPanel = () => {
@@ -143,7 +143,7 @@ export const MemoPanel = () => {
 
   return (
     <Wrapper>
-      <ColorPanel onClick={(e: Event) => e.stopPropagation()}>
+      <ColorPanel onClick={(e) => e.stopPropagation()}>
         {memoColorList &&
           memoColorList.map((code) => {
             return (
@@ -161,10 +161,8 @@ export const MemoPanel = () => {
       <InputContainer>
         <Title>Memo</Title>
         <NoteArea
-          onClick={(e: Event) => e.stopPropagation()}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            handleTextAreaChange(e, tempMemo, setTempMemo)
-          }
+          onClick={(e) => e.stopPropagation()}
+          onChange={(e) => handleTextAreaChange(e, tempMemo, setTempMemo)}
           value={tempMemo.memo}
           name="memo"
           id=""
@@ -172,7 +170,7 @@ export const MemoPanel = () => {
         ></NoteArea>
       </InputContainer>
       <AddNoteBtn
-        onClick={(e: Event) => {
+        onClick={(e) => {
           e.stopPropagation()
           addMemo()
         }}

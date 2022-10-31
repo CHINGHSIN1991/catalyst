@@ -9,7 +9,7 @@ import { fetchWeatherData } from '../../utils/api'
 import { FocusPanelTitle } from '../../static/styleSetting'
 import { openWeatherData, scheme, centralPanel } from '../../static/types'
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<scheme & centralPanel>`
   font-family: 'Noto Sans', 'Trebuchet MS', 'Microsoft JhengHei';
   display: inline-flex;
   flex-direction: column;
@@ -20,19 +20,17 @@ const Wrapper = styled.div`
   right: 0;
   margin: 0 auto;
   border-radius: 4px;
-  border: ${(props: scheme) => props.theme.panelBorder};
-  background-color: ${(props: scheme) => props.theme.panelBackground};
+  border: ${(props) => props.theme.panelBorder};
+  background-color: ${(props) => props.theme.panelBackground};
   backdrop-filter: blur(16px);
-  height: ${(props: centralPanel) =>
-    props.centralPanel === 'Weather' ? '128px' : '0px'};
-  width: ${(props: centralPanel) =>
-    props.centralPanel === 'Weather' ? '480px' : '0px'};
+  height: ${(props) => (props.centralPanel === 'Weather' ? '128px' : '0px')};
+  width: ${(props) => (props.centralPanel === 'Weather' ? '480px' : '0px')};
   transition: 0.1s;
   overflow: hidden;
   @media (max-width: 1180px) {
-    width: ${(props: centralPanel) =>
+    width: ${(props) =>
       props.centralPanel === 'Weather' ? 'calc(100% - 48px)' : '0px'};
-    min-width: ${(props: centralPanel) =>
+    min-width: ${(props) =>
       props.centralPanel === 'Weather' ? '440px' : '0px'};
   }
 `
@@ -94,7 +92,7 @@ const InfoTitle = styled.div`
   width: 64px;
 `
 
-const WeatherPanel: React.FC<{ centralPanel: string }> = (props) => {
+const WeatherPanel: React.FC<centralPanel> = (props) => {
   const personalization = useSelector(getPersonalization)
   const [weatherData, setWeatherData] = useState<openWeatherData>(null)
 

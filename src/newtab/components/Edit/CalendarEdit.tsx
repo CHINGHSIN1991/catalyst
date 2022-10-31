@@ -47,8 +47,8 @@ const InputTitle = styled.div`
   width: 80px;
 `
 
-const InputValue = styled.input`
-  width: ${(props: width) => `${props.width}%`};
+const InputValue = styled.input<width>`
+  width: ${(props) => `${props.width}%`};
   font-size: 1rem;
   height: 28px;
   line-height: 28px;
@@ -75,22 +75,22 @@ const SwitchContainer = styled.div`
   width: 100%;
 `
 
-const Switch = styled.div`
+const Switch = styled.div<isAllDay>`
   display: flex;
   align-items: center;
   cursor: pointer;
   margin-left: 12px;
   width: 32px;
   height: 18px;
-  background-color: ${(props: isAllDay) =>
+  background-color: ${(props) =>
     props.isAllDay ? 'rgba(6,214,160,0.5)' : 'rgba(0,0,0,0.2)'};
   transition: 0.2s;
   border-radius: 12px;
 `
 
-const SwitchOption = styled.div`
+const SwitchOption = styled.div<isAllDay>`
   position: absolute;
-  left: ${(props: isAllDay) => (props.isAllDay ? '16px' : '4px')};
+  left: ${(props) => (props.isAllDay ? '16px' : '4px')};
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -106,18 +106,18 @@ const ColorSet = styled.div`
   height: 28px;
 `
 
-const ColorOption = styled.div`
+const ColorOption = styled.div<eventComparison & colorItem>`
   cursor: pointer;
   width: 14px;
   height: 20px;
   border: solid 2px
-    ${(props: eventComparison) =>
+    ${(props) =>
       props.item.colorId === props.tempEvent.colorId
         ? props.item.colorId
         : 'rgba(255,255,255,1)'};
   border-radius: 4px;
-  background-color: ${(props: colorItem) => props.item.code};
-  opacity: ${(props: eventComparison) =>
+  background-color: ${(props) => props.item.code};
+  opacity: ${(props) =>
     props.item.colorId === props.tempEvent.colorId ? 1 : 0.3};
 `
 
@@ -131,19 +131,18 @@ const PublicOptionSet = styled.div`
   border-radius: 12px;
 `
 
-const PublicOption = styled.div`
+const PublicOption = styled.div<isPublic>`
   font-size: 12px;
   width: 50%;
   text-align: center;
-  font-weight: ${(props: isPublic) => (props.isPublic ? 'bold' : 'normal')};
-  color: ${(props: isPublic) =>
-    props.isPublic ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.2)'};
+  font-weight: ${(props) => (props.isPublic ? 'bold' : 'normal')};
+  color: ${(props) => (props.isPublic ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.2)')};
   transition: 0.2s;
 `
 
-const PublicOptionBg = styled.div`
+const PublicOptionBg = styled.div<isPublic>`
   position: absolute;
-  left: ${(props: isPublic) => (props.isPublic ? '4px' : '124px')};
+  left: ${(props) => (props.isPublic ? '4px' : '124px')};
   transition: 0.2s;
   width: 120px;
   height: 18px;
@@ -164,10 +163,6 @@ export const CalendarEditPanel: React.FC<{}> = () => {
     visibility: 'public',
     colorId: '7',
   })
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setTempEvent({ ...tempEvent, [e.target.name]: e.target.value })
-  }
 
   function postEvent() {
     postNewEvent(userInfo, tempEvent).then((res) => {
@@ -199,7 +194,7 @@ export const CalendarEditPanel: React.FC<{}> = () => {
 
   return (
     <CalendarWrapper
-      onClick={(e: Event) => {
+      onClick={(e) => {
         e.stopPropagation()
       }}
     >
@@ -213,7 +208,7 @@ export const CalendarEditPanel: React.FC<{}> = () => {
           name="summary"
           type="text"
           value={tempEvent.summary}
-          onChange={handleChange}
+          onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)}
           width={100}
         ></InputValue>
       </FormSet>
@@ -233,9 +228,7 @@ export const CalendarEditPanel: React.FC<{}> = () => {
         <InputValue
           name="startDate"
           value={tempEvent.startDate}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleInputChange(e, tempEvent, setTempEvent)
-          }
+          onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)}
           type="Date"
           width={tempEvent.isAllDay ? 100 : 52}
         ></InputValue>
@@ -243,9 +236,7 @@ export const CalendarEditPanel: React.FC<{}> = () => {
           <InputValue
             name="startTime"
             value={tempEvent.startTime}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleInputChange(e, tempEvent, setTempEvent)
-            }
+            onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)}
             type="Time"
             width={48}
           ></InputValue>
@@ -256,9 +247,7 @@ export const CalendarEditPanel: React.FC<{}> = () => {
         <InputValue
           name="endDate"
           value={tempEvent.endDate}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleInputChange(e, tempEvent, setTempEvent)
-          }
+          onChange={(e) => handleInputChange(e, tempEvent, setTempEvent)}
           type="Date"
           width={tempEvent.isAllDay ? 100 : 52}
         ></InputValue>
@@ -278,6 +267,8 @@ export const CalendarEditPanel: React.FC<{}> = () => {
           {calendarColorList &&
             calendarColorList.map((item) => {
               return (
+                // fixed
+                // @ts-ignore
                 <ColorOption
                   key={item.colorId}
                   item={item}

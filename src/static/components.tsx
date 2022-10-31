@@ -61,7 +61,7 @@ export const ButtonContainer = styled.div`
   justify-content: center;
 `
 
-const PanelBtn = styled.div`
+const PanelBtn = styled.div<width & disabled>`
   white-space: nowrap;
   cursor: pointer;
   box-sizing: border-box;
@@ -71,26 +71,25 @@ const PanelBtn = styled.div`
   font-size: 14px;
   line-height: 24px;
   height: 28px;
-  width: ${(props: width) => `${props.width}px`};
+  width: ${(props) => `${props.width}px`};
   border-radius: 4px;
   margin: 8px;
-  color: ${(props: disabled) =>
+  color: ${(props) =>
     props.disabled ? 'rgba(184,184,184,1)' : 'rgb(80,80,80,1)'};
-  background-color: ${(props: disabled) =>
+  background-color: ${(props) =>
     props.disabled ? 'rgba(240,240,240,1)' : 'rgba(80,80,80,0)'};
   border: solid 2px
-    ${(props: disabled) =>
-      props.disabled ? 'rgba(184,184,184,1)' : 'rgba(80,80,80,1)'};
+    ${(props) => (props.disabled ? 'rgba(184,184,184,1)' : 'rgba(80,80,80,1)')};
   transition: 0.1s;
   :hover {
-    color: ${(props: disabled) =>
+    color: ${(props) =>
       props.disabled ? 'rgba(184,184,184,1)' : 'rgb(255,255,255,1)'};
-    background-color: ${(props: disabled) =>
+    background-color: ${(props) =>
       props.disabled ? 'rgba(240,240,240,1)' : 'rgba(80,80,80,1)'};
   }
 `
 
-const AlertBtn = styled.div`
+const AlertBtn = styled.div<width & disabled>`
   white-space: nowrap;
   cursor: pointer;
   box-sizing: border-box;
@@ -100,21 +99,21 @@ const AlertBtn = styled.div`
   font-size: 14px;
   line-height: 24px;
   height: 28px;
-  width: ${(props: width) => `${props.width}px`};
+  width: ${(props) => `${props.width}px`};
   border-radius: 4px;
   margin: 8px;
-  color: ${(props: disabled) =>
+  color: ${(props) =>
     props.disabled ? 'rgba(180, 180, 180,1)' : 'rgb(204, 109, 102,1)'};
-  background-color: ${(props: disabled) =>
+  background-color: ${(props) =>
     props.disabled ? 'rgba(240,240,240,1)' : 'rgba(204, 109, 102,0)'};
   border: solid 2px
-    ${(props: disabled) =>
+    ${(props) =>
       props.disabled ? 'rgba(180, 180, 180,1)' : 'rgba(204, 109, 102,1)'};
   transition: 0.1s;
   :hover {
-    color: ${(props: disabled) =>
+    color: ${(props) =>
       props.disabled ? 'rgba(180, 180, 180,1)' : 'rgb(255,255,255,1)'};
-    background-color: ${(props: disabled) =>
+    background-color: ${(props) =>
       props.disabled ? 'rgba(240,240,240,1)' : 'rgba(204, 109, 102,1)'};
   }
 `

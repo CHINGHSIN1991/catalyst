@@ -31,7 +31,7 @@ const InputContainer = styled.div`
   padding-top: 8px;
 `
 
-const TagInput = styled.input`
+const TagInput = styled.input<isEditOn>`
   color: rgba(40, 40, 40, 1);
   box-sizing: border-box !important;
   outline: none !important;
@@ -40,11 +40,9 @@ const TagInput = styled.input`
   overflow: hidden;
   border: none !important;
   border-radius: 4px;
-  padding: ${(props: isEditOn) =>
-    props.isEditOn ? '0 4px !important' : '0 !important'};
+  padding: ${(props) => (props.isEditOn ? '0 4px !important' : '0 !important')};
   border: none;
-  width: ${(props: isEditOn) =>
-    props.isEditOn ? '120px !important' : '0px !important'};
+  width: ${(props) => (props.isEditOn ? '120px !important' : '0px !important')};
   transition: 0.3s !important;
   background-color: rgb(224, 224, 224);
   :focus {
@@ -63,17 +61,16 @@ const SelectOption = styled.option`
   }
 `
 
-const SelectBlock = styled.select`
+const SelectBlock = styled.select<isEditOn>`
   box-sizing: border-box !important;
   color: rgba(40, 40, 40, 1);
   height: 24px;
   border-radius: 4px;
   border: none !important;
-  width: ${(props: isEditOn) =>
-    props.isEditOn ? '0px !important' : '140px !important'};
+  width: ${(props) => (props.isEditOn ? '0px !important' : '140px !important')};
   overflow: hidden;
   transition: 0.3s;
-  padding: ${(props: isEditOn) =>
+  padding: ${(props) =>
     props.isEditOn ? '0 !important' : '0 0 0 8px !important'};
   margin: 0;
   background-color: rgb(224, 224, 224);
@@ -92,7 +89,7 @@ const Title = styled.div`
   text-align: start;
 `
 
-const Btn = styled.div`
+const Btn = styled.div<isEditOn>`
   display: flex;
   font-size: bold;
   align-items: center;
@@ -105,25 +102,25 @@ const Btn = styled.div`
   border-radius: 4px;
   margin: 0 0 0 4px;
   transition: 0.3s;
-  width: ${(props: isEditOn) => (props.isEditOn ? '48px' : '56px')};
+  width: ${(props) => (props.isEditOn ? '48px' : '56px')};
   height: 24px;
   :hover {
     background-color: rgb(120, 120, 120);
   }
 `
 
-const AddBtn = styled.div`
+const AddBtn = styled.div<isEditOn>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${(props: isEditOn) => (props.isEditOn ? '24px' : '0')};
+  width: ${(props) => (props.isEditOn ? '24px' : '0')};
   overflow: hidden;
   border-radius: 4px;
-  margin-left: ${(props: isEditOn) => (props.isEditOn ? '4px' : '0')};
+  margin-left: ${(props) => (props.isEditOn ? '4px' : '0')};
   transition: 0.3s;
   height: 24px;
   color: rgba(255, 255, 255, 1);
-  background-color: ${(props: isEditOn) =>
+  background-color: ${(props) =>
     props.isEditOn ? 'rgb(144,144,144)' : 'rgb(224,224,224)'};
   :hover {
     background-color: rgb(96, 96, 96);
@@ -253,14 +250,12 @@ export const NotesPanel = () => {
 
   return (
     <Wrapper>
-      <TagsPanel onClick={(e: Event) => e.stopPropagation()}>
+      <TagsPanel onClick={(e) => e.stopPropagation()}>
         <TagInput
           isEditOn={isEditOn}
           name="category"
           value={tempCategory.category}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleInputChange(e, tempCategory, setTempCategory)
-          }
+          onChange={(e) => handleInputChange(e, tempCategory, setTempCategory)}
           type="text"
         ></TagInput>
         <AddBtn isEditOn={isEditOn} onClick={addCategory}>
@@ -295,7 +290,7 @@ export const NotesPanel = () => {
         </SelectBlock>
         <Btn
           isEditOn={isEditOn}
-          onClick={(e: Event) => {
+          onClick={(e) => {
             setIsEditOn(!isEditOn)
           }}
         >
@@ -306,10 +301,10 @@ export const NotesPanel = () => {
         <Title>Title</Title>
         <TitleInput
           name="title"
-          onClick={(e: Event) => {
+          onClick={(e) => {
             e.stopPropagation()
           }}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          onChange={(e) => {
             handleInputChange(e, noteLink, setNoteLink)
           }}
           value={noteLink.title}
@@ -320,8 +315,8 @@ export const NotesPanel = () => {
         <Title>Quick note</Title>
         <NoteArea
           name="note"
-          onClick={(e: Event) => e.stopPropagation()}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+          onClick={(e) => e.stopPropagation()}
+          onChange={(e) => {
             handleTextAreaChange(e, noteLink, setNoteLink)
           }}
           value={noteLink.note}
@@ -329,7 +324,7 @@ export const NotesPanel = () => {
         ></NoteArea>
       </InputContainer>
       <AddNoteBtn
-        onClick={(e: Event) => {
+        onClick={(e) => {
           e.stopPropagation()
           addQuickNotes()
         }}

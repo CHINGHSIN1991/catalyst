@@ -18,6 +18,7 @@ import {
 import { PanelButton, ButtonContainer } from '../../../static/components'
 import { personalServiceList } from '../../../static/optionList'
 import { scheme } from '../../../static/types'
+import { handleErrorImage } from '../../../utils/functions'
 
 type index = { index: number }
 
@@ -35,10 +36,10 @@ const ServiceContainer = styled.div`
   flex-wrap: wrap;
 `
 
-const ServiceItem = styled.div`
+const ServiceItem = styled.div<index>`
   box-sizing: border-box;
-  opacity: ${(props: index) => (props.index === -1 ? 0.3 : 1)};
-  border: ${(props: index) =>
+  opacity: ${(props) => (props.index === -1 ? 0.3 : 1)};
+  border: ${(props) =>
     props.index === -1
       ? 'solid 2px rgba(127, 255, 212,0)'
       : `solid 2px rgba(127, 255, 212,1) `};
@@ -68,12 +69,12 @@ const ServiceTitle = styled.div`
   font-size: 0.75rem;
 `
 
-const IndexBox = styled.div`
+const IndexBox = styled.div<index & scheme>`
   position: absolute;
   right: -10px;
   top: 1px;
-  width: ${(props: index) => (props.index === -1 ? '0px' : '20px')};
-  height: ${(props: index) => (props.index === -1 ? '0px' : '20px')};
+  width: ${(props) => (props.index === -1 ? '0px' : '20px')};
+  height: ${(props) => (props.index === -1 ? '0px' : '20px')};
   transform: translateY(-50%);
   border-radius: 10px;
   font-size: 8px;
@@ -83,8 +84,8 @@ const IndexBox = styled.div`
   white-space: nowrap;
   overflow: hidden;
   transition: 0.02s;
-  color: ${(props: scheme) => props.theme.accentText};
-  background-color: ${(props: scheme) => props.theme.accentColor};
+  color: ${(props) => props.theme.accentText};
+  background-color: ${(props) => props.theme.accentColor};
 `
 
 export const ServiceEditPanel: React.FC<{}> = () => {
@@ -116,7 +117,7 @@ export const ServiceEditPanel: React.FC<{}> = () => {
   }, [])
 
   return (
-    <Wrapper onClick={(e: Event) => e.stopPropagation()}>
+    <Wrapper onClick={(e) => e.stopPropagation()}>
       <EditPanelTitle>
         <EditPanelTitleText>Personal service edit</EditPanelTitleText>
         <EditPanelTitleUnderLine />
@@ -133,7 +134,10 @@ export const ServiceEditPanel: React.FC<{}> = () => {
                 <IndexBox index={tempServiceList.indexOf(service.id)}>
                   {tempServiceList.indexOf(service.id) + 1}
                 </IndexBox>
-                <ServiceIcon src={service.imgUrl.color}></ServiceIcon>
+                <ServiceIcon
+                  src={service.imgUrl.color}
+                  onError={(e) => handleErrorImage(e)}
+                ></ServiceIcon>
                 <ServiceTitle>{service.name.english}</ServiceTitle>
               </ServiceItem>
             )

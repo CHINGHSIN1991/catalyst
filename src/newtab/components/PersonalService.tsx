@@ -51,18 +51,16 @@ const ServiceLinks = styled(ScrollbarContainer)`
   }
 `
 
-const ServiceIcon = styled.div`
+const ServiceIcon = styled.div<src & hover & backup>`
   width: 28px;
   height: 28px;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: ${(props: src) => `url(${props.src})`};
-  /* object-fit: contain; */
+  background-image: ${(props) => `url(${props.src})`};
   transition: 0.2s;
   :hover {
-    background-image: ${(props: hover & backup) =>
-      `url(${props.hover}), url(${props.backup})`};
+    background-image: ${(props) => `url(${props.hover}), url(${props.backup})`};
   }
 `
 
@@ -72,8 +70,8 @@ const ServiceOnError = styled.img`
   object-fit: contain;
 `
 
-const ServiceLink = styled.a`
-  color: ${(props: scheme) => props.theme.primary};
+const ServiceLink = styled.a<scheme & hover>`
+  color: ${(props) => props.theme.primary};
   padding: 8px;
   border-radius: 4px;
   margin: 0 8px;
@@ -89,7 +87,7 @@ const ServiceLink = styled.a`
   :hover {
     background-color: rgba(255, 255, 255, 0.1);
     ${ServiceIcon} {
-      background-image: ${(props: hover) => `url(${props.hover})`};
+      background-image: ${(props) => `url(${props.hover})`};
     }
   }
   @media (max-width: 1580px) {
@@ -107,8 +105,8 @@ const WelcomeSentence = styled.div`
   flex-shrink: 0;
 `
 
-const UserName = styled.a`
-  color: ${(props: scheme) => props.theme.primary};
+const UserName = styled.a<scheme>`
+  color: ${(props) => props.theme.primary};
   display: flex;
   flex-shrink: 1;
   align-items: center;
@@ -125,9 +123,9 @@ const UserName = styled.a`
   text-overflow: ellipsis;
 `
 
-const MoreServiceButton = styled.a`
+const MoreServiceButton = styled.a<scheme>`
   display: block;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   margin: 8px 16px;
   width: 100%;
   height: 24px;
@@ -225,21 +223,18 @@ const PersonalServicePanel: React.FC<{}> = () => {
               hover={personalServiceList[item].imgUrl.color}
               target="_blank"
             >
+              {/* fixed */}
+              {/* @ts-ignore */}
               <ServiceIcon
                 src={
                   personalization.isDarkMode
                     ? personalServiceList[item].imgUrl.light
                     : personalServiceList[item].imgUrl.dark
                 }
-                onError={(e: React.ChangeEvent<HTMLImageElement>) =>
-                  handleErrorImage(e)
-                }
               >
                 <ServiceOnError
                   src="https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/onError.png?alt=media&token=3a641010-249b-4fbb-a1bd-256adfb460ea"
-                  onError={(e: React.ChangeEvent<HTMLImageElement>) =>
-                    handleErrorImage(e)
-                  }
+                  onError={(e) => handleErrorImage(e)}
                 ></ServiceOnError>
               </ServiceIcon>
               <ServiceTitle>

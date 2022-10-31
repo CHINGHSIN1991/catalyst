@@ -6,8 +6,8 @@ import AlertContext from '../features/alertContext'
 import { memo, scheme } from '../../static/types'
 import { ToggleTitle, ToggleButton } from '../../static/styleSetting'
 
-const Wrapper = styled.div`
-  color: ${(props: scheme) => props.theme.primary};
+const Wrapper = styled.div<scheme>`
+  color: ${(props) => props.theme.primary};
   position: absolute;
   bottom: 40px;
   width: 100%;

@@ -47,8 +47,8 @@ const NoteLinkIcon = styled.img`
   object-fit: cover;
 `
 
-const TempLinks = styled.ul`
-  display: ${(props: length) => (props.length === 0 ? 'none' : 'flex')};
+const TempLinks = styled.ul<length>`
+  display: ${(props) => (props.length === 0 ? 'none' : 'flex')};
   flex-direction: column;
   border: solid 1px rgba(255, 255, 255, 0);
   border-radius: 4px;
@@ -95,14 +95,14 @@ const TextNote = styled.div`
   overflow: hidden;
 `
 
-const TitleEdit = styled.input`
+const TitleEdit = styled.input<scheme>`
   height: 24px;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.2);
   padding: 4px 8px;
   border: solid 1px darkgrey;
   outline: none;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   border-radius: 4px;
   transition: 0.3s;
   :focus {
@@ -110,14 +110,14 @@ const TitleEdit = styled.input`
   }
 `
 
-const NoteEdit = styled.textarea`
+const NoteEdit = styled.textarea<scheme>`
   width: 100%;
   height: 56px;
   resize: none;
   background-color: rgba(0, 0, 0, 0.2);
   border: solid 1px darkgrey;
   outline: none;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   border-radius: 4px;
   transition: 0.3s;
   padding: 4px 8px;
@@ -146,14 +146,14 @@ const TempLink = styled.li`
   }
 `
 
-const LinkContent = styled.div`
+const LinkContent = styled.div<scheme>`
   display: flex;
   align-items: flex-start;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
 `
 
 const TextContent = styled.a`
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   flex-grow: 1;
   overflow: hidden;
 `
@@ -166,11 +166,11 @@ const EditTrigger = styled.div`
   width: 16px;
 `
 
-const ScrollContainer = styled(ScrollbarContainer)`
+const ScrollContainer = styled(ScrollbarContainer)<shortcutNumber>`
   display: flex;
   flex-direction: column;
   padding-right: 2px;
-  max-height: ${(props: shortcutNumber) =>
+  max-height: ${(props) =>
     `calc(100vh - (288px + ${
       Math.ceil((props.shortcutNumber + 1) / 4) * 88
     }px ))`};
@@ -180,16 +180,16 @@ const ScrollContainer = styled(ScrollbarContainer)`
   }
 `
 
-const EditPanel = styled.div`
+const EditPanel = styled.div<isEditOn>`
   position: absolute;
   display: flex;
   align-items: center;
-  padding: ${(props: isEditOn) => (props.isEditOn ? '16px' : '0px')};
+  padding: ${(props) => (props.isEditOn ? '16px' : '0px')};
   border-radius: 4px;
   top: 0;
   right: 0;
   transition: 0.1s;
-  width: ${(props: isEditOn) => (props.isEditOn ? '100%' : '0%')};
+  width: ${(props) => (props.isEditOn ? '100%' : '0%')};
   height: 100%;
   background-color: rgba(80, 80, 80, 0.5);
   backdrop-filter: blur(8px);
@@ -245,11 +245,11 @@ const DeleteTagButton = styled.div`
   }
 `
 
-const EditOption = styled.div`
+const EditOption = styled.div<isEditOn>`
   padding: 6px;
   margin: 8px 24px;
-  opacity: ${(props: isEditOn) => (props.isEditOn ? 1 : 0)};
-  transform: ${(props: isEditOn) =>
+  opacity: ${(props) => (props.isEditOn ? 1 : 0)};
+  transform: ${(props) =>
     props.isEditOn ? 'translateY(0%)' : 'translateY(50%)'};
   transition: 0.2s;
   font-size: 0.75rem;
@@ -457,9 +457,7 @@ const TempLinkElement: React.FC<{
         <IconContainer>
           <NoteLinkIcon
             src={props.note.logo}
-            onError={(e: React.ChangeEvent<HTMLImageElement>) =>
-              handleErrorImage(e)
-            }
+            onError={(e) => handleErrorImage(e)}
           ></NoteLinkIcon>
         </IconContainer>
         {props.tempNote.id !== props.note.id && (
@@ -474,15 +472,14 @@ const TempLinkElement: React.FC<{
               value={props.tempNote.title}
               name="title"
               type="text"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onChange={(e) =>
                 handleInputChange(e, props.tempNote, props.setTempNote)
               }
             ></TitleEdit>
             <NoteEdit
               value={props.tempNote.note}
               name="note"
-              type="text"
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              onChange={(e) =>
                 handleTextAreaChange(e, props.tempNote, props.setTempNote)
               }
             ></NoteEdit>
@@ -491,7 +488,7 @@ const TempLinkElement: React.FC<{
         {props.tempNote.id !== props.note.id && (
           <EditTrigger
             title="More actions"
-            onClick={(e: Event) => {
+            onClick={(e) => {
               e.stopPropagation()
               setIsEditOn(true)
             }}
@@ -542,14 +539,14 @@ const TempLinkElement: React.FC<{
       </LinkContent>
       <EditPanel
         isEditOn={isEditOn}
-        onClick={(e: Event) => {
+        onClick={(e) => {
           e.stopPropagation()
           setIsEditOn(false)
         }}
       >
         <EditOption1
           isEditOn={isEditOn}
-          onClick={(e: Event) => {
+          onClick={(e) => {
             e.stopPropagation()
             props.setTempNote(props.note)
             setIsEditOn(false)
@@ -559,7 +556,7 @@ const TempLinkElement: React.FC<{
         </EditOption1>
         <EditOption2
           isEditOn={isEditOn}
-          onClick={(e: Event) => {
+          onClick={(e) => {
             e.stopPropagation()
             props.delNote(props.note.id)
           }}

@@ -23,10 +23,10 @@ const ButtonContainer = styled.div`
   }
 `
 
-const ButtonArea = styled.div`
+const ButtonArea = styled.div<scheme>`
   width: 32px;
   height: 32px;
-  background-color: ${(props: scheme) => props.theme.primarySemiopaque};
+  background-color: ${(props) => props.theme.primarySemiopaque};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -38,7 +38,7 @@ const ButtonArea = styled.div`
     margin-right: 0px;
   }
   :hover {
-    background-color: ${(props: scheme) => props.theme.primaryHover};
+    background-color: ${(props) => props.theme.primaryHover};
   }
 `
 

@@ -36,12 +36,12 @@ const AlarmContainer = styled.div`
   align-items: center;
 `
 
-const TextNote = styled.div`
+const TextNote = styled.div<scheme>`
   height: 0px;
   padding-top: 0px;
   font-size: 0.75rem;
   line-height: 1rem;
-  color: ${(props: scheme) => props.theme.tertiary};
+  color: ${(props) => props.theme.tertiary};
   text-overflow: ellipsis;
   word-break: break-all;
   overflow: hidden;
@@ -72,40 +72,39 @@ const ToDoElements = styled.div`
   flex-grow: 1;
 `
 
-const ToDoContent = styled.div`
+const ToDoContent = styled.div<scheme>`
   display: flex;
   align-items: flex-start;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
 `
 
-const TextContent = styled.div`
-  color: ${(props: scheme) => props.theme.primary};
+const TextContent = styled.div<scheme>`
+  color: ${(props) => props.theme.primary};
   flex-grow: 1;
   width: auto;
   overflow: hidden;
 `
 
-const TextTitle = styled.div`
+const TextTitle = styled.div<isDone & scheme>`
   font-size: 0.875rem;
   line-height: 1rem;
-  color: ${(props: isDone & scheme) =>
+  color: ${(props) =>
     props.isDone ? props.theme.tertiary : props.theme.primary};
-  text-decoration: ${(props: isDone) =>
-    props.isDone ? 'line-through' : 'none'};
+  text-decoration: ${(props) => (props.isDone ? 'line-through' : 'none')};
   padding: 4px 0;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 `
 
-const TitleEdit = styled.input`
+const TitleEdit = styled.input<scheme>`
   height: 24px;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.2);
   padding: 4px 8px;
   border: solid 1px darkgrey;
   outline: none;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   border-radius: 4px;
   transition: 0.3s;
   :focus {
@@ -144,27 +143,27 @@ const CompleteBtns = styled.div`
   width: 48px;
 `
 
-const EditPanel = styled.div`
+const EditPanel = styled.div<isEditOn>`
   position: absolute;
   display: flex;
   align-items: center;
-  padding: ${(props: isEditOn) => (props.isEditOn ? '16px' : '0px')};
+  padding: ${(props) => (props.isEditOn ? '16px' : '0px')};
   border-radius: 4px;
   top: 0;
   right: 0;
   transition: 0.1s;
-  width: ${(props: isEditOn) => (props.isEditOn ? '100%' : '0%')};
+  width: ${(props) => (props.isEditOn ? '100%' : '0%')};
   height: 100%;
   background-color: rgba(80, 80, 80, 0.5);
   backdrop-filter: blur(8px);
   overflow: hidden;
 `
 
-const EditOption = styled.div`
+const EditOption = styled.div<isEditOn>`
   padding: 6px;
   margin: 8px 24px;
-  opacity: ${(props: isEditOn) => (props.isEditOn ? 1 : 0)};
-  transform: ${(props: isEditOn) =>
+  opacity: ${(props) => (props.isEditOn ? 1 : 0)};
+  transform: ${(props) =>
     props.isEditOn ? 'translateY(0%)' : 'translateY(50%)'};
   transition: 0.2s;
   font-size: 0.75rem;
@@ -187,11 +186,11 @@ const EditOption2 = styled(EditOption)`
   transition-property: transform, opacity;
 `
 
-const AddToDoContainer = styled.div`
+const AddToDoContainer = styled.div<isEditOn>`
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.1);
   width: 100%;
-  height: ${(props: isEditOn) => (props.isEditOn ? '86px' : '0px')};
+  height: ${(props) => (props.isEditOn ? '86px' : '0px')};
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -213,10 +212,10 @@ const ToDoTitle = styled.div`
   width: 48px;
 `
 
-const ToDoInput = styled.input`
+const ToDoInput = styled.input<scheme>`
   height: 24px;
   padding: 0 4px;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   border: solid 1px gray;
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.1);
@@ -256,17 +255,17 @@ const EditButton = styled.div`
   }
 `
 
-const ToDoContainer = styled(ScrollbarContainer)`
+const ToDoContainer = styled(ScrollbarContainer)<isEditOn>`
   width: 100%;
   transition: 0.2s;
-  height: ${(props: isEditOn) =>
+  height: ${(props) =>
     props.isEditOn ? 'calc(100vh - 836px)' : 'calc(100vh - 750px)'};
   @media (max-width: 1580px) {
-    height: ${(props: isEditOn) =>
+    height: ${(props) =>
       props.isEditOn ? 'calc(100vh - 614px)' : 'calc(100vh - 528px)'};
   }
   @media (max-width: 1180px) {
-    height: ${(props: isEditOn) =>
+    height: ${(props) =>
       props.isEditOn ? 'calc(100vh - 428px)' : 'calc(100vh - 342px)'};
   }
 `
@@ -517,7 +516,7 @@ const ToDoElement: React.FC<{
               style={{ width: '224px' }}
               value={props.tempTodo.workContent}
               name="workContent"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onChange={(e) =>
                 handleInputChange(e, props.tempTodo, props.setTempTodo)
               }
               type="text"
@@ -526,7 +525,7 @@ const ToDoElement: React.FC<{
               <ToDoLabel htmlFor="">
                 <ToDoInput
                   name="alertDate"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onChange={(e) =>
                     handleInputChange(e, props.tempTodo, props.setTempTodo)
                   }
                   value={props.tempTodo.alertDate || ''}
@@ -534,7 +533,7 @@ const ToDoElement: React.FC<{
                 />
                 <ToDoInput
                   name="alertTime"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onChange={(e) =>
                     handleInputChange(e, props.tempTodo, props.setTempTodo)
                   }
                   value={props.tempTodo.alertTime || ''}
@@ -561,7 +560,7 @@ const ToDoElement: React.FC<{
         {props.tempTodo.id !== props.item.id && (
           <EditTrigger
             title="More actions"
-            onClick={(e: Event) => {
+            onClick={(e) => {
               e.stopPropagation()
               setIsEditOn(true)
             }}
@@ -601,14 +600,14 @@ const ToDoElement: React.FC<{
       </ToDoContent>
       <EditPanel
         isEditOn={isEditOn}
-        onClick={(e: Event) => {
+        onClick={(e) => {
           e.stopPropagation()
           setIsEditOn(false)
         }}
       >
         <EditOption1
           isEditOn={isEditOn}
-          onClick={(e: Event) => {
+          onClick={(e) => {
             e.stopPropagation()
             setIsEditOn(false)
             props.setTempTodo(props.item)
@@ -618,7 +617,7 @@ const ToDoElement: React.FC<{
         </EditOption1>
         <EditOption2
           isEditOn={isEditOn}
-          onClick={(e: Event) => {
+          onClick={(e) => {
             e.stopPropagation()
             props.delTodo(props.item.id)
           }}
@@ -648,7 +647,7 @@ const AddToDoPanel: React.FC<{
           id="workContent"
           name="workContent"
           value={props.tempTodo.workContent}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange={(e) =>
             handleInputChange(e, props.tempTodo, props.setTempTodo)
           }
         />
@@ -691,7 +690,7 @@ const AddToDoPanel: React.FC<{
           <ToDoTitle>Alert</ToDoTitle>
           <ToDoInput
             name="alertDate"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onChange={(e) =>
               handleInputChange(e, props.tempTodo, props.setTempTodo)
             }
             value={props.tempTodo.alertDate || ''}
@@ -699,7 +698,7 @@ const AddToDoPanel: React.FC<{
           />
           <ToDoInput
             name="alertTime"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onChange={(e) =>
               handleInputChange(e, props.tempTodo, props.setTempTodo)
             }
             value={props.tempTodo.alertTime || ''}

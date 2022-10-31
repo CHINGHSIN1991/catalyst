@@ -65,23 +65,23 @@ const PublicOptionSet = styled.div`
   border-radius: 14px;
 `
 
-const PublicOption = styled.div`
+const PublicOption = styled.div<bol>`
   font-size: 14px;
   line-height: 20px;
   width: 50%;
   text-align: center;
-  font-weight: ${(props: bol) => {
+  font-weight: ${(props) => {
     return props.bol ? 'bold' : 'normal'
   }};
-  color: ${(props: bol) => {
+  color: ${(props) => {
     return props.bol ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.3)'
   }};
   transition: 0.2s;
 `
 
-const PublicOptionBg = styled.div`
+const PublicOptionBg = styled.div<bol>`
   position: absolute;
-  left: ${(props: bol) => {
+  left: ${(props) => {
     return props.bol ? '4px' : 'calc(50% + 4px)'
   }};
   transition: 0.2s;
@@ -137,7 +137,7 @@ export const OptionPanel: React.FC<{}> = () => {
   }, [personalization])
 
   return (
-    <Wrapper onClick={(e: Event) => e.stopPropagation()}>
+    <Wrapper onClick={(e) => e.stopPropagation()}>
       <EditPanelTitle>
         <EditPanelTitleText>Personalization</EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>

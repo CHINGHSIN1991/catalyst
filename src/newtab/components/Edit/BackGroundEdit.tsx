@@ -59,21 +59,20 @@ const BackgroundListPanel = styled.div`
   }
 `
 
-const BackgroundListOption = styled.div`
+const BackgroundListOption = styled.div<currentComparison>`
   cursor: pointer;
   border-radius: 8px 0px 0px 8px;
   display: flex;
   flex-direction: column;
   margin-bottom: 3px;
   line-height: 24px;
-  width: ${(props: currentComparison) =>
-    props.index === props.current ? '120px' : '104px'};
+  width: ${(props) => (props.index === props.current ? '120px' : '104px')};
   height: 60px;
-  background-color: ${(props: currentComparison) =>
+  background-color: ${(props) =>
     props.index === props.current ? 'darkgray' : 'lightgray'};
   transition: 0.2s;
   :hover {
-    background-color: ${(props: currentComparison) =>
+    background-color: ${(props) =>
       props.index === props.current ? 'darkgray' : 'darkgray'};
   }
   :last-child {
@@ -81,19 +80,18 @@ const BackgroundListOption = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: ${(props: currentComparison) =>
-      props.index === props.current ? '100px' : '80px'};
+    width: ${(props) => (props.index === props.current ? '100px' : '80px')};
   }
 `
 
-const BackgroundImage = styled.div`
+const BackgroundImage = styled.div<bg>`
   cursor: pointer;
   border: solid 1px gray;
   border-radius: 4px;
   margin: 8px;
   width: 120px;
   height: 80px;
-  background-image: url(${(props: bg) => props.bg});
+  background-image: url(${(props) => props.bg});
   background-position: center;
   background-size: cover;
   overflow: hidden;
@@ -201,26 +199,25 @@ const BackgroundPanel = styled.div`
   height: auto;
 `
 
-const ApplyButton = styled.div`
+const ApplyButton = styled.div<appliedComparison>`
   border-radius: 12px;
   font-size: 12px;
   font-weight: bold;
   line-height: 20px;
-  width: ${(props: appliedComparison) =>
-    props.applied === props.index ? '72px' : '56px'};
+  width: ${(props) => (props.applied === props.index ? '72px' : '56px')};
   margin: 2px 0 8px 16px;
   text-align: center;
-  color: ${(props: appliedComparison) =>
+  color: ${(props) =>
     props.applied === props.index ? 'rgb(40,40,40)' : 'rgb(240,240,240)'};
-  background-color: ${(props: appliedComparison) =>
+  background-color: ${(props) =>
     props.applied === props.index ? 'rgb(124, 247, 216)' : 'rgb(120,120,120)'};
   white-space: nowrap;
   overflow: hidden;
   transition: 0.2s;
   :hover {
-    background-color: ${(props: appliedComparison) =>
+    background-color: ${(props) =>
       props.applied === props.index ? 'rgb(124, 247, 216)' : 'rgb(40,40,40)'};
-    color: ${(props: appliedComparison) =>
+    color: ${(props) =>
       props.applied === props.index ? 'rgb(40,40,40)' : 'rgb(250,250,250)'};
   }
   @media (max-width: 768px) {
@@ -228,11 +225,11 @@ const ApplyButton = styled.div`
   }
 `
 
-const BackgroundListOptionTitle = styled.div`
+const BackgroundListOptionTitle = styled.div<currentComparison>`
   padding: 4px 0 0 16px;
   font-size: 0.875rem;
   font-weight: bold;
-  color: ${(props: currentComparison) =>
+  color: ${(props) =>
     props.current === props.index ? 'white' : 'rgb(40,40,40)'};
   transition: 0.2s;
   @media (max-width: 768px) {
@@ -308,7 +305,7 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
   }, [editPanelState])
 
   return (
-    <Wrapper onClick={(e: Event) => e.stopPropagation()}>
+    <Wrapper onClick={(e) => e.stopPropagation()}>
       <EditPanelTitle>
         <EditPanelTitleText>Background setting</EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
@@ -328,9 +325,6 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
                   current={current}
                   index={item}
                   onClick={() => setCurrentSet(item)}
-                  currentApplied={
-                    tempBackgroundSetting.bgSetting.current.setting
-                  }
                 >
                   <BackgroundListOptionTitle current={current} index={item}>
                     {item === 0 ? 'Random' : `Collection ${item}`}
@@ -341,7 +335,6 @@ export const BackgroundEditPanel: React.FC<{}> = () => {
                       onClick={() => applyCollection(item)}
                       applied={tempBackgroundSetting.bgSetting.current.setting}
                       index={item}
-                      current={current}
                     >
                       {tempBackgroundSetting.bgSetting.current.setting ===
                         item && 'Current'}

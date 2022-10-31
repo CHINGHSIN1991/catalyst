@@ -80,15 +80,15 @@ const BarColumn = styled.div`
   height: 100%;
 `
 
-const EventItem = styled.div`
+const EventItem = styled.div<period>`
   border: solid 0.5px rgba(120, 120, 120, 0.4);
   color: rgba(255, 255, 255, 1);
   border-radius: 4px;
   position: absolute;
   width: calc(100% - 8px);
-  top: ${(props: period) => `${(props.start - props.base) * 32 + 16}px`};
-  height: ${(props: period) => `${(props.end - props.start) * 32}px`};
-  background-color: ${(props: period) => props.color};
+  top: ${(props) => `${(props.start - props.base) * 32 + 16}px`};
+  height: ${(props) => `${(props.end - props.start) * 32}px`};
+  background-color: ${(props) => props.color};
   opacity: 0.8;
 `
 
@@ -115,23 +115,23 @@ const TimeLine = styled.div`
   height: 32px;
 `
 
-const TimeValue = styled.div`
+const TimeValue = styled.div<scheme>`
   font-size: 0.75rem;
   padding-right: 8px;
-  color: ${(props: scheme) => props.theme.secondary};
+  color: ${(props) => props.theme.secondary};
 `
 
-const TimeHr = styled.div`
+const TimeHr = styled.div<scheme>`
   width: 100%;
   height: 1px;
-  background-color: ${(props: scheme) => props.theme.fourthly};
+  background-color: ${(props) => props.theme.fourthly};
 `
 
-const TimeLineDisplay = styled.div`
+const TimeLineDisplay = styled.div<timeLineInfo>`
   position: absolute;
   margin-left: 39px;
   width: calc(100% - 39px);
-  top: ${(props: timeLineInfo) =>
+  top: ${(props) =>
     `calc(${
       ((props.timeLineInfo.current - props.timeLineInfo.startTime) / 86400000) *
       768
