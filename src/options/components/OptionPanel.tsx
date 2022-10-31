@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from "styled-components";
-import { useState, useEffect } from "react";
+import React from 'react'
+import styled from 'styled-components'
+import { useState, useEffect } from 'react'
 
-import { languageList } from '../../static/optionList';
-import { bol } from '../../static/types';
+import { languageList } from '../../static/optionList'
+import { bol } from '../../static/types'
 
 const Wrapper = styled.div`
   width: 320px;
@@ -11,31 +11,31 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media (max-width:1180px) {
+  @media (max-width: 1180px) {
     padding: 0 16px;
     flex-direction: column;
     align-items: center;
     width: 100%;
     height: auto;
-  } 
-`;
+  }
+`
 
 const EditPanelTitle = styled.div`
-  color: rgba(255,255,255,1);
+  color: rgba(255, 255, 255, 1);
   width: 100%;
   padding: 16px 0;
-`;
+`
 
 const EditPanelTitleText = styled.div`
   font-weight: bold;
-`;
+`
 
 const EditPanelTitleUnderLine = styled.div`
   width: 100%;
   height: 1px;
   margin-top: 8px;
   background-color: grey;
-`;
+`
 
 const InfoContainer = styled.div`
   padding: 8px 0;
@@ -45,15 +45,15 @@ const InfoContainer = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   height: 64px;
-`;
+`
 
 const Title = styled.div`
   width: 100%;
   padding-left: 4px;
-  color: rgb(160,160,160);
+  color: rgb(160, 160, 160);
   font-size: 0.875rem;
   line-height: 20px;
-`;
+`
 
 const PublicOptionSet = styled.div`
   cursor: pointer;
@@ -61,36 +61,42 @@ const PublicOptionSet = styled.div`
   align-items: center;
   width: 100%;
   height: 28px;
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 14px;
-`;
+`
 
 const PublicOption = styled.div`
   font-size: 14px;
   line-height: 20px;
   width: 50%;
   text-align: center;
-  font-weight: ${(props: bol) => { return props.bol ? 'bold' : 'normal'; }};
-  color: ${(props: bol) => { return props.bol ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.3)'; }};
+  font-weight: ${(props: bol) => {
+    return props.bol ? 'bold' : 'normal'
+  }};
+  color: ${(props: bol) => {
+    return props.bol ? 'rgba(0,0,0,0.9)' : 'rgba(0,0,0,0.3)'
+  }};
   transition: 0.2s;
-`;
+`
 
 const PublicOptionBg = styled.div`
   position: absolute;
-  left: ${(props: bol) => { return props.bol ? '4px' : 'calc(50% + 4px)'; }};
+  left: ${(props: bol) => {
+    return props.bol ? '4px' : 'calc(50% + 4px)'
+  }};
   transition: 0.2s;
   width: calc(50% - 8px);
   height: 20px;
   border-radius: 10px;
   background-color: #fff;
-`;
+`
 
 const SelectOption = styled.option`
-  color: rgba(240,240,240,1);
-  height: 240px; 
+  color: rgba(240, 240, 240, 1);
+  height: 240px;
   padding: 4px 8px;
-  background-color: rgba(0,0,0,0.8);
-`;
+  background-color: rgba(0, 0, 0, 0.8);
+`
 
 const LanguageSelect = styled.select`
   appearance: none;
@@ -100,16 +106,16 @@ const LanguageSelect = styled.select`
   width: 100%;
   height: 28px;
   font-weight: bold;
-  border: solid 4px rgba(0,0,0,0.3);
-  background-color: rgba(255,255,255,1);
+  border: solid 4px rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 14px;
   padding: 0 16px;
   :focus {
-    background-color: rgba(255,255,255,0.5);
-    border: solid 4px rgba(0,0,0,0);
+    background-color: rgba(255, 255, 255, 0.5);
+    border: solid 4px rgba(0, 0, 0, 0);
     outline: none;
   }
-`;
+`
 
 export const OptionPanel: React.FC<{}> = () => {
   const [personalization, setPersonalization] = useState({
@@ -120,92 +126,111 @@ export const OptionPanel: React.FC<{}> = () => {
     isPrivateShow: true,
     isDarkMode: true,
     pronounce: 'en-US',
-  });
+  })
 
   function handleSettingChanged(key: string) {
-    setPersonalization({ ...personalization, [key]: !personalization[key] });
+    setPersonalization({ ...personalization, [key]: !personalization[key] })
   }
 
   useEffect(() => {
-    chrome.storage.sync.set({ personalization });
-  }, [personalization]);
+    chrome.storage.sync.set({ personalization })
+  }, [personalization])
 
   return (
     <Wrapper onClick={(e: Event) => e.stopPropagation()}>
       <EditPanelTitle>
-        <EditPanelTitleText>
-          Personalization
-        </EditPanelTitleText>
+        <EditPanelTitleText>Personalization</EditPanelTitleText>
         <EditPanelTitleUnderLine></EditPanelTitleUnderLine>
       </EditPanelTitle>
       <OptionElement
-        title='Clock display'
-        truthy='24-hour'
-        falsy='12-hour'
-        keyName='isMilitary'
+        title="Clock display"
+        truthy="24-hour"
+        falsy="12-hour"
+        keyName="isMilitary"
         bol={personalization.isMilitary}
         handleSettingChanged={handleSettingChanged}
       ></OptionElement>
       <OptionElement
-        title='Temperature'
-        truthy='Celsius'
-        falsy='Fahrenheit'
-        keyName='isCelsius'
+        title="Temperature"
+        truthy="Celsius"
+        falsy="Fahrenheit"
+        keyName="isCelsius"
         bol={personalization.isCelsius}
         handleSettingChanged={handleSettingChanged}
       ></OptionElement>
       <OptionElement
-        title='Side menu default'
-        truthy='Show'
-        falsy='Hidden'
-        keyName='isMenuShow'
+        title="Side menu default"
+        truthy="Show"
+        falsy="Hidden"
+        keyName="isMenuShow"
         bol={personalization.isMenuShow}
         handleSettingChanged={handleSettingChanged}
       ></OptionElement>
       <OptionElement
-        title='Calendar color'
-        truthy='Multicolor'
-        falsy='Monochrome'
-        keyName='idCalendarColorful'
+        title="Calendar color"
+        truthy="Multicolor"
+        falsy="Monochrome"
+        keyName="idCalendarColorful"
         bol={personalization.idCalendarColorful}
         handleSettingChanged={handleSettingChanged}
       ></OptionElement>
       <OptionElement
-        title='Private schedule'
-        truthy='Show'
-        falsy='Hidden'
-        keyName='isPrivateShow'
+        title="Private schedule"
+        truthy="Show"
+        falsy="Hidden"
+        keyName="isPrivateShow"
         bol={personalization.isPrivateShow}
         handleSettingChanged={handleSettingChanged}
       ></OptionElement>
       <OptionElement
-        title='Display mode'
-        truthy='Dark mode'
-        falsy='Light mode'
-        keyName='isDarkMode'
+        title="Display mode"
+        truthy="Dark mode"
+        falsy="Light mode"
+        keyName="isDarkMode"
         bol={personalization.isDarkMode}
         handleSettingChanged={handleSettingChanged}
       ></OptionElement>
       <InfoContainer>
         <Title>Pronounce tool</Title>
-        <LanguageSelect value={personalization.pronounce} onChange={(e) => setPersonalization({ ...personalization, pronounce: e.target.value })}>
-          {languageList.map((item) => { return <SelectOption key={item.LangCultureName} value={item.LangCultureName}>{item.DisplayEN}</SelectOption>; })}
+        <LanguageSelect
+          value={personalization.pronounce}
+          onChange={(e) =>
+            setPersonalization({
+              ...personalization,
+              pronounce: e.target.value,
+            })
+          }
+        >
+          {languageList.map((item) => {
+            return (
+              <SelectOption
+                key={item.LangCultureName}
+                value={item.LangCultureName}
+              >
+                {item.DisplayEN}
+              </SelectOption>
+            )
+          })}
         </LanguageSelect>
       </InfoContainer>
-    </Wrapper >
-  );
-};
+    </Wrapper>
+  )
+}
 
 const OptionElement: React.FC<{
-  title: string,
-  truthy: string,
-  falsy: string;
-  bol: boolean,
-  keyName: string,
-  handleSettingChanged: (key: string) => void;
+  title: string
+  truthy: string
+  falsy: string
+  bol: boolean
+  keyName: string
+  handleSettingChanged: (key: string) => void
 }> = (props) => {
   return (
-    <InfoContainer onClick={() => { props.handleSettingChanged(props.keyName); }}>
+    <InfoContainer
+      onClick={() => {
+        props.handleSettingChanged(props.keyName)
+      }}
+    >
       <Title>{props.title}</Title>
       <PublicOptionSet>
         <PublicOptionBg bol={props.bol}></PublicOptionBg>
@@ -213,5 +238,5 @@ const OptionElement: React.FC<{
         <PublicOption bol={!props.bol}>{props.falsy}</PublicOption>
       </PublicOptionSet>
     </InfoContainer>
-  );
-};
+  )
+}
