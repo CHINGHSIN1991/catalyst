@@ -71,7 +71,7 @@ This software uses the following open source packages:
 - [ts-loader 9.3.1](https://www.npmjs.com/package/ts-loader) | [file-loader 6.2.0](https://v4.webpack.js.org/loaders/file-loader/) | [url-loader 4.1.1](https://www.npmjs.com/package/url-loader)
 
 - [TypeScript 4.8.2](https://www.typescriptlang.org/)
-- [@reduxjs/toolkit 1.8.5](https://www.npmjs.com/package/@reduxjs/toolkit) | [@types/chrome 0.0.196](https://www.npmjs.com/package/@types/chrome) | [@types/react 18.0.18](https://www.npmjs.com/package/@types/react) | [@types/react-dom 18.0.6](https://www.npmjs.com/package/@types/react-dom) | [@types/react-redux 7.1.24](https://www.npmjs.com/package/@types/react-dom)
+- [@reduxjs/toolkit 1.8.5](https://www.npmjs.com/package/@reduxjs/toolkit) | [@types/chrome 0.0.196](https://www.npmjs.com/package/@types/chrome) | [@types/react 18.0.18](https://www.npmjs.com/package/@types/react) | [@types/react-dom 18.0.6](https://www.npmjs.com/package/@types/react-dom) | [@types/react-redux 7.1.24](https://www.npmjs.com/package/@types/react-dom) | [@types/styled-components 5.1.26](https://www.npmjs.com/package/@types/styled-components?activeTab=readme) | [@types/uuid 8.3.4](https://www.npmjs.com/package/@types/uuid)
 
 - [React 18.2.0](https://reactjs.org/) | [React-DOM 18.2.0](https://www.npmjs.com/package/react-dom) | [Redux 4.2.0](https://redux.js.org/) | [React-redux 8.0.2](https://react-redux.js.org/)
 
