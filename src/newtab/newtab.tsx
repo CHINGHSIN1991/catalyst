@@ -38,7 +38,7 @@ type isMenuOn = { isMenuOn: boolean }
 type bg = { currentBackground: string }
 type mobileToggle = { mobileToggle: number }
 
-const Wrapper = styled.div<bg>`
+const Wrapper = styled.div`
   font-family: 'Noto Sans';
   position: fixed;
   left: 0;
@@ -46,7 +46,6 @@ const Wrapper = styled.div<bg>`
   width: 100vw;
   height: 100vh;
   display: flex;
-  background-image: url(${(props) => props.currentBackground});
   background-position: center;
   background-size: cover;
   transition: 0.5s;
@@ -242,8 +241,6 @@ const NewTab: React.FC<{}> = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* fixed */}
-      {/* @ts-ignore */}
       <Wrapper>
         <MemoizedBackgroundComponent />
         <Container isBoardOn={isBoardOn}>

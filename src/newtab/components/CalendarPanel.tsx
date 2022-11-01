@@ -238,7 +238,10 @@ export const CalendarPanel: React.FC<{}> = () => {
   useEffect(() => {
     loadCalendarEvents()
     setTimeLine()
-    setInterval(() => setTimeLine(), 30000)
+    const timeLineId = setInterval(() => setTimeLine(), 30000)
+    return () => {
+      clearInterval(timeLineId)
+    }
   }, [])
 
   useEffect(() => {

@@ -10,9 +10,8 @@ export function handleTextAreaChange<T>(e: React.ChangeEvent<HTMLTextAreaElement
 }
 
 export function handleErrorImage(e: SyntheticEvent<HTMLImageElement, Event>) {
-  // fixed
-  // @ts-ignore
-  e.target.src = 'PlaceHolder_128.png';
+  const target = e.target as HTMLImageElement
+  target.src = 'PlaceHolder_128.png';
 }
 
 export function statusChangeDelay(max: number, delay: number, processStatus: number, setProcessStatus: (n: number) => void) {

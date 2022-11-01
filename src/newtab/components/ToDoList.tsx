@@ -271,7 +271,7 @@ const ToDoContainer = styled(ScrollbarContainer)<isEditOn>`
 `
 
 const ToDoListPanel: React.FC<{}> = () => {
-  const [workList, setWorkList] = useState(null)
+  const [workList, setWorkList] = useState<todo[]>([])
   const [tempTodo, setTempTodo] = useState<todo>({
     id: 0,
     workContent: '',
@@ -330,14 +330,11 @@ const ToDoListPanel: React.FC<{}> = () => {
   }
 
   function changeIsDone(id: number) {
-    let tempWorkList = []
-    workList.forEach((todo: todo) => {
+    const tempWorkList = workList.map((todo) => {
       if (todo.id === id) {
-        todo.isDone = !todo.isDone
-        tempWorkList.push(todo)
-      } else {
-        tempWorkList.push(todo)
+        return { ...todo, isDone: !todo.isDone }
       }
+      return todo
     })
     chrome.storage.local.set({ todoList: tempWorkList }, function () {
       setWorkList(tempWorkList)

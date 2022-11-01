@@ -51,7 +51,7 @@ const ServiceLinks = styled(ScrollbarContainer)`
   }
 `
 
-const ServiceIcon = styled.div<src & hover & backup>`
+const ServiceIcon = styled.div<src>`
   width: 28px;
   height: 28px;
   background-size: contain;
@@ -59,9 +59,6 @@ const ServiceIcon = styled.div<src & hover & backup>`
   background-repeat: no-repeat;
   background-image: ${(props) => `url(${props.src})`};
   transition: 0.2s;
-  :hover {
-    background-image: ${(props) => `url(${props.hover}), url(${props.backup})`};
-  }
 `
 
 const ServiceOnError = styled.img`
@@ -223,8 +220,6 @@ const PersonalServicePanel: React.FC<{}> = () => {
               hover={personalServiceList[item].imgUrl.color}
               target="_blank"
             >
-              {/* fixed */}
-              {/* @ts-ignore */}
               <ServiceIcon
                 src={
                   personalization.isDarkMode

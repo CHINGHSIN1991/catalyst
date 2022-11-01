@@ -22,7 +22,7 @@ import { PanelButton, ButtonContainer } from '../../../static/components'
 type width = { width: number }
 type isAllDay = { isAllDay: boolean }
 type isPublic = { isPublic: boolean }
-type eventComparison = { item: calendarItem; tempEvent: calendarItem }
+type eventComparison = { tempEvent: tempEvent }
 type colorItem = { item: calendarColor }
 
 const CalendarWrapper = styled(EditPanelWrapper)`
@@ -267,8 +267,6 @@ export const CalendarEditPanel: React.FC<{}> = () => {
           {calendarColorList &&
             calendarColorList.map((item) => {
               return (
-                // fixed
-                // @ts-ignore
                 <ColorOption
                   key={item.colorId}
                   item={item}
