@@ -86,6 +86,7 @@ This software uses the following open source packages:
 - [ ] Notification or sign when adding new background to collection
 - [ ] Feature to grab and sort lists in each panel (such as shortcut, to-do, inspiration notes) by React DnD
 - [ ] Calendar events edit feature
+- [ ] Memo edit feature
 - [ ] More efficient background carousel mechanism
 - [x] Pronounce tool (unstable) @v1.0.5
 - [x] Chrome's "socket" like feature to communicate with different tabs and scripts @v1.0.5
