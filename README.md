@@ -94,6 +94,7 @@ This software uses the following open source packages:
 <br>
 
 ## Version History
+- [ v1.0.8 ]  Fixed bugs caused by typescript and some functions that were called repeatedly.Installed the missed typeScript helper package. Adjusted the structure of package.json @GitHub 2022/11/01
 - [ v1.0.7 ]  Fixed the bulletin board bug.<br>- released @GitHub 2022/10/25 @Chrome web store 2022/10/26
 - [ v1.0.6 ]  Use react memo to avoid unnecessary rendering to improve the user experience.<br>- released @GitHub 2022/10/24 @Chrome web store 2022/10/25
 - [ v1.0.5 ]  Write Pomodoro functionality with new logic to resolve errors caused by Chrome.alarm operation limit. 
