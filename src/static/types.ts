@@ -313,7 +313,7 @@ export type openWeatherData = {
   }
 
   export type centralPanel = {
-    centralPanel: 'Pomodoro'|'Weather'
+    centralPanel: 'Pomodoro'|'Weather'|''
   }
 
   type delEvent = (item:calendarItem)=>void

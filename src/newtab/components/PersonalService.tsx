@@ -1,27 +1,33 @@
-import React from 'react';
-import styled from "styled-components";
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react'
+import styled from 'styled-components'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { setEditPanel } from '../features/reducers/editSlice';
-import { getUserInfo, loadUserInfo } from '../features/reducers/userInfoSlice';
-import { getPersonalization } from '../features/reducers/optionsSlice';
-import { getServiceList, loadServiceList } from '../features/reducers/personalServiceSlice';
+import { setEditPanel } from '../features/reducers/editSlice'
+import { getUserInfo, loadUserInfo } from '../features/reducers/userInfoSlice'
+import { getPersonalization } from '../features/reducers/optionsSlice'
+import {
+  getServiceList,
+  loadServiceList,
+} from '../features/reducers/personalServiceSlice'
 
-import { PanelBasicSetting, ScrollbarContainer } from '../../static/styleSetting';
-import { personalServiceList } from '../../static/optionList';
-import { handleErrorImage } from '../../utils/functions';
-import { scheme } from '../../static/types';
+import {
+  PanelBasicSetting,
+  ScrollbarContainer,
+} from '../../static/styleSetting'
+import { personalServiceList } from '../../static/optionList'
+import { handleErrorImage } from '../../utils/functions'
+import { scheme } from '../../static/types'
 
-type src = { src: string; };
-type hover = { hover: string; };
-type backup = { backup: string; };
+type src = { src: string }
+type hover = { hover: string }
+type backup = { backup: string }
 
 const PersonalPanel = styled(PanelBasicSetting)`
-  @media (max-width:1180px) {
-    flex-grow:1;
+  @media (max-width: 1180px) {
+    flex-grow: 1;
   }
-`;
+`
 
 const WelcomeMessage = styled.div`
   display: flex;
@@ -29,7 +35,7 @@ const WelcomeMessage = styled.div`
   font-weight: bold;
   font-size: 1rem;
   padding: 0px 16px 16px 0px;
-`;
+`
 
 const ServiceLinks = styled(ScrollbarContainer)`
   max-height: 104px;
@@ -37,36 +43,32 @@ const ServiceLinks = styled(ScrollbarContainer)`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  @media (max-width:1580px) {
+  @media (max-width: 1580px) {
     max-height: 72px;
   }
-  @media (max-width:1180px) {
+  @media (max-width: 1180px) {
     max-height: calc(100vh - 400px);
-  } 
-`;
+  }
+`
 
-const ServiceIcon = styled.div`
+const ServiceIcon = styled.div<src>`
   width: 28px;
   height: 28px;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: ${(props: src) => `url(${props.src})`};  
-  /* object-fit: contain; */
+  background-image: ${(props) => `url(${props.src})`};
   transition: 0.2s;
-  :hover {
-    background-image: ${(props: hover & backup) => `url(${props.hover}), url(${props.backup})`};
-  }
-`;
+`
 
 const ServiceOnError = styled.img`
   width: 28px;
   height: 28px;
   object-fit: contain;
-`;
+`
 
-const ServiceLink = styled.a`
-  color: ${(props: scheme) => props.theme.primary};
+const ServiceLink = styled.a<scheme & hover>`
+  color: ${(props) => props.theme.primary};
   padding: 8px;
   border-radius: 4px;
   margin: 0 8px;
@@ -80,28 +82,28 @@ const ServiceLink = styled.a`
   transition: 0.1s;
 
   :hover {
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     ${ServiceIcon} {
-      background-image: ${(props: hover) => `url(${props.hover})`};
+      background-image: ${(props) => `url(${props.hover})`};
     }
   }
-  @media (max-width:1580px) {
+  @media (max-width: 1580px) {
     width: 64px;
   }
-`;
+`
 
-const ServiceTitle = styled.div`  
+const ServiceTitle = styled.div`
   padding-top: 8px;
   font-size: 0.75rem;
-`;
+`
 const WelcomeSentence = styled.div`
   font-weight: bold;
   display: flex;
   flex-shrink: 0;
-`;
+`
 
-const UserName = styled.a`
-  color: ${(props: scheme) => props.theme.primary};
+const UserName = styled.a<scheme>`
+  color: ${(props) => props.theme.primary};
   display: flex;
   flex-shrink: 1;
   align-items: center;
@@ -113,33 +115,33 @@ const UserName = styled.a`
   transition: 0.2s;
   transform: translateY(0.4rem);
   margin: 0;
-  overflow: hidden;  
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-`;
+`
 
-const MoreServiceButton = styled.a`
+const MoreServiceButton = styled.a<scheme>`
   display: block;
-  color: ${(props: scheme) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   margin: 8px 16px;
   width: 100%;
   height: 24px;
   font-size: 12px;
   line-height: 24px;
   cursor: pointer;
-  border: solid 1px rgba(255,255,255,0.2);
-  background-color: rgba(255,255,255,0.1);
+  border: solid 1px rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   text-align: center;
   transition: 0.2s;
   :hover {
-    border: solid 1px rgba(255,255,255,0.8);
-    background-color: rgba(255,255,255,0.2);
+    border: solid 1px rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.2);
   }
-`;
+`
 
 const CreateButton = styled.div`
-position: absolute;
+  position: absolute;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -151,56 +153,55 @@ position: absolute;
   line-height: 20px;
   width: 24px;
   height: 24px;
-  background-color: rgba(200,200,200,0.1);
+  background-color: rgba(200, 200, 200, 0.1);
   border-radius: 50%;
   transition: 0.2s;
-  :hover{
-    background-color: rgba(200,200,200,0.5);
+  :hover {
+    background-color: rgba(200, 200, 200, 0.5);
   }
-`;
+`
 
 const PersonalServicePanel: React.FC<{}> = () => {
-  const dispatch = useDispatch();
-  const userInfo = useSelector(getUserInfo);
-  const serviceList = useSelector(getServiceList);
-  const personalization = useSelector(getPersonalization);
-  const [welcomeMessage, setWelcomeMessage] = useState("Have a nice day !");
+  const dispatch = useDispatch()
+  const userInfo = useSelector(getUserInfo)
+  const serviceList = useSelector(getServiceList)
+  const personalization = useSelector(getPersonalization)
+  const [welcomeMessage, setWelcomeMessage] = useState('Have a nice day !')
 
   function setWelcomeMsg(current: number) {
     if (current < 12) {
-      setWelcomeMessage("Good morning !");
+      setWelcomeMessage('Good morning !')
     } else if (current < 17) {
-      setWelcomeMessage("Good afternoon !");
+      setWelcomeMessage('Good afternoon !')
     } else {
-      setWelcomeMessage("Good evening !");
+      setWelcomeMessage('Good evening !')
     }
   }
 
   function takeServiceList() {
     chrome.storage.sync.get(['serviceList'], function (res) {
       if ('serviceList' in res) {
-        dispatch(loadServiceList(res.serviceList));
+        dispatch(loadServiceList(res.serviceList))
       }
-    });
+    })
   }
 
   useEffect(() => {
-    const current = (new Date()).getHours();
-    setWelcomeMsg(current);
+    const current = new Date().getHours()
+    setWelcomeMsg(current)
 
     chrome.storage.sync.get(['userName'], function (res) {
       if ('userName' in res) {
-        dispatch(loadUserInfo({ ...userInfo, name: res.userName }));
+        dispatch(loadUserInfo({ ...userInfo, name: res.userName }))
       }
-    });
-    takeServiceList();
+    })
+    takeServiceList()
     chrome.storage.onChanged.addListener(function (changes) {
       if (changes.serviceList) {
-        takeServiceList();
+        takeServiceList()
       }
-    });
-
-  }, []);
+    })
+  }, [])
 
   return (
     <PersonalPanel>
@@ -212,24 +213,54 @@ const PersonalServicePanel: React.FC<{}> = () => {
       </WelcomeMessage>
       <ServiceLinks>
         {serviceList.map((item) => {
-          return <ServiceLink key={personalServiceList[item].imgUrl.light} href={personalServiceList[item].link} hover={personalServiceList[item].imgUrl.color} target="_blank">
-            <ServiceIcon src={personalization.isDarkMode ? personalServiceList[item].imgUrl.light : personalServiceList[item].imgUrl.dark} onError={(e: React.ChangeEvent<HTMLImageElement>) => handleErrorImage(e)}>
-              <ServiceOnError src='https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/onError.png?alt=media&token=3a641010-249b-4fbb-a1bd-256adfb460ea' onError={(e: React.ChangeEvent<HTMLImageElement>) => handleErrorImage(e)}></ServiceOnError>
-            </ServiceIcon>
-            <ServiceTitle>{personalServiceList[item].name.english}</ServiceTitle>
-          </ServiceLink>;
+          return (
+            <ServiceLink
+              key={personalServiceList[item].imgUrl.light}
+              href={personalServiceList[item].link}
+              hover={personalServiceList[item].imgUrl.color}
+              target="_blank"
+            >
+              <ServiceIcon
+                src={
+                  personalization.isDarkMode
+                    ? personalServiceList[item].imgUrl.light
+                    : personalServiceList[item].imgUrl.dark
+                }
+              >
+                <ServiceOnError
+                  src="https://firebasestorage.googleapis.com/v0/b/catalyst-aws17.appspot.com/o/onError.png?alt=media&token=3a641010-249b-4fbb-a1bd-256adfb460ea"
+                  onError={(e) => handleErrorImage(e)}
+                ></ServiceOnError>
+              </ServiceIcon>
+              <ServiceTitle>
+                {personalServiceList[item].name.english}
+              </ServiceTitle>
+            </ServiceLink>
+          )
         })}
-        <MoreServiceButton href="https://about.google/products/" target="_blank">
+        <MoreServiceButton
+          href="https://about.google/products/"
+          target="_blank"
+        >
           See more services
         </MoreServiceButton>
       </ServiceLinks>
-      <CreateButton onClick={() => dispatch(setEditPanel({ name: 'ServiceEdit' }))}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+      <CreateButton
+        onClick={() => dispatch(setEditPanel({ name: 'ServiceEdit' }))}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          className="bi bi-three-dots-vertical"
+          viewBox="0 0 16 16"
+        >
           <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
         </svg>
       </CreateButton>
-    </PersonalPanel >
-  );
-};
+    </PersonalPanel>
+  )
+}
 
-export const MemoizedPersonalServicePanel = React.memo(PersonalServicePanel);
+export const MemoizedPersonalServicePanel = React.memo(PersonalServicePanel)
