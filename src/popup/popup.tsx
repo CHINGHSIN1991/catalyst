@@ -1,22 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import styled from "styled-components";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import styled from 'styled-components'
 
-import { ResetStyle, GlobalStyle } from "../static/globalStyle";
+import { ResetStyle, GlobalStyle } from '../static/globalStyle'
 
-import { PageToolPanel } from './components/PageToolPanel';
-import { PomodoroPanel } from './components/PomodoroPanel';
-import { ToDoList } from './components/ToDoList';
+import { PageToolPanel } from './components/PageToolPanel'
+import { PomodoroPanel } from './components/PomodoroPanel'
+import { ToDoList } from './components/ToDoList'
 
 const Wrapper = styled.div`
   padding: 8px;
   display: flex;
   flex-direction: column;
   width: 240px;
-  color: rgb(40,40,40);
+  color: rgb(40, 40, 40);
   min-height: 120px;
-  background-color: rgba(0,0,0,0.05);
-`;
+  background-color: rgba(0, 0, 0, 0.05);
+`
 const App: React.FC<{}> = () => {
   return (
     <Wrapper>
@@ -25,12 +25,12 @@ const App: React.FC<{}> = () => {
       <PageToolPanel></PageToolPanel>
       <PomodoroPanel></PomodoroPanel>
       <ToDoList></ToDoList>
-    </Wrapper >
-  );
-};
+    </Wrapper>
+  )
+}
 
-const rootElement = document.createElement('div');
-document.body.appendChild(rootElement);
-const root = ReactDOM.createRoot(rootElement);
+const rootElement = document.createElement('div')
+document.body.appendChild(rootElement)
+const root = ReactDOM.createRoot(rootElement)
 
-root.render(<App />);
+root.render(<App />)
