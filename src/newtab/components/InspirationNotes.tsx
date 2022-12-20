@@ -171,12 +171,12 @@ const ScrollContainer = styled(ScrollbarContainer)<shortcutNumber>`
   flex-direction: column;
   padding-right: 2px;
   max-height: ${(props) =>
-    `calc(100vh - (288px + ${
+    `calc(100vh - (256px + ${
       Math.ceil((props.shortcutNumber + 1) / 4) * 88
     }px ))`};
   flex-grow: 1;
   @media (max-width: 1180px) {
-    max-height: calc(100vh - 332px);
+    max-height: calc(100vh - 344px);
   }
 `
 
