@@ -9,7 +9,7 @@ import AlertContext from '../features/alertContext'
 import { handleTextAreaChange } from '../../utils/functions'
 import { BulletinTogglePanel } from './BulletinTogglePanel'
 import { memo, scheme, tempMemo } from '../../static/types'
-import { memoColorList, colorScheme } from '../../static/optionList'
+import { memoColorList } from '../../static/optionList'
 import {
   ScrollbarContainer,
   ScrollbarTextArea,
@@ -18,6 +18,7 @@ import {
 type color = { color: string }
 type colorComparison = { color: string; tempColor: string }
 type coord = { x: number; y: number }
+type isEditOn = { isEditOn: boolean }
 
 const Wrapper = styled(ScrollbarContainer)`
   width: 100vw;
@@ -125,7 +126,7 @@ const Memo = styled.div`
   min-height: 80px;
   margin: 8px;
   border-radius: 4px;
-  padding: 28px 16px 16px;
+  padding: 8px 8px 16px 16px;
   word-break: break-all;
   box-shadow: 2px 2px 8px 1px rgba(0, 0, 0, 0.3);
 `
@@ -144,16 +145,29 @@ const MemoWrapper = styled.div<color>`
 const MemoContent = styled(ScrollbarContainer)`
   max-height: 240px;
 `
-
-const MemoEditBtn = styled.div`
-  position: absolute;
-  color: gray;
-  right: 12px;
-  top: 8px;
-  width: 16px;
-  height: 16px;
+const MemoEditPanel = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 8px;
+`
+const MemoEditCheckBox = styled.div<isEditOn>`
+  display: flex;
+  justify-content: flex-end;
+  overflow: hidden;
+  transition: 0.1s;
+  width: ${(props) => (props.isEditOn ? '0px' : '80px')};
+`
+
+const MemoEditBtn = styled.div`
+  position: relative;
+  margin-left: 8px;
+  color: gray;
+  white-space: nowrap;
+  font-size: 10px;
+  line-height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   :hover {
     color: black;
@@ -164,6 +178,21 @@ const MemoTextContent = styled.div`
   font-size: 14px;
   line-height: 20px;
   word-break: break-word;
+  min-height: 40px;
+`
+const MemoEditArea = styled(ScrollbarTextArea)<color>`
+  position: absolute;
+  background-color: ${(props) => props.color};
+  border: none;
+  line-height: 18px;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  :focus {
+    outline: none;
+  }
 `
 
 const CreateAtContainer = styled.div`
@@ -241,6 +270,16 @@ const BulletinBoard: React.FC<{
     }
   }
 
+  function editContent(id: string, content: string) {
+    let tempMemos = [...memos]
+    tempMemos.forEach((memo) => {
+      if (memo.id === id) {
+        memo.memo = content
+      }
+    })
+    setMemos(tempMemos)
+  }
+
   function changePosition(coord: coord, index: number) {
     const tempMemos = [...memos]
     tempMemos[index].position = { x: coord.x, y: coord.y }
@@ -284,40 +323,14 @@ const BulletinBoard: React.FC<{
         {memos &&
           memos.map((item, index: number) => {
             return (
-              <Draggable
+              <MemoTemplate
                 key={item.id}
-                defaultPosition={{ x: 0, y: 0 }}
-                position={item.position}
-                onStop={(e, data) => {
-                  changePosition(data, index)
-                }}
-              >
-                <Memo>
-                  <MemoWrapper color={item.color}></MemoWrapper>
-                  <MemoEditBtn onClick={() => deleteMemo(item.id)}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-x"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                    </svg>
-                  </MemoEditBtn>
-                  <MemoContent>
-                    <MemoTextContent>{item.memo}</MemoTextContent>
-                    {item.createAt && (
-                      <CreateAtContainer>
-                        <CreateAt href={item.createAt.url} target="_blank">
-                          create @ {item.createAt.title}
-                        </CreateAt>
-                      </CreateAtContainer>
-                    )}
-                  </MemoContent>
-                </Memo>
-              </Draggable>
+                index={index}
+                memo={item}
+                editContent={editContent}
+                changePosition={changePosition}
+                deleteMemo={deleteMemo}
+              ></MemoTemplate>
             )
           })}
       </MemoContainer>
@@ -352,6 +365,108 @@ const BulletinBoard: React.FC<{
         memos={memos}
       ></BulletinTogglePanel>
     </Wrapper>
+  )
+}
+
+const MemoTemplate: React.FC<{
+  index: number
+  memo: memo
+  editContent: (id: string, content: string) => void
+  changePosition: (data: coord, index: number) => void
+  deleteMemo: (id: string) => void
+}> = (props) => {
+  const [isEditOn, setIsEditOn] = useState(false)
+  const [editContent, setEditContent] = useState({
+    editContent: props.memo.memo,
+  })
+
+  useEffect(() => {
+    if (isEditOn) {
+      setEditContent({
+        editContent: props.memo.memo,
+      })
+    }
+  }, [isEditOn])
+
+  return (
+    <Draggable
+      key={props.memo.id}
+      defaultPosition={{ x: 0, y: 0 }}
+      position={props.memo.position}
+      onStop={(e, data) => {
+        props.changePosition(data, props.index)
+      }}
+    >
+      <Memo>
+        <MemoWrapper color={props.memo.color}></MemoWrapper>
+        <MemoEditPanel>
+          <MemoEditCheckBox isEditOn={isEditOn}>
+            <MemoEditBtn onClick={() => setIsEditOn(true)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-pencil-square"
+                viewBox="0 0 16 16"
+              >
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                <path
+                  fillRule="evenodd"
+                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+                />
+              </svg>
+            </MemoEditBtn>
+          </MemoEditCheckBox>
+          <MemoEditCheckBox isEditOn={!isEditOn}>
+            <MemoEditBtn
+              onClick={() => {
+                props.editContent(props.memo.id, editContent.editContent)
+                setIsEditOn(false)
+              }}
+            >
+              DONE
+            </MemoEditBtn>
+            <MemoEditBtn onClick={() => setIsEditOn(false)}>CANCEL</MemoEditBtn>
+          </MemoEditCheckBox>
+          <MemoEditBtn onClick={() => props.deleteMemo(props.memo.id)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              fill="currentColor"
+              className="bi bi-x-square"
+              viewBox="0 0 16 16"
+            >
+              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </MemoEditBtn>
+        </MemoEditPanel>
+        <MemoContent>
+          <MemoTextContent>
+            {props.memo.memo}
+            {isEditOn && (
+              <MemoEditArea
+                color={props.memo.color}
+                value={editContent.editContent}
+                name="editContent"
+                onChange={(e) => {
+                  handleTextAreaChange(e, editContent, setEditContent)
+                }}
+              ></MemoEditArea>
+            )}
+          </MemoTextContent>
+          {props.memo.createAt && (
+            <CreateAtContainer>
+              <CreateAt href={props.memo.createAt.url} target="_blank">
+                create @ {props.memo.createAt.title}
+              </CreateAt>
+            </CreateAtContainer>
+          )}
+        </MemoContent>
+      </Memo>
+    </Draggable>
   )
 }
 

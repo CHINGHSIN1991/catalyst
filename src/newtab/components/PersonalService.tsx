@@ -21,7 +21,6 @@ import { scheme } from '../../static/types'
 
 type src = { src: string }
 type hover = { hover: string }
-type backup = { backup: string }
 
 const PersonalPanel = styled(PanelBasicSetting)`
   @media (max-width: 1180px) {

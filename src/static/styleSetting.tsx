@@ -140,8 +140,8 @@ export const ScrollbarContainer = styled.div`
   }
   &::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 1px solid slategrey;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
   }
   &::-webkit-scrollbar-track {
     box-shadow: transparent;
