@@ -86,8 +86,8 @@ This software uses the following open source packages:
 - [ ] Notification or sign when adding new background to collection
 - [ ] Feature to grab and sort lists in each panel (such as shortcut, to-do, inspiration notes) by React DnD
 - [ ] Calendar events edit feature
-- [ ] Memo edit feature
 - [ ] More efficient background carousel mechanism
+- [x] Memo edit feature @v1.0.9
 - [x] Pronounce tool (unstable) @v1.0.5
 - [x] Chrome's "socket" like feature to communicate with different tabs and scripts @v1.0.5
 - [x] Feature to hide page tool icon @v1.0.2
@@ -95,6 +95,7 @@ This software uses the following open source packages:
 <br>
 
 ## Version History
+- [ v1.0.9 ]  Fixed layout bugs on inspiration notes panel. Add memo edit feature.<br>- released @GitHub 2022/12/20
 - [ v1.0.8 ]  Fixed bugs caused by typescript and some functions that were called repeatedly.Installed the missed typeScript helper package. Adjusted the structure of package.json.<br>- released @GitHub 2022/11/01 @Chrome web store 2022/11/02
 - [ v1.0.7 ]  Fixed the bulletin board bug.<br>- released @GitHub 2022/10/25 @Chrome web store 2022/10/26
 - [ v1.0.6 ]  Use react memo to avoid unnecessary rendering to improve the user experience.<br>- released @GitHub 2022/10/24 @Chrome web store 2022/10/25
