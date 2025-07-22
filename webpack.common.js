@@ -37,6 +37,17 @@ module.exports = {
         {
           from: path.resolve('src/static'),
           to: path.resolve('dist'),
+          transform(content, absolutePath) {
+            if (
+              absolutePath.endsWith('manifest.json') &&
+              process.env.EXTENSION_KEY
+            ) {
+              const manifest = JSON.parse(content.toString())
+              manifest.key = process.env.EXTENSION_KEY
+              return Buffer.from(JSON.stringify(manifest, null, 2))
+            }
+            return content
+          },
         },
       ],
     }),
