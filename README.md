@@ -57,6 +57,16 @@ Replace new tab page with a customized dashboard to help you get focused, and ke
 " target="_blank"><img alt="Chrome Web Store" src="https://img.shields.io/chrome-web-store/v/jhpdbbakbcmoaondmjjjbojlakgkeilo"></a>
 <br>
 <br>
+## Build
+
+Install dependencies with `npm install` and provide your extension private key via the `EXTENSION_KEY` environment variable when running the build script:
+
+```bash
+EXTENSION_KEY="<your-key>" npm run build
+```
+
+The bundled extension will be generated in the `dist` directory.
+
 
 ## Tech
 
